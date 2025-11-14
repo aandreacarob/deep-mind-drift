@@ -38,20 +38,24 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Van Gogh-inspired Narrative Colors */
+    --deep-purple: 273 35% 47%;
+    --soft-yellow: 45 69% 85%;
+    --teal-green: 168 36% 45%;
+    --pastel-pink: 337 31% 72%;
+    --misty-gray: 240 7% 77%;
+    
+    /* Glow and Effects */
+    --glow-yellow: 45 100% 70%;
+    --glow-purple: 273 50% 60%;
+
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -100,6 +104,36 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
+    cursor: none;
+  }
+
+  @font-face {
+    font-family: 'Crimson Text';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+  }
+}
+
+@layer utilities {
+  .text-handwritten {
+    font-family: 'Crimson Text', serif;
+    letter-spacing: 0.02em;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--glow-yellow) / 0.5),
+                 0 0 40px hsl(var(--glow-yellow) / 0.3);
+  }
+
+  .watercolor-texture {
+    background-blend-mode: multiply;
+    position: relative;
+  }
+
+  .organic-border {
+    border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
   }
 }
