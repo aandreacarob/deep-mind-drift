@@ -282,5 +282,91 @@ All colors MUST be HSL.
     .continue-btn {
       transition: none;
     }
+
+    .sky-bubble {
+      animation: none !important;
+      opacity: 0.7;
+    }
+  }
+
+  /* Sky Bubbles - Adornan el cielo de remolinos */
+  .sky-bubbles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .sky-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, 
+      hsl(var(--turquoise-light) / 0.8), 
+      hsl(var(--turquoise-medium) / 0.6), 
+      hsl(var(--blue-deep) / 0.4));
+    box-shadow: 
+      0 0 20px hsl(var(--turquoise-light) / 0.6),
+      0 0 40px hsl(var(--turquoise-light) / 0.4),
+      inset 0 0 10px rgba(255, 255, 255, 0.3);
+    animation: bubble-float 8s ease-in-out infinite, bubble-glow 3s ease-in-out infinite;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  .bubble-glow {
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+    animation: inner-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes bubble-float {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-10px) scale(1.05);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes bubble-glow {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px hsl(var(--turquoise-light) / 0.6),
+        0 0 40px hsl(var(--turquoise-light) / 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 
+        0 0 30px hsl(var(--turquoise-light) / 0.9),
+        0 0 60px hsl(var(--turquoise-light) / 0.6),
+        inset 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  @keyframes inner-glow {
+    0% {
+      opacity: 0.6;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
   }
 }
