@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import caminoBackground from "@/assets/camino.png";
-import { TextDisintegration } from "@/components/TextDisintegration";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,12 +12,6 @@ interface Bubble {
   y: number;
   size: number;
   delay: number;
-}
-
-interface DisintegrationEffect {
-  id: string;
-  text: string;
-  boundingRect: DOMRect;
 }
 
 interface MessageSection {
@@ -76,7 +69,6 @@ const Seccion1 = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
-  const [disintegrations, setDisintegrations] = useState<DisintegrationEffect[]>([]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -108,38 +100,71 @@ const Seccion1 = () => {
           });
         },
         onLeave: () => {
-          // Crear efecto de desintegración
           const messageBox = box as HTMLElement;
           const rect = messageBox.getBoundingClientRect();
           const textContent = messageBox.textContent || "";
           
-          // Fade out el texto original a 60%
-          gsap.to(box, {
-            opacity: 0.6,
+          // Posición final aleatoria para la burbuja
+          const finalX = Math.random() * 80 + 10;
+          const finalY = Math.random() * 30 + 5;
+          const finalSize = Math.random() * 12 + 8;
+          
+          // Timeline de transformación completa
+          const tl = gsap.timeline();
+          
+          // 1. Fade out del texto
+          tl.to(box.querySelectorAll('*'), {
+            opacity: 0,
             duration: 0.3,
+            ease: "power2.in",
           });
           
-          // Crear partículas de desintegración
-          setDisintegrations((prev) => [
-            ...prev,
-            {
-              id: `disintegration-${Date.now()}-${Math.random()}`,
-              text: textContent,
-              boundingRect: rect,
-            },
-          ]);
+          // 2. Transformar el card en burbuja
+          tl.to(box, {
+            scale: 0.15,
+            borderRadius: "50%",
+            background: "radial-gradient(circle at 30% 30%, hsl(175 45% 55% / 0.8), hsl(176 62% 37% / 0.6), hsl(198 62% 29% / 0.4))",
+            backdropFilter: "none",
+            border: "none",
+            boxShadow: "0 0 20px hsl(175 45% 55% / 0.6), 0 0 40px hsl(175 45% 55% / 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3)",
+            duration: 0.8,
+            ease: "power2.inOut",
+          }, "-=0.1");
           
-          // Después crear burbuja cuando termine la desintegración
-          setTimeout(() => {
-            const newBubble: Bubble = {
-              id: Date.now() + Math.random(),
-              x: Math.random() * 80 + 10,
-              y: Math.random() * 30 + 5,
-              size: Math.random() * 12 + 8,
-              delay: Math.random() * 0.5,
-            };
-            setBubbles((prev) => [...prev, newBubble]);
-          }, 1500);
+          // 3. Mover a posición final en el cielo
+          tl.to(box, {
+            x: `${finalX}vw`,
+            y: `${finalY}vh`,
+            duration: 1.2,
+            ease: "power1.out",
+            onComplete: () => {
+              // Ocultar el card original
+              gsap.set(box, { opacity: 0 });
+              
+              // Crear burbuja permanente en sky-bubbles
+              const newBubble: Bubble = {
+                id: Date.now() + Math.random(),
+                x: finalX,
+                y: finalY,
+                size: finalSize,
+                delay: 0,
+              };
+              setBubbles((prev) => [...prev, newBubble]);
+              
+              // Resetear el card para la próxima vez
+              gsap.set(box, {
+                scale: 1,
+                borderRadius: "",
+                background: "",
+                backdropFilter: "",
+                border: "",
+                boxShadow: "",
+                x: 0,
+                y: 30,
+              });
+              gsap.set(box.querySelectorAll('*'), { opacity: 1 });
+            }
+          }, "-=0.4");
         },
         onLeaveBack: () => {
           gsap.to(box, {
@@ -188,20 +213,6 @@ const Seccion1 = () => {
           </div>
         ))}
       </div>
-
-      {/* Efectos de desintegración */}
-      {disintegrations.map((disintegration) => (
-        <TextDisintegration
-          key={disintegration.id}
-          text={disintegration.text}
-          boundingRect={disintegration.boundingRect}
-          onComplete={() => {
-            setDisintegrations((prev) =>
-              prev.filter((d) => d.id !== disintegration.id)
-            );
-          }}
-        />
-      ))}
 
       {messages.map((message, index) => (
         <section
