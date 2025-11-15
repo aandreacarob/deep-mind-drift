@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CustomCursor } from "@/components/CustomCursor";
 import caminoBackground from "@/assets/camino.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Bubble {
+interface Star {
   id: number;
   x: number;
   y: number;
@@ -70,16 +71,41 @@ const messages: MessageSection[] = [
 const Seccion1 = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+  const [stars, setStars] = useState<Star[]>([]);
+  const MAX_STARS = 8; // Límite máximo de estrellas visibles
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ScrollTrigger para el efecto de parallax en la imagen de fondo
+    if (containerRef.current && backgroundRef.current && !prefersReducedMotion) {
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          // Mover el backgroundPosition desde top (0%) hasta bottom (100%)
+          // Usamos center para mantener centrado horizontalmente
+          const backgroundPosition = `${50}% ${progress * 100}%`;
+          backgroundRef.current!.style.backgroundPosition = backgroundPosition;
+        },
+      });
+    }
 
     sectionsRef.current.forEach((section, index) => {
       if (!section) return;
 
       const box = section.querySelector(".message-box");
       if (!box) return;
+
+      // Solo convertir en estrella si tiene contenido (no es null) y no es la última tarjeta con el botón
+      const isLastCard = index === messages.length - 1;
+      const hasButton = messages[index]?.content?.includes('continue-btn') || false;
+      const shouldBecomeStar = messages[index]?.content !== null && !isLastCard && !hasButton;
 
       if (prefersReducedMotion) {
         gsap.set(box, { opacity: 1, y: 0 });
@@ -102,15 +128,28 @@ const Seccion1 = () => {
           });
         },
         onLeave: () => {
+          // Solo convertir en estrella si tiene contenido
+          if (!shouldBecomeStar) {
+            gsap.to(box, {
+              opacity: 0,
+              duration: 0.5,
+              ease: "power2.in",
+            });
+            return;
+          }
+
           const messageBox = box as HTMLElement;
-          const rect = messageBox.getBoundingClientRect();
-          const textContent = messageBox.textContent || "";
           const currentIndex = index;
           
-          // Posición final aleatoria para la burbuja
+          // Posición final aleatoria para la estrella en el cielo (parte superior)
+          // Distribución más espaciada para evitar aglomeraciones
           const finalX = Math.random() * 80 + 10;
-          const finalY = Math.random() * 30 + 5;
-          const finalSize = Math.random() * 12 + 8;
+          const finalY = Math.random() * 20 + 8; // Concentrado en la parte superior (cielo)
+          const finalSize = Math.random() * 8 + 5; // Tamaño más pequeño y consistente
+          
+          // Obtener dimensiones actuales de la tarjeta
+          const currentRect = box.getBoundingClientRect();
+          const currentSize = Math.max(currentRect.width, currentRect.height);
           
           // Timeline de transformación completa
           const tl = gsap.timeline();
@@ -122,54 +161,100 @@ const Seccion1 = () => {
             ease: "power2.in",
           });
           
-          // 2. Transformar el card en burbuja
+          // 2. Primero hacer la tarjeta cuadrada (usar el tamaño mayor como base)
           tl.to(box, {
-            scale: 0.15,
+            width: `${currentSize}px`,
+            height: `${currentSize}px`,
+            maxWidth: `${currentSize}px`,
+            padding: "0",
+            duration: 0.3,
+            ease: "power2.inOut",
+          });
+          
+          // 3. Aplicar borderRadius para hacerla circular mientras se reduce
+          tl.to(box, {
             borderRadius: "50%",
-            background: "radial-gradient(circle at 30% 30%, hsl(175 45% 55% / 0.8), hsl(176 62% 37% / 0.6), hsl(198 62% 29% / 0.4))",
-            backdropFilter: "none",
-            border: "none",
-            boxShadow: "0 0 20px hsl(175 45% 55% / 0.6), 0 0 40px hsl(175 45% 55% / 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3)",
-            duration: 0.8,
+            duration: 0.2,
             ease: "power2.inOut",
           }, "-=0.1");
           
-          // 3. Mover a posición final en el cielo
+          // 4. Reducir tamaño y cambiar apariencia a estrella
           tl.to(box, {
-            x: `${finalX}vw`,
-            y: `${finalY}vh`,
-            duration: 1.2,
-            ease: "power1.out",
+            width: `${finalSize}px`,
+            height: `${finalSize}px`,
+            maxWidth: `${finalSize}px`,
+            background: "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 200, 0.8), rgba(255, 220, 150, 0.6))",
+            backdropFilter: "none",
+            border: "none",
+            boxShadow: "0 0 15px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 200, 0.7), 0 0 45px rgba(255, 220, 150, 0.5), inset 0 0 8px rgba(255, 255, 255, 0.8)",
+            duration: 0.4,
+            ease: "power2.inOut",
+          }, "-=0.1");
+          
+          // 5. Mover a posición final en el cielo con animación suave (usando posición fija)
+          tl.to(box, {
+            position: "fixed",
+            left: `${finalX}%`,
+            top: `${finalY}%`,
+            x: "-50%",
+            y: "-50%",
+            duration: 1.5,
+            ease: "power2.out",
             onComplete: () => {
               // Ocultar el card original
               gsap.set(box, { opacity: 0 });
               
-              // Crear burbuja permanente en sky-bubbles
-              const newBubble: Bubble = {
-                id: Date.now() + Math.random(),
-                x: finalX,
-                y: finalY,
-                size: finalSize,
-                delay: 0,
-                messageId: messages[currentIndex].id,
-                sectionIndex: currentIndex,
-              };
-              setBubbles((prev) => [...prev, newBubble]);
+              // Crear estrella permanente en el cielo, eliminando las más antiguas si excedemos el límite
+              setStars((prev) => {
+                // Si ya alcanzamos el límite, eliminar la estrella más antigua
+                if (prev.length >= MAX_STARS) {
+                  const updated = [...prev.slice(1)]; // Eliminar la primera (más antigua)
+                  const newStar: Star = {
+                    id: Date.now() + Math.random(),
+                    x: finalX,
+                    y: finalY,
+                    size: finalSize,
+                    delay: Math.random() * 1.5,
+                    messageId: messages[currentIndex].id,
+                    sectionIndex: currentIndex,
+                  };
+                  return [...updated, newStar];
+                } else {
+                  // Agregar nueva estrella si no hemos alcanzado el límite
+                  const newStar: Star = {
+                    id: Date.now() + Math.random(),
+                    x: finalX,
+                    y: finalY,
+                    size: finalSize,
+                    delay: Math.random() * 1.5,
+                    messageId: messages[currentIndex].id,
+                    sectionIndex: currentIndex,
+                  };
+                  return [...prev, newStar];
+                }
+              });
               
               // Resetear el card para la próxima vez
               gsap.set(box, {
+                width: "",
+                height: "",
                 scale: 1,
                 borderRadius: "",
                 background: "",
                 backdropFilter: "",
                 border: "",
                 boxShadow: "",
+                padding: "",
+                maxWidth: "",
+                position: "",
+                left: "",
+                top: "",
                 x: 0,
                 y: 30,
               });
               gsap.set(box.querySelectorAll('*'), { opacity: 1 });
             }
-          }, "-=0.4");
+          }, "-=0.3");
         },
         onLeaveBack: () => {
           gsap.to(box, {
@@ -191,16 +276,16 @@ const Seccion1 = () => {
     navigate("/seccion-2");
   };
 
-  const handleBubbleClick = (bubble: Bubble) => {
-    const section = sectionsRef.current[bubble.sectionIndex];
+  const handleStarClick = (star: Star) => {
+    const section = sectionsRef.current[star.sectionIndex];
     if (!section) return;
 
     // Scroll a la sección
     section.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // Remover la burbuja del cielo después de un pequeño delay
+    // Remover la estrella del cielo después de un pequeño delay
     setTimeout(() => {
-      setBubbles((prev) => prev.filter((b) => b.id !== bubble.id));
+      setStars((prev) => prev.filter((s) => s.id !== star.id));
       
       // Resetear y mostrar el mensaje original
       const box = section.querySelector(".message-box") as HTMLElement;
@@ -222,38 +307,44 @@ const Seccion1 = () => {
   };
 
   return (
-    <div className="scrollytelling-container">
-      <div
-        className="fixed-background"
-        style={{
-          backgroundImage: `url(${caminoBackground})`,
-        }}
-      />
+    <>
+      <CustomCursor />
+      <div ref={containerRef} className="scrollytelling-container">
+        <div
+          ref={backgroundRef}
+          className="fixed-background"
+          style={{
+            backgroundImage: `url(${caminoBackground})`,
+            backgroundPosition: "center top",
+            backgroundSize: "cover",
+          }}
+        />
       
-      {/* Burbujas que adornan el cielo */}
-      <div className="sky-bubbles">
-        {bubbles.map((bubble) => (
+      {/* Estrellas que adornan el cielo como perlas */}
+      <div className="sky-stars">
+        {stars.map((star) => (
           <div
-            key={bubble.id}
-            className="sky-bubble"
+            key={star.id}
+            className="sky-star"
             style={{
-              left: `${bubble.x}%`,
-              top: `${bubble.y}%`,
-              width: `${bubble.size}px`,
-              height: `${bubble.size}px`,
-              animationDelay: `${bubble.delay}s`,
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              animationDelay: `${star.delay}s`,
               cursor: 'pointer',
             }}
-            onClick={() => handleBubbleClick(bubble)}
+            onClick={() => handleStarClick(star)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                handleBubbleClick(bubble);
+                handleStarClick(star);
               }
             }}
           >
-            <div className="bubble-glow" />
+            <div className="star-core" />
+            <div className="star-glow" />
           </div>
         ))}
       </div>
@@ -278,7 +369,8 @@ const Seccion1 = () => {
           )}
         </section>
       ))}
-    </div>
+      </div>
+    </>
   );
 };
 
