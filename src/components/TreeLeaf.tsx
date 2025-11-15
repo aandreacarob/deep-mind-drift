@@ -38,7 +38,7 @@ export const TreeLeaf = ({
 
   return (
     <motion.g
-      style={{ cursor: isActive ? "pointer" : "default" }}
+      style={{ cursor: isActive ? "pointer" : "default", pointerEvents: isActive ? "auto" : "none" }}
       onMouseEnter={() => isActive && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0.4, scale: 0.8 }}

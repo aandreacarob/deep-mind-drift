@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TreeLeaf } from "@/components/TreeLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
+import vangoghBg from "@/assets/vangogh-background.jpg";
+import watercolorTree from "@/assets/watercolor-tree.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -396,7 +398,10 @@ Sino cómo la habitas.`,
         ref={containerRef}
         className="min-h-[300vh] relative"
         style={{
-          background: "linear-gradient(135deg, #E8DFF5 0%, #D8D3E1 100%)",
+          backgroundImage: `url(${vangoghBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
         {/* Sticky tree container */}
@@ -407,35 +412,22 @@ Sino cómo la habitas.`,
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
+            {/* Watercolor tree image */}
+            <img
+              src={watercolorTree}
+              alt="Árbol de acuarela"
+              className="w-full h-auto max-h-[90vh] object-contain"
+              style={{ maxWidth: "800px" }}
+            />
+            
+            {/* Interactive leaves overlay */}
             <svg
               width="800"
               height="800"
               viewBox="0 0 800 800"
-              className="w-full h-auto max-h-[90vh]"
+              className="absolute inset-0 w-full h-auto max-h-[90vh]"
+              style={{ pointerEvents: "none" }}
             >
-              {/* Tree trunk and branches */}
-              <g stroke="#5A8A8A" strokeWidth="8" fill="none" strokeLinecap="round">
-                {/* Main trunk */}
-                <path d="M 400 750 Q 400 700 400 650" opacity="0.8" />
-                
-                {/* Central branch */}
-                <path d="M 400 650 Q 400 400 400 150" opacity="0.8" />
-                
-                {/* Left main branch */}
-                <path d="M 400 650 Q 350 600 250 550" opacity="0.7" />
-                <path d="M 250 550 Q 220 500 200 450" opacity="0.6" />
-                <path d="M 200 450 Q 190 400 180 350" opacity="0.5" />
-                
-                {/* Right main branch */}
-                <path d="M 400 650 Q 450 600 550 530" opacity="0.7" />
-                <path d="M 550 530 Q 580 480 600 430" opacity="0.6" />
-                <path d="M 600 430 Q 610 380 620 330" opacity="0.5" />
-                <path d="M 620 330 Q 615 280 600 230" opacity="0.5" />
-                
-                {/* Center upper branches */}
-                <path d="M 400 400 Q 390 340 380 280" opacity="0.5" />
-              </g>
-
               {/* Leaves */}
               {leaves.map((leaf) => (
                 <TreeLeaf
