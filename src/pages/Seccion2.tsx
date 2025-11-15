@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TreeLeaf } from "@/components/TreeLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import vangoghBg from "@/assets/vangogh-background.jpg";
-import watercolorTree from "@/assets/watercolor-tree.png";
+import treeImage from "@/assets/tree.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -412,10 +412,10 @@ Sino cómo la habitas.`,
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            {/* Watercolor tree image */}
+            {/* Tree image */}
             <img
-              src={watercolorTree}
-              alt="Árbol de acuarela"
+              src={treeImage}
+              alt="Árbol neuronal"
               className="w-full h-auto max-h-[90vh] object-contain"
               style={{ maxWidth: "800px" }}
             />
