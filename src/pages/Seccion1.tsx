@@ -12,6 +12,8 @@ interface Bubble {
   y: number;
   size: number;
   delay: number;
+  messageId: number;
+  sectionIndex: number;
 }
 
 interface MessageSection {
@@ -73,7 +75,7 @@ const Seccion1 = () => {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    sectionsRef.current.forEach((section) => {
+    sectionsRef.current.forEach((section, index) => {
       if (!section) return;
 
       const box = section.querySelector(".message-box");
@@ -89,7 +91,7 @@ const Seccion1 = () => {
       ScrollTrigger.create({
         trigger: section,
         start: "top 70%",
-        end: "top 40%",
+        end: "top -5%",
         toggleActions: "play none none reverse",
         onEnter: () => {
           gsap.to(box, {
@@ -103,6 +105,7 @@ const Seccion1 = () => {
           const messageBox = box as HTMLElement;
           const rect = messageBox.getBoundingClientRect();
           const textContent = messageBox.textContent || "";
+          const currentIndex = index;
           
           // Posición final aleatoria para la burbuja
           const finalX = Math.random() * 80 + 10;
@@ -148,6 +151,8 @@ const Seccion1 = () => {
                 y: finalY,
                 size: finalSize,
                 delay: 0,
+                messageId: messages[currentIndex].id,
+                sectionIndex: currentIndex,
               };
               setBubbles((prev) => [...prev, newBubble]);
               
@@ -186,6 +191,36 @@ const Seccion1 = () => {
     navigate("/seccion-2");
   };
 
+  const handleBubbleClick = (bubble: Bubble) => {
+    const section = sectionsRef.current[bubble.sectionIndex];
+    if (!section) return;
+
+    // Scroll a la sección
+    section.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Remover la burbuja del cielo después de un pequeño delay
+    setTimeout(() => {
+      setBubbles((prev) => prev.filter((b) => b.id !== bubble.id));
+      
+      // Resetear y mostrar el mensaje original
+      const box = section.querySelector(".message-box") as HTMLElement;
+      if (box) {
+        gsap.set(box, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          borderRadius: "",
+          background: "",
+          backdropFilter: "",
+          border: "",
+          boxShadow: "",
+          x: 0,
+        });
+        gsap.set(box.querySelectorAll('*'), { opacity: 1 });
+      }
+    }, 300);
+  };
+
   return (
     <div className="scrollytelling-container">
       <div
@@ -207,6 +242,15 @@ const Seccion1 = () => {
               width: `${bubble.size}px`,
               height: `${bubble.size}px`,
               animationDelay: `${bubble.delay}s`,
+              cursor: 'pointer',
+            }}
+            onClick={() => handleBubbleClick(bubble)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleBubbleClick(bubble);
+              }
             }}
           >
             <div className="bubble-glow" />
