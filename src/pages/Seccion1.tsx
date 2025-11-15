@@ -1,10 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import caminoBackground from "@/assets/camino.png";
 
 gsap.registerPlugin(ScrollTrigger);
+
+interface Bubble {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+}
 
 interface MessageSection {
   id: number;
@@ -60,6 +68,7 @@ const messages: MessageSection[] = [
 const Seccion1 = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -90,6 +99,17 @@ const Seccion1 = () => {
             ease: "power2.out",
           });
         },
+        onLeave: () => {
+          // Crear burbuja cuando el mensaje sale
+          const newBubble: Bubble = {
+            id: Date.now() + Math.random(),
+            x: Math.random() * 80 + 10, // 10-90% del ancho
+            y: Math.random() * 30 + 5, // 5-35% desde arriba (zona del cielo)
+            size: Math.random() * 12 + 8, // 8-20px
+            delay: Math.random() * 0.5,
+          };
+          setBubbles((prev) => [...prev, newBubble]);
+        },
         onLeaveBack: () => {
           gsap.to(box, {
             opacity: 0,
@@ -118,6 +138,26 @@ const Seccion1 = () => {
           backgroundImage: `url(${caminoBackground})`,
         }}
       />
+      
+      {/* Burbujas que adornan el cielo */}
+      <div className="sky-bubbles">
+        {bubbles.map((bubble) => (
+          <div
+            key={bubble.id}
+            className="sky-bubble"
+            style={{
+              left: `${bubble.x}%`,
+              top: `${bubble.y}%`,
+              width: `${bubble.size}px`,
+              height: `${bubble.size}px`,
+              animationDelay: `${bubble.delay}s`,
+            }}
+          >
+            <div className="bubble-glow" />
+          </div>
+        ))}
+      </div>
+
       {messages.map((message, index) => (
         <section
           key={message.id}
