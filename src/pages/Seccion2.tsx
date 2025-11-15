@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TreeLeaf } from "@/components/TreeLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import vangoghBg from "@/assets/vangogh-background.jpg";
 import treeImage from "@/assets/tree.png";
 
@@ -27,6 +28,7 @@ const Seccion2 = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeLeaves, setActiveLeaves] = useState<number[]>([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [selectedLeaf, setSelectedLeaf] = useState<LeafData | null>(null);
 
   const leaves: LeafData[] = [
     {
@@ -434,6 +436,11 @@ Sino cómo la habitas.`,
                   key={leaf.id}
                   {...leaf}
                   isActive={activeLeaves.includes(leaf.id)}
+                  onClick={() => {
+                    if (activeLeaves.includes(leaf.id)) {
+                      setSelectedLeaf(leaf);
+                    }
+                  }}
                 />
               ))}
             </svg>
@@ -450,6 +457,24 @@ Sino cómo la habitas.`,
         >
           ← Volver
         </motion.button>
+
+        {/* Modal Dialog */}
+        <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            {selectedLeaf && (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-semibold mb-4" style={{ color: selectedLeaf.color }}>
+                    {selectedLeaf.title}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-base whitespace-pre-line leading-relaxed text-foreground">
+                  {selectedLeaf.content}
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
