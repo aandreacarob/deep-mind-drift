@@ -49,12 +49,15 @@ export const TreeLeaf = ({
       }
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      {/* Leaf shape */}
-      <motion.ellipse
-        cx={x}
-        cy={y}
-        rx="45"
-        ry="70"
+      {/* Realistic leaf shape */}
+      <motion.path
+        d={`M ${x} ${y - 60} 
+            Q ${x + 25} ${y - 40} ${x + 35} ${y - 10}
+            Q ${x + 40} ${y + 10} ${x + 30} ${y + 30}
+            Q ${x + 20} ${y + 50} ${x} ${y + 65}
+            Q ${x - 20} ${y + 50} ${x - 30} ${y + 30}
+            Q ${x - 40} ${y + 10} ${x - 35} ${y - 10}
+            Q ${x - 25} ${y - 40} ${x} ${y - 60} Z`}
         fill={isActive ? color : "#C8B8D8"}
         opacity={isActive ? 1 : 0.4}
         transform={`rotate(${rotation} ${x} ${y})`}
@@ -63,14 +66,24 @@ export const TreeLeaf = ({
         }}
       />
       
-      {/* Leaf vein */}
-      <motion.line
-        x1={x}
-        y1={y - 60}
-        x2={x}
-        y2={y + 60}
-        stroke={isActive ? "rgba(255,255,255,0.3)" : "rgba(200,184,216,0.3)"}
+      {/* Leaf vein - curved */}
+      <motion.path
+        d={`M ${x} ${y - 55} Q ${x + 2} ${y} ${x} ${y + 60}`}
+        stroke={isActive ? "rgba(255,255,255,0.4)" : "rgba(200,184,216,0.3)"}
         strokeWidth="2"
+        fill="none"
+        transform={`rotate(${rotation} ${x} ${y})`}
+      />
+      
+      {/* Side veins */}
+      <motion.path
+        d={`M ${x} ${y - 20} Q ${x + 15} ${y - 10} ${x + 25} ${y}
+            M ${x} ${y} Q ${x + 15} ${y + 10} ${x + 20} ${y + 25}
+            M ${x} ${y - 20} Q ${x - 15} ${y - 10} ${x - 25} ${y}
+            M ${x} ${y} Q ${x - 15} ${y + 10} ${x - 20} ${y + 25}`}
+        stroke={isActive ? "rgba(255,255,255,0.25)" : "rgba(200,184,216,0.2)"}
+        strokeWidth="1"
+        fill="none"
         transform={`rotate(${rotation} ${x} ${y})`}
       />
 
