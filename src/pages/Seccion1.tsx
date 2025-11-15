@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import caminoBackground from "@/assets/camino.png";
@@ -57,6 +58,7 @@ const messages: MessageSection[] = [
 ];
 
 const Seccion1 = () => {
+  const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -104,6 +106,10 @@ const Seccion1 = () => {
     };
   }, []);
 
+  const handleContinue = () => {
+    navigate("/seccion-2");
+  };
+
   return (
     <div className="scrollytelling-container">
       <div
@@ -120,7 +126,14 @@ const Seccion1 = () => {
         >
           {message.content && (
             <div className="message-box">
-              <div dangerouslySetInnerHTML={{ __html: message.content }} />
+              <div 
+                dangerouslySetInnerHTML={{ __html: message.content }} 
+                onClick={(e) => {
+                  if ((e.target as HTMLElement).classList.contains('continue-btn')) {
+                    handleContinue();
+                  }
+                }}
+              />
             </div>
           )}
         </section>
