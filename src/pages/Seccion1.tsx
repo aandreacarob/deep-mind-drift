@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import caminoBackground from "@/assets/camino.png";
+import { TextDisintegration } from "@/components/TextDisintegration";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +13,12 @@ interface Bubble {
   y: number;
   size: number;
   delay: number;
+}
+
+interface DisintegrationEffect {
+  id: string;
+  text: string;
+  boundingRect: DOMRect;
 }
 
 interface MessageSection {
@@ -69,6 +76,7 @@ const Seccion1 = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [disintegrations, setDisintegrations] = useState<DisintegrationEffect[]>([]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -89,7 +97,7 @@ const Seccion1 = () => {
       ScrollTrigger.create({
         trigger: section,
         start: "top 70%",
-        end: "top 30%",
+        end: "top 40%",
         toggleActions: "play none none reverse",
         onEnter: () => {
           gsap.to(box, {
@@ -100,15 +108,38 @@ const Seccion1 = () => {
           });
         },
         onLeave: () => {
-          // Crear burbuja cuando el mensaje sale
-          const newBubble: Bubble = {
-            id: Date.now() + Math.random(),
-            x: Math.random() * 80 + 10, // 10-90% del ancho
-            y: Math.random() * 30 + 5, // 5-35% desde arriba (zona del cielo)
-            size: Math.random() * 12 + 8, // 8-20px
-            delay: Math.random() * 0.5,
-          };
-          setBubbles((prev) => [...prev, newBubble]);
+          // Crear efecto de desintegración
+          const messageBox = box as HTMLElement;
+          const rect = messageBox.getBoundingClientRect();
+          const textContent = messageBox.textContent || "";
+          
+          // Fade out el texto original a 60%
+          gsap.to(box, {
+            opacity: 0.6,
+            duration: 0.3,
+          });
+          
+          // Crear partículas de desintegración
+          setDisintegrations((prev) => [
+            ...prev,
+            {
+              id: `disintegration-${Date.now()}-${Math.random()}`,
+              text: textContent,
+              boundingRect: rect,
+            },
+          ]);
+          
+          // Después crear burbuja cuando termine la desintegración
+          setTimeout(() => {
+            const newBubble: Bubble = {
+              id: Date.now() + Math.random(),
+              x: Math.random() * 80 + 10,
+              y: Math.random() * 30 + 5,
+              size: Math.random() * 12 + 8,
+              delay: Math.random() * 0.5,
+            };
+            setBubbles((prev) => [...prev, newBubble]);
+          }, 1500);
         },
         onLeaveBack: () => {
           gsap.to(box, {
@@ -157,6 +188,20 @@ const Seccion1 = () => {
           </div>
         ))}
       </div>
+
+      {/* Efectos de desintegración */}
+      {disintegrations.map((disintegration) => (
+        <TextDisintegration
+          key={disintegration.id}
+          text={disintegration.text}
+          boundingRect={disintegration.boundingRect}
+          onComplete={() => {
+            setDisintegrations((prev) =>
+              prev.filter((d) => d.id !== disintegration.id)
+            );
+          }}
+        />
+      ))}
 
       {messages.map((message, index) => (
         <section
