@@ -7,7 +7,6 @@ import { TreeLeaf } from "@/components/TreeLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import vangoghBg from "@/assets/vangogh-background.jpg";
 import watercolorTree from "@/assets/watercolor-tree.png";
-import { removeBackground, loadImage } from "@/utils/removeBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +27,6 @@ const Seccion2 = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeLeaves, setActiveLeaves] = useState<number[]>([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [processedTreeImage, setProcessedTreeImage] = useState<string | null>(null);
 
   const leaves: LeafData[] = [
     {
@@ -356,32 +354,6 @@ Sino cómo la habitas.`,
   ];
 
   useEffect(() => {
-    // Process the tree image to remove background
-    const processImage = async () => {
-      try {
-        const response = await fetch(watercolorTree);
-        const blob = await response.blob();
-        const img = await loadImage(blob);
-        const processedBlob = await removeBackground(img);
-        const url = URL.createObjectURL(processedBlob);
-        setProcessedTreeImage(url);
-      } catch (error) {
-        console.error('Error processing tree image:', error);
-        // Fallback to original image
-        setProcessedTreeImage(watercolorTree);
-      }
-    };
-    
-    processImage();
-    
-    return () => {
-      if (processedTreeImage && processedTreeImage !== watercolorTree) {
-        URL.revokeObjectURL(processedTreeImage);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     if (!containerRef.current) return;
 
     const scrollTrigger = ScrollTrigger.create({
@@ -441,18 +413,12 @@ Sino cómo la habitas.`,
             transition={{ duration: 1 }}
           >
             {/* Watercolor tree image */}
-            {processedTreeImage ? (
-              <img
-                src={processedTreeImage}
-                alt="Árbol de acuarela"
-                className="w-full h-auto max-h-[90vh] object-contain"
-                style={{ maxWidth: "800px" }}
-              />
-            ) : (
-              <div className="w-[800px] h-[800px] flex items-center justify-center">
-                <div className="text-purple-600">Procesando imagen...</div>
-              </div>
-            )}
+            <img
+              src={watercolorTree}
+              alt="Árbol de acuarela"
+              className="w-full h-auto max-h-[90vh] object-contain"
+              style={{ maxWidth: "800px" }}
+            />
             
             {/* Interactive leaves overlay */}
             <svg
@@ -460,7 +426,7 @@ Sino cómo la habitas.`,
               height="800"
               viewBox="0 0 800 800"
               className="absolute inset-0 w-full h-auto max-h-[90vh]"
-              style={{ pointerEvents: "none" }}
+              style={{ pointerEvents: "auto" }}
             >
               {/* Leaves */}
               {leaves.map((leaf) => (

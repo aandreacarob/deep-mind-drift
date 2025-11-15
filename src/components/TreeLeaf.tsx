@@ -94,6 +94,7 @@ export const TreeLeaf = ({
           y={position === "center" ? y - 300 : y - 150}
           width="320"
           height="300"
+          style={{ pointerEvents: "none" }}
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
