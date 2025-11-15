@@ -49,6 +49,17 @@ All colors MUST be HSL.
     --glow-yellow: 45 100% 70%;
     --glow-purple: 273 50% 60%;
 
+    /* Scrollytelling Colors */
+    --turquoise-light: 175 45% 55%;
+    --turquoise-medium: 176 62% 37%;
+    --blue-deep: 198 62% 29%;
+    --blue-dark: 201 68% 19%;
+    --highlight-doubt: 47 100% 64%;
+    --highlight-action: 27 100% 62%;
+    --highlight-question: 0 0% 100%;
+    --glass-bg: 0 0% 6%;
+    --glass-border: 0 0% 100%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -135,5 +146,141 @@ All colors MUST be HSL.
 
   .organic-border {
     border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+  }
+
+  /* Scrollytelling Styles */
+  .scrollytelling-container {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .fixed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: -1;
+  }
+
+  .story-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .message-box {
+    background: rgba(15, 15, 15, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: white;
+    text-align: center;
+    white-space: pre-line;
+  }
+
+  .message-box em {
+    font-style: italic;
+  }
+
+  .message-box h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: hsl(var(--soft-yellow));
+    margin: 0;
+  }
+
+  .message-box .highlight-doubt {
+    color: hsl(var(--highlight-doubt));
+    font-weight: 600;
+  }
+
+  .message-box .highlight-action {
+    color: hsl(var(--highlight-action));
+    font-weight: 600;
+  }
+
+  .message-box .highlight-question {
+    color: hsl(var(--highlight-question));
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                 0 0 40px rgba(255, 255, 255, 0.3);
+  }
+
+  .message-box .small-text {
+    font-size: 1.2rem;
+  }
+
+  .continue-btn {
+    margin-top: 2rem;
+    padding: 1rem 3rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #0F0F0F;
+    background: linear-gradient(135deg, hsl(var(--highlight-doubt)), hsl(var(--highlight-action)));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 154, 60, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 154, 60, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .message-box {
+      padding: 1.5rem;
+      font-size: 1.2rem;
+      width: 90%;
+    }
+
+    .message-box h2 {
+      font-size: 1.6rem;
+    }
+
+    .continue-btn {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .message-box {
+      padding: 2rem;
+      font-size: 1.4rem;
+      width: 80%;
+    }
+
+    .message-box h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .message-box {
+      transition: none;
+      animation: none;
+    }
+    
+    .continue-btn {
+      transition: none;
+    }
   }
 }
