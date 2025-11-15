@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TreeLeaf } from "@/components/TreeLeaf";
+import { LeafPreview } from "@/components/LeafPreview";
+import { FallingLeaf } from "@/components/FallingLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import vangoghBg from "@/assets/vangogh-background.jpg";
@@ -18,6 +20,7 @@ interface LeafData {
   rotation: number;
   color: string;
   title: string;
+  summary: string;
   content: string;
   position: "left" | "right" | "center";
   activationPercent: number;
@@ -29,6 +32,19 @@ const Seccion2 = () => {
   const [activeLeaves, setActiveLeaves] = useState<number[]>([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedLeaf, setSelectedLeaf] = useState<LeafData | null>(null);
+  const [hoveredLeaf, setHoveredLeaf] = useState<LeafData | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [fallingLeaves, setFallingLeaves] = useState<Array<{
+    id: number;
+    startX: number;
+    startY: number;
+    rotation: number;
+    delay: number;
+    duration: number;
+    color: string;
+    createdAt: number;
+  }>>([]);
+  const lastScrollBatchRef = useRef<Set<number>>(new Set());
 
   const leaves: LeafData[] = [
     {
@@ -38,6 +54,7 @@ const Seccion2 = () => {
       rotation: 0,
       color: "#E8DFF5",
       title: "EL MAPA CEREBRAL",
+      summary: "Tu cerebro tiene 86 mil millones de neuronas. No necesitas conocerlas todas. Solo necesitas entender cuatro regiones que se activan cada vez que interactúas con una pantalla.",
       content: `Tu cerebro tiene 86 mil millones de neuronas.
 
 No necesitas conocerlas todas.
@@ -68,6 +85,7 @@ Hasta ahora.`,
       rotation: -25,
       color: "#7FB3D5",
       title: "47 SEGUNDOS",
+      summary: "47 segundos es el tiempo promedio que pasas en una pantalla antes de cambiar. No es falta de atención, es fragmentación aprendida.",
       content: `Ese es el tiempo promedio que pasas mirando 
 una sola pantalla antes de cambiar a otra cosa.
 
@@ -86,6 +104,7 @@ redirigida.`,
       rotation: -35,
       color: "#95C2E0",
       title: "23 MINUTOS",
+      summary: "23 minutos y 15 segundos. Ese es el tiempo que tu cerebro necesita para recuperar la concentración plena después de una interrupción. No es el segundo que tardas en revisar la notificación, es el cuarto de hora que pierdes después.",
       content: `23 MINUTOS Y 15 SEGUNDOS
 
 Ese es el tiempo que tu cerebro necesita para 
@@ -108,6 +127,7 @@ Y esto sucede docenas de veces al día.`,
       rotation: -20,
       color: "#A8D5E2",
       title: "40% DE PÉRDIDA",
+      summary: "40% de pérdida de productividad. Esa es la penalización que paga tu cerebro por los 'costos de cambio' acumulados. Milisegundos que se acumulan hasta convertirse en horas perdidas.",
       content: `40% DE PÉRDIDA DE PRODUCTIVIDAD
 
 Esa es la penalización que paga tu cerebro 
@@ -131,6 +151,7 @@ Hasta convertirse en horas perdidas.`,
       rotation: 25,
       color: "#5D9BD5",
       title: "CORTEZA PREFRONTAL",
+      summary: "Tu 'CEO Interno'. La parte que razona, planifica y dice 'no' a los impulsos. Cuando estás constantemente cambiando entre tareas, ella trabaja más duro. No se apaga, se sobrecarga.",
       content: `Tu "CEO Interno"
 
 Justo detrás de tu frente.
@@ -161,6 +182,7 @@ Necesita más esfuerzo para hacer lo mismo.`,
       rotation: 35,
       color: "#E76F51",
       title: "NÚCLEO ACCUMBENS",
+      summary: "Tu Centro de Recompensa. Se enciende cuando recibes un 'like', un mensaje o descubres un video. Las apps te recompensan a veces, impredeciblemente. Esto se llama 'refuerzo variable'.",
       content: `Tu Centro de Recompensa
 
 Escondido en el centro de tu cerebro.
@@ -198,6 +220,7 @@ sabe cómo está diseñado.`,
       rotation: 20,
       color: "#F4A261",
       title: "AMÍGDALA",
+      summary: "Tu Detector de Amenazas. Heredado de cuando vivías en la sabana. Ella no distingue entre un tigre que te persigue y una notificación que vibra. Para ella, todo es una alarma.",
       content: `Tu Detector de Amenazas
 
 Heredado de cuando vivías en la sabana.
@@ -239,6 +262,7 @@ una notificación de un juego.`,
       rotation: 15,
       color: "#8FB996",
       title: "HIPOCAMPO",
+      summary: "Tu Archivador de Memorias. Solo guarda lo que considera importante. Pero cuando puedes Googlearlo, tu hipocampo aprende: 'No necesito guardar esto'. Se llama 'Efecto Google'.",
       content: `Tu Archivador de Memorias
 
 Donde guardas experiencias.
@@ -280,6 +304,7 @@ y un poco peor en recordar.`,
       rotation: -10,
       color: "#9B87B5",
       title: "SIN VILLANOS",
+      summary: "La mecánica sin villanos. Cuatro sistemas. Ninguno roto. Todos funcionando perfectamente. El problema es que fueron diseñados para un mundo diferente. Y alguien más lo sabe.",
       content: `LA MECÁNICA SIN VILLANOS
 
 Cuatro sistemas.
@@ -318,6 +343,7 @@ Para hacerte quedarte.`,
       rotation: 0,
       color: "#B8A5C8",
       title: "LA PREGUNTA ESPEJO",
+      summary: "La pregunta ya no es: '¿Por qué me pasa esto?'. La pregunta ahora es: '¿Lo noto cuando sucede?'. Porque si lo notas, si ves la mecánica mientras sucede, entonces puedes elegir.",
       content: `Has visto el mapa.
 Has visto cómo funciona.
 
@@ -373,6 +399,38 @@ Sino cómo la habitas.`,
         
         setActiveLeaves(newActiveLeaves);
 
+        // Add falling leaves at different scroll percentages (more frequently)
+        const scrollPercentages = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90];
+        
+        scrollPercentages.forEach((percent) => {
+          const rangeStart = percent;
+          const rangeEnd = percent + 1;
+          
+          if (progress >= rangeStart && progress < rangeEnd && !lastScrollBatchRef.current.has(percent)) {
+            lastScrollBatchRef.current.add(percent);
+            
+            // Vary the number of leaves per batch
+            const leafCount = percent % 20 === 0 ? 4 : percent % 15 === 0 ? 3 : 2;
+            
+            const newFallingLeaves = Array.from({ length: leafCount }, (_, i) => ({
+              id: Date.now() + i + percent * 100,
+              startX: Math.random() * window.innerWidth,
+              startY: -50 - Math.random() * 100,
+              rotation: Math.random() * 360,
+              delay: i * (300 + Math.random() * 400),
+              duration: 4000 + Math.random() * 3000,
+              color: [
+                "#E8DFF5", "#7FB3D5", "#95C2E0", "#A8D5E2", 
+                "#5D9BD5", "#E76F51", "#F4A261", "#8FB996", 
+                "#9B87B5", "#B8A5C8"
+              ][Math.floor(Math.random() * 10)],
+              createdAt: Date.now(),
+            }));
+            
+            setFallingLeaves((prev) => [...prev, ...newFallingLeaves]);
+          }
+        });
+
         // Trigger transition at 100%
         if (progress >= 99 && !isTransitioning) {
           setIsTransitioning(true);
@@ -390,8 +448,56 @@ Sino cómo la habitas.`,
 
     return () => {
       scrollTrigger.kill();
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, [isTransitioning]);
+
+  // Automatic falling leaves interval
+  useEffect(() => {
+    const autoLeafInterval = setInterval(() => {
+      // Generate 1-2 leaves automatically every 3-5 seconds
+      const leafCount = Math.random() > 0.5 ? 1 : 2;
+      const newLeaves = Array.from({ length: leafCount }, (_, i) => ({
+        id: Date.now() + i,
+        startX: Math.random() * window.innerWidth,
+        startY: -50 - Math.random() * 100,
+        rotation: Math.random() * 360,
+        delay: i * 200,
+        duration: 4000 + Math.random() * 3000,
+        color: [
+          "#E8DFF5", "#7FB3D5", "#95C2E0", "#A8D5E2", 
+          "#5D9BD5", "#E76F51", "#F4A261", "#8FB996", 
+          "#9B87B5", "#B8A5C8"
+        ][Math.floor(Math.random() * 10)],
+        createdAt: Date.now(),
+      }));
+      
+      setFallingLeaves((prev) => [...prev, ...newLeaves]);
+    }, 3000 + Math.random() * 2000); // Every 3-5 seconds
+
+    return () => {
+      clearInterval(autoLeafInterval);
+    };
+  }, []);
+
+  // Clean up old falling leaves (remove after animation completes)
+  useEffect(() => {
+    const cleanupInterval = setInterval(() => {
+      const now = Date.now();
+      setFallingLeaves((prev) => 
+        prev.filter((leaf) => {
+          const maxAge = leaf.duration + leaf.delay + 1000; // Add 1 second buffer
+          return now - leaf.createdAt < maxAge;
+        })
+      );
+    }, 2000); // Check every 2 seconds
+
+    return () => {
+      clearInterval(cleanupInterval);
+    };
+  }, []);
 
   return (
     <>
@@ -419,7 +525,7 @@ Sino cómo la habitas.`,
               src={treeImage}
               alt="Árbol neuronal"
               className="w-full h-auto max-h-[90vh] object-contain"
-              style={{ maxWidth: "800px" }}
+              style={{ maxWidth: "800px", pointerEvents: "none" }}
             />
             
             {/* Interactive leaves overlay */}
@@ -441,11 +547,70 @@ Sino cómo la habitas.`,
                       setSelectedLeaf(leaf);
                     }
                   }}
+                  onMouseEnter={() => {
+                    if (activeLeaves.includes(leaf.id)) {
+                      // Clear any existing timeout
+                      if (hoverTimeoutRef.current) {
+                        clearTimeout(hoverTimeoutRef.current);
+                        hoverTimeoutRef.current = null;
+                      }
+                      setHoveredLeaf(leaf);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    // Add delay before hiding preview
+                    hoverTimeoutRef.current = setTimeout(() => {
+                      setHoveredLeaf(null);
+                    }, 500);
+                  }}
                 />
               ))}
             </svg>
+            
+            {/* Leaf Preview on Hover */}
+            {hoveredLeaf && activeLeaves.includes(hoveredLeaf.id) && (
+              <LeafPreview
+                title={hoveredLeaf.title}
+                summary={hoveredLeaf.summary}
+                color={hoveredLeaf.color}
+                x={hoveredLeaf.x}
+                y={hoveredLeaf.y}
+                position={hoveredLeaf.position}
+                onReadMore={() => {
+                  setSelectedLeaf(hoveredLeaf);
+                  setHoveredLeaf(null);
+                }}
+                onMouseEnter={() => {
+                  // Cancel timeout when hovering over preview
+                  if (hoverTimeoutRef.current) {
+                    clearTimeout(hoverTimeoutRef.current);
+                    hoverTimeoutRef.current = null;
+                  }
+                }}
+                onMouseLeave={() => {
+                  // Add delay when leaving preview
+                  hoverTimeoutRef.current = setTimeout(() => {
+                    setHoveredLeaf(null);
+                  }, 500);
+                }}
+              />
+            )}
           </motion.div>
         </div>
+
+        {/* Falling Decorative Leaves */}
+        {fallingLeaves.map((leaf) => (
+          <FallingLeaf
+            key={leaf.id}
+            id={leaf.id}
+            startX={leaf.startX}
+            startY={leaf.startY}
+            rotation={leaf.rotation}
+            delay={leaf.delay}
+            duration={leaf.duration}
+            color={leaf.color}
+          />
+        ))}
 
         {/* Back button */}
         <motion.button

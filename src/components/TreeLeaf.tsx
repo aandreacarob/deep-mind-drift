@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import leafImage from "@/assets/leaf.png";
 
@@ -12,6 +13,8 @@ interface TreeLeafProps {
   content: string;
   position: "left" | "right" | "center";
   onClick: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const TreeLeaf = ({
@@ -19,20 +22,71 @@ export const TreeLeaf = ({
   y,
   rotation,
   isActive,
+  color,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
 }: TreeLeafProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    if (isActive) {
+      setIsHovered(true);
+      onMouseEnter?.();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    onMouseLeave?.();
+  };
+
   return (
     <motion.g
       style={{ cursor: isActive ? "pointer" : "default", pointerEvents: isActive ? "auto" : "none" }}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, scale: 0 }}
       animate={
         isActive
-          ? { opacity: 1, scale: 1 }
+          ? { 
+              opacity: 1, 
+              scale: isHovered ? 1.25 : 1 
+            }
           : { opacity: 0, scale: 0 }
       }
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: isHovered ? 0.2 : 0.8, ease: "easeOut" }}
     >
+      {/* Glow effect on hover */}
+      {isHovered && isActive && (
+        <circle
+          cx={x}
+          cy={y}
+          r="60"
+          fill="none"
+          stroke={color}
+          strokeWidth="2"
+          opacity="0.6"
+          style={{
+            filter: `blur(8px)`,
+            pointerEvents: "none",
+          }}
+        >
+          <animate
+            attributeName="r"
+            values="60;80;60"
+            dur="1.5s"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="opacity"
+            values="0.6;0.3;0.6"
+            dur="1.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+      )}
       {/* Leaf image */}
       <image
         href={leafImage}
@@ -42,7 +96,13 @@ export const TreeLeaf = ({
         height="120"
         transform={`rotate(${rotation} ${x} ${y})`}
         style={{
-          filter: isActive ? "drop-shadow(0 4px 12px rgba(0,0,0,0.2))" : "none",
+          filter: isActive 
+            ? isHovered 
+              ? `drop-shadow(0 12px 30px ${color}CC) drop-shadow(0 0 20px ${color}AA) brightness(1.3) saturate(1.4)` 
+              : "drop-shadow(0 4px 12px rgba(0,0,0,0.2))"
+            : "none",
+          pointerEvents: isActive ? "auto" : "none",
+          transition: "filter 0.2s ease-out",
         }}
       />
     </motion.g>
