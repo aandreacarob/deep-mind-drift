@@ -10,6 +10,8 @@ export interface SphereData {
   symbol: string;
   title: string;
   description: string;
+  examples: string;
+  neuroscience: string;
   light: string;
   shadow: string;
   phrase: string;
@@ -23,6 +25,8 @@ const spheresData: SphereData[] = [
     symbol: "fragmentado",
     title: "El Fragmentado",
     description: "Vives en modo multitarea constante. 15 pestañas abiertas. Revisas el teléfono mientras trabajas, comes, conversas.",
+    examples: "→ Trabajar con 15 pestañas abiertas, cambiando entre ellas cada 30 segundos\n→ Ver una serie mientras scrolleas Instagram y respondes mensajes\n→ Empezar 5 tareas diferentes en una hora y no terminar ninguna",
+    neuroscience: "Sobrecarga el sistema de atención ejecutiva. Cada cambio de tarea cuesta entre 5-15 minutos de recuperación cognitiva. Activa constantemente el núcleo accumbens (dopamina de novedad) sin permitir satisfacción profunda.",
     light: "Alta capacidad de procesar múltiples fuentes de información simultáneamente. Conectado con muchos frentes.",
     shadow: "Atención superficial. Nunca estás completamente presente en ningún lado. Fatiga cognitiva crónica.",
     phrase: "Estoy en todas partes y en ninguna al mismo tiempo.",
@@ -34,6 +38,8 @@ const spheresData: SphereData[] = [
     symbol: "acumulador",
     title: "El Acumulador",
     description: "Guardas todo. 847 artículos marcados, 234 videos guardados, 15 cursos iniciados. Consumes inspiración pero no creas acción.",
+    examples: "→ Guardar cientos de artículos en Pocket que nunca leerás\n→ Tener 15 cursos online comenzados y 0 terminados\n→ 847 pestañas abiertas en Chrome \"para revisar después\"\n→ Descargar PDFs que nunca abrirás",
+    neuroscience: "Genera una ilusión de productividad sin acción real. El acto de guardar activa el circuito de recompensa (dopamina), pero sin el beneficio del aprendizaje consolidado que requiere procesamiento profundo.",
     light: "Curioso, siempre aprendiendo, valoras el conocimiento. Tienes un archivo mental rico.",
     shadow: "Parálisis por abundancia. La información acumulada se vuelve una carga. Confundes consumir con hacer.",
     phrase: "Algún día haré algo con todo esto.",
@@ -45,6 +51,8 @@ const spheresData: SphereData[] = [
     symbol: "reactivo",
     title: "El Reactivo",
     description: "Vives respondiendo a estímulos externos. Cada notificación es urgente. Tu tiempo está secuestrado por las demandas digitales de otros.",
+    examples: "→ Revisar el teléfono cada vez que suena una notificación\n→ Responder emails y mensajes instantáneamente sin importar lo que estés haciendo\n→ Sentir ansiedad si no revisas redes sociales cada hora\n→ Interrumpir conversaciones presenciales para responder mensajes",
+    neuroscience: "Mantiene el sistema nervioso simpático (lucha o huida) constantemente activado. Genera picos continuos de cortisol. El cerebro entra en modo de hipervigilancia crónica, similar al estrés postraumático leve.",
     light: "Altamente responsivo, atento a tu comunidad, disponible para otros.",
     shadow: "No tienes tiempo propio. Tu agenda la escriben otros. Agotamiento por hiperconexión. El FOMO te gobierna.",
     phrase: "¿Qué me perdí mientras no estaba mirando?",
@@ -56,6 +64,8 @@ const spheresData: SphereData[] = [
     symbol: "buscador",
     title: "El Buscador",
     description: "Usas la tecnología como herramienta intencional. Sabes qué quieres encontrar. Entras, tomas lo que necesitas, sales.",
+    examples: "→ Desactivar todas las notificaciones excepto las esenciales\n→ Usar apps en modo \"no molestar\" por defecto\n→ Entrar a redes sociales con un objetivo específico y salir cuando lo cumples\n→ Horarios definidos para revisar email (ej: 10am, 3pm, 6pm)",
+    neuroscience: "Fortalece la corteza prefrontal dorsolateral (control ejecutivo) y la capacidad de regulación atencional. Similar al entrenamiento de meditación: aumenta materia gris en áreas de autocontrol.",
     light: "Control sobre tu atención. Usas la tecnología en lugar de ser usado por ella. Propósito claro.",
     shadow: "Puedes perderte la serendipia. A veces la rigidez te impide descubrir lo inesperado. Riesgo de aislamiento.",
     phrase: "Entro cuando decido, salgo cuando termino.",
@@ -67,6 +77,8 @@ const spheresData: SphereData[] = [
     symbol: "ausente",
     title: "El Ausente",
     description: "Resistencia activa o pasiva. Minimizas tu presencia digital. Puede ser por elección consciente o por alienación.",
+    examples: "→ No tener redes sociales o tenerlas inactivas\n→ Teléfono sin datos móviles, solo WiFi en casa\n→ Responder mensajes una vez al día o menos\n→ Preferir llamadas telefónicas o encuentros presenciales\n→ Usar teléfono básico en lugar de smartphone",
+    neuroscience: "Permite la restauración del modo de red por defecto (Default Mode Network), esencial para la creatividad, consolidación de memoria y procesamiento emocional. El cerebro necesita 'aburrimiento' para funcionar óptimamente.",
     light: "Proteges tu atención profunda. Menos ruido, más silencio. Capacidad de concentración sostenida.",
     shadow: "Puedes estar desconectado de conversaciones importantes. Riesgo de quedarse fuera de comunidades. A veces es huida, no elección.",
     phrase: "Prefiero no estar ahí.",
