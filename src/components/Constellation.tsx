@@ -11,55 +11,49 @@ interface ConstellationProps {
 
 const insights: Record<string, { title: string; message: string }> = {
   profundo: {
-    title: "Tu esfera dominante: 📚 Pensamiento Profundo",
-    message: `Valoras la inmersión cognitiva.
-Tu cerebro está entrenado para la concentración sostenida.
+    title: "Tu esfera dominante: Pensamiento Profundo",
+    message: `Valoras concentrarte profundamente.
 
 En un mundo que premia la velocidad,
-tu capacidad de profundidad es una ventaja.
+esto es una ventaja.
 
-Pero también puede ser una fricción:
-el entorno digital no está diseñado para ti.`,
+Pero el entorno digital no está diseñado para ti.`,
   },
   fragmentado: {
-    title: "Tu esfera dominante: ⚡ Pensamiento Fragmentado",
-    message: `Reconoces los patrones de tu atención dividida.
+    title: "Tu esfera dominante: Pensamiento Fragmentado",
+    message: `Reconoces tu atención dividida.
 
-Ser consciente de esto es el primer paso.
-No eres débil. Estás respondiendo racionalmente
-a un entorno diseñado para fragmentar.
+Ser consciente es el primer paso.
+No eres débil.
+Estás respondiendo a un mundo diseñado 
+para fragmentar.
 
-La pregunta es: ¿quieres cambiar el patrón?`,
+La pregunta es: ¿quieres cambiarlo?`,
   },
   delegado: {
-    title: "Tu esfera dominante: 🤖 Pensamiento Delegado",
-    message: `Te interesa cómo externalizamos el pensamiento.
+    title: "Tu esfera dominante: Pensamiento Delegado",
+    message: `Te preguntas qué perdemos cuando 
+delegamos todo.
 
-Te preguntas: ¿Qué perdemos cuando 
-dejamos de ejercitar la memoria?
-
-Hacer estas preguntas ya es señal
-de pensamiento crítico.`,
+Hacerte esta pregunta ya es pensamiento crítico.`,
   },
   aumentado: {
-    title: "Tu esfera dominante: 🧩 Pensamiento Aumentado",
-    message: `Buscas equilibrio.
+    title: "Tu esfera dominante: Pensamiento Aumentado",
+    message: `Buscas balance.
 
 No quieres rechazar la tecnología,
 pero tampoco ser dominado por ella.
 
-Esta es la zona más productiva
-de la cognición digital.`,
+Esta es la zona más sana.`,
   },
   hibrido: {
-    title: "Tu esfera dominante: 🔮 Pensamiento Híbrido",
-    message: `Te fascina el futuro.
+    title: "Tu esfera dominante: Pensamiento Híbrido",
+    message: `Controlas conscientemente tus estados cognitivos.
 
-Tu curiosidad por lo que viene
-sugiere que piensas en términos sistémicos.
+Esta metacognición es el nivel más avanzado
+de relación con la tecnología.
 
-Quizás seas parte de la generación
-que construya ese futuro.`,
+Es difícil de sostener, pero poderoso.`,
   },
 };
 
@@ -83,7 +77,9 @@ export const Constellation = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-black relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: 'linear-gradient(180deg, #3A2A4A 0%, #2C3E50 100%)'
+    }}>
       {/* Stars background */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 150 }).map((_, i) => (
@@ -105,11 +101,17 @@ export const Constellation = ({
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold text-white mb-4">
-            Tu Constelación Cognitiva
+          <h1 className="text-5xl font-semibold text-white mb-4" style={{
+            fontFamily: 'Inter, sans-serif'
+          }}>
+            TU CONSTELACIÓN COGNITIVA
           </h1>
-          <p className="text-xl text-gray-300">
-            Basado en las esferas que exploraste y el tiempo que dedicaste a cada una
+          <p className="text-lg" style={{
+            fontFamily: 'Crimson Pro, serif',
+            color: '#D1C4E0'
+          }}>
+            Lo que exploraste<br />
+            y el tiempo que dedicaste a cada esfera
           </p>
         </motion.div>
 
@@ -118,7 +120,11 @@ export const Constellation = ({
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="relative w-full max-w-4xl mx-auto h-[600px] mb-16 bg-black/30 rounded-3xl border border-white/20 backdrop-blur-sm overflow-hidden"
+          className="relative w-full max-w-4xl mx-auto h-[600px] mb-16 rounded-3xl overflow-hidden shadow-2xl"
+          style={{
+            background: 'linear-gradient(135deg, rgba(58, 42, 74, 0.6) 0%, rgba(44, 62, 80, 0.6) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}
         >
           <svg className="absolute inset-0 w-full h-full">
             {/* Draw connecting lines */}
@@ -174,8 +180,16 @@ export const Constellation = ({
           transition={{ delay: 1.5 }}
           className="max-w-2xl mx-auto text-center mb-12"
         >
-          <h2 className="text-3xl font-bold text-white mb-6">{insight.title}</h2>
-          <p className="text-xl text-gray-300 whitespace-pre-line leading-relaxed">
+          <h2 className="text-2xl font-semibold text-white mb-6" style={{
+            fontFamily: 'Inter, sans-serif'
+          }}>
+            {insight.title}
+          </h2>
+          <p className="text-lg whitespace-pre-line" style={{
+            fontFamily: 'Crimson Pro, serif',
+            color: '#D1C4E0',
+            lineHeight: '1.8'
+          }}>
             {insight.message}
           </p>
         </motion.div>
@@ -189,7 +203,12 @@ export const Constellation = ({
         >
           <button
             onClick={onGeneratePainting}
-            className="px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xl font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 shadow-2xl"
+            className="px-10 py-5 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-2xl"
+            style={{
+              backgroundColor: '#9B87B5',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px'
+            }}
           >
             → Generar mi pintura cognitiva
           </button>
@@ -198,7 +217,13 @@ export const Constellation = ({
         {/* Back button */}
         <button
           onClick={onBack}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-sm border rounded-full font-semibold hover:scale-105 transition-all duration-300"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderColor: 'rgba(255, 255, 255, 0.3)',
+            color: 'white',
+            fontFamily: 'Inter, sans-serif'
+          }}
         >
           ← Volver
         </button>

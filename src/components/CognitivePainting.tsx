@@ -128,7 +128,9 @@ export const CognitivePainting = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-black relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: 'linear-gradient(180deg, #E8DFF5 0%, #f4f1de 50%, #faf8f3 100%)'
+    }}>
       {/* Stars background */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 100 }).map((_, i) => (
@@ -150,11 +152,19 @@ export const CognitivePainting = ({
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-bold text-white mb-4">
-            Tu Día Digital, Pintado
+          <h1 className="text-5xl font-semibold mb-6" style={{
+            fontFamily: 'Inter, sans-serif',
+            color: '#2D1B3D'
+          }}>
+            TU DÍA DIGITAL, PINTADO
           </h1>
-          <p className="text-xl text-gray-300 mb-8">
-            ¿Cómo se vería tu actividad mental si la pintara un algoritmo?
+          <p className="text-lg mb-8" style={{
+            fontFamily: 'Crimson Pro, serif',
+            color: '#4A3A5A',
+            lineHeight: '1.8'
+          }}>
+            ¿Cómo se vería tu mente<br />
+            si la pintara un algoritmo?
           </p>
         </motion.div>
 
@@ -185,24 +195,37 @@ export const CognitivePainting = ({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            className="rounded-2xl p-8"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              border: '1px solid rgba(155, 135, 181, 0.3)'
+            }}
           >
-            <h3 className="text-2xl font-bold text-white mb-6">
-              LEYENDA DE COLORES
+            <h3 className="text-lg font-semibold mb-6" style={{
+              fontFamily: 'Inter, sans-serif',
+              color: '#8B6BA5',
+              letterSpacing: '0.1em'
+            }}>
+              LEYENDA
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {spheresData.map((sphere) => (
                 <div key={sphere.id} className="flex items-center gap-3">
                   <div
-                    className="w-8 h-8 rounded-full border-2 border-white/50"
-                    style={{ backgroundColor: sphere.color }}
+                    className="w-4 h-4 rounded-sm"
+                    style={{ 
+                      backgroundColor: sphere.color,
+                      filter: 'blur(0.3px)',
+                      opacity: 0.8
+                    }}
                   />
-                  <div>
-                    <div className="text-white font-semibold flex items-center gap-2">
-                      <span>{sphere.emoji}</span>
-                      <span className="text-sm">{sphere.title}</span>
-                    </div>
-                  </div>
+                  <span style={{
+                    fontFamily: 'Crimson Pro, serif',
+                    fontSize: '14px',
+                    color: '#4A3A5A'
+                  }}>
+                    {sphere.title}
+                  </span>
                 </div>
               ))}
             </div>
@@ -216,15 +239,18 @@ export const CognitivePainting = ({
           transition={{ delay: 0.9 }}
           className="max-w-2xl mx-auto text-center mb-12"
         >
-          <p className="text-lg text-gray-300 whitespace-pre-line leading-relaxed">
-            {`Esta es tu "huella cognitiva" de hoy.
-
-Los colores representan dónde vivió tu atención:
+          <p className="whitespace-pre-line" style={{
+            fontFamily: 'Crimson Pro, serif',
+            fontSize: '16px',
+            color: '#4A3A5A',
+            lineHeight: '1.8'
+          }}>
+            {`Esta es tu huella cognitiva.
 
 Más pinceladas de un color = 
-Más tiempo en ese patrón de pensamiento
+más tiempo en ese patrón.
 
-No hay pinturas "buenas" o "malas".
+No hay pinturas buenas o malas.
 Solo patrones.
 
 Y los patrones pueden cambiar.`}
@@ -241,12 +267,23 @@ Y los patrones pueden cambiar.`}
           >
             <button
               onClick={handleDownload}
-              className="px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xl font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 shadow-2xl"
+              className="px-10 py-5 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-2xl"
+              style={{
+                backgroundColor: '#7B6795',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '18px'
+              }}
             >
               ⬇ Descargar mi pintura
             </button>
-            <p className="text-gray-400 mt-4 text-sm">
-              Guárdala. Revísala en 6 meses. ¿Cambió tu patrón?
+            <p className="mt-4" style={{
+              fontFamily: 'Crimson Pro, serif',
+              fontStyle: 'italic',
+              fontSize: '14px',
+              color: '#8B6BA5'
+            }}>
+              Guárdala. Revísala en 6 meses.<br />
+              ¿Cambió tu patrón?
             </p>
           </motion.div>
         )}
@@ -254,7 +291,13 @@ Y los patrones pueden cambiar.`}
         {/* Back button */}
         <button
           onClick={onBack}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-sm border rounded-full font-semibold hover:scale-105 transition-all duration-300"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            borderColor: '#9B87B5',
+            color: '#2D1B3D',
+            fontFamily: 'Inter, sans-serif'
+          }}
         >
           ← Volver
         </button>

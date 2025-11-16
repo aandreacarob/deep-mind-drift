@@ -27,181 +27,76 @@ export interface UserJourney {
 
 const spheresData: SphereData[] = [
   {
-    id: "profundo",
-    color: "#4A90E2",
-    emoji: "📚",
-    title: "Pensamiento Profundo",
-    description: `La capacidad de sostener tu atención 
-en una idea compleja 
-por períodos extendidos de tiempo.
-
-Concentración sin interrupciones.
-Inmersión total.
-Flujo.`,
-    examples: [
-      "Leer un libro completo sin revisar el teléfono",
-      "Resolver un problema matemático complejo",
-      "Escribir durante 2 horas seguidas",
-      "Tener una conversación sin distracciones digitales",
-      "Ver una película sin pausarla ni revisar el móvil",
-    ],
-    neuroscience: `Activa principalmente la corteza prefrontal dorsolateral, 
-asociada con la función ejecutiva y el razonamiento abstracto.
-
-Requiere:
-- Glucosa constante
-- Entorno de baja estimulación sensorial  
-- Práctica sostenida durante años
-
-Se debilita con:
-- Interrupciones frecuentes
-- Multitasking crónico
-- Consumo superficial de contenido`,
-    position: { x: 20, y: 30 },
-  },
-  {
     id: "fragmentado",
     color: "#F5A623",
-    emoji: "⚡",
+    emoji: "fragmentado",
     title: "Pensamiento Fragmentado",
-    description: `Saltar entre múltiples tareas o estímulos
-sin completar profundamente ninguno.
-
-Tu atención es un malabarista exhausto
-que nunca puede descansar.`,
+    description: `Saltar constantemente entre tareas, apps y estímulos. 
+Tu atención está dividida en docenas de microtareas 
+simultáneas. Nunca terminas nada profundamente.`,
     examples: [
-      "Revisar 3 apps mientras ves una serie",
-      "Leer un artículo con 10 pestañas abiertas",
-      "Responder mensajes durante una reunión",
-      "Cambiar de canción antes de que termine",
-      "Trabajar con notificaciones activadas",
+      "Trabajar con 15 pestañas abiertas, cambiando entre ellas cada 30 segundos",
+      "Ver una serie mientras scrolleas Instagram y respondes mensajes",
+      "Empezar 5 tareas diferentes en una hora y no terminar ninguna",
     ],
-    neuroscience: `Genera un "costo de cambio" cognitivo medible.
-
-Cada interrupción requiere que el cerebro 
-recargue el contexto completo de la tarea.
-
-Consecuencias:
-- Pérdida de hasta 40% de eficiencia cognitiva
-- Aumento de cortisol (hormona del estrés)
-- Se necesitan 23 minutos para recuperar 
-  el foco completo después de una distracción
-
-El cerebro NO está diseñado para multitasking.
-Está diseñado para alternar rápidamente,
-pero cada cambio tiene un costo.`,
-    position: { x: 70, y: 25 },
+    neuroscience: `Sobrecarga el sistema de atención ejecutiva. Cada cambio de tarea cuesta entre 5-15 minutos de recuperación cognitiva. Activa constantemente el núcleo accumbens (dopamina de novedad) sin permitir satisfacción profunda.`,
+    position: { x: 20, y: 25 },
   },
   {
     id: "delegado",
     color: "#E74C3C",
-    emoji: "🤖",
+    emoji: "delegado",
     title: "Pensamiento Delegado",
-    description: `Usar IA o motores de búsqueda
-en lugar de recuperar tu propio conocimiento
-o razonar desde cero.
-
-Google es tu memoria externa.
-ChatGPT es tu procesador auxiliar.`,
+    description: `Has externalizado tu memoria y razonamiento a Google, ChatGPT y algoritmos. Ya no recuerdas números de teléfono, direcciones, o datos que "están en internet".`,
     examples: [
-      "Preguntarle a ChatGPT antes de intentar recordar",
-      "Googlear cada duda inmediata sin reflexionar",
-      "Usar calculadora para operaciones mentales simples",
-      "Depender de GPS incluso en rutas conocidas",
-      "No recordar cumpleaños sin recordatorios digitales",
+      "Googlear algo que sabías hace 5 años pero ya no recuerdas",
+      "Depender de GPS incluso para ir a lugares que has visitado 20 veces",
+      "No recordar cumpleaños sin que Facebook te lo recuerde",
     ],
-    neuroscience: `El "Efecto Google":
-
-Cuando externalizamos la memoria,
-el hipocampo (archivador de recuerdos) se atrofia.
-
-El cerebro optimiza recordando DÓNDE está la información,
-no la información misma.
-
-Esto se llama "memoria transactiva":
-Delegamos el almacenamiento a sistemas externos.
-
-Es eficiente para tareas mecánicas.
-Pero tiene un costo para el pensamiento profundo:
-Si no retienes información básica,
-no puedes establecer conexiones complejas.`,
-    position: { x: 30, y: 70 },
+    neuroscience: `Atrofia el hipocampo (responsable de la memoria a largo plazo). El cerebro aprende que no necesita retener información porque "está disponible externamente". Fenómeno conocido como "Efecto Google" o amnesia digital.`,
+    position: { x: 75, y: 30 },
   },
   {
     id: "aumentado",
     color: "#7ED321",
-    emoji: "🧩",
+    emoji: "aumentado",
     title: "Pensamiento Aumentado",
-    description: `Usar tecnología como colaborador
-que expande tus capacidades cognitivas,
-no como sustituto.
-
-La herramienta te potencia.
-No te reemplaza.`,
+    description: `Usas la tecnología como una extensión intencional de tu cognición. No delegas, sino que amplificas. Usas herramientas digitales para pensar mejor, no para pensar menos.`,
     examples: [
-      "Usar IA para revisar y mejorar tu propio razonamiento",
-      "Herramientas de visualización de datos complejos",
-      "Apps que organizan tu conocimiento (Notion, Obsidian)",
-      "Calculadora para cálculos complejos después de entender el proceso matemático",
-      "Traducción automática como puente para aprender idiomas",
+      "Usar Notion/Obsidian para construir un 'segundo cerebro' conectando ideas",
+      "Investigar en profundidad con múltiples fuentes, luego sintetizar sin IA",
+      "Usar apps de meditación, aprendizaje espaciado, o journaling estructurado",
     ],
-    neuroscience: `Activa redes de "cognición distribuida":
-
-El cerebro aprende a integrar herramientas externas
-como extensiones funcionales de sí mismo.
-
-Similar a cómo las gafas se vuelven 
-"parte transparente" de tu visión.
-
-La diferencia clave con el Pensamiento Delegado:
-
-DELEGADO: La herramienta sustituye tu proceso cognitivo
-AUMENTADO: La herramienta amplifica tu proceso cognitivo
-
-Ejemplo:
-- ChatGPT escribe por ti = Delegado
-- ChatGPT critica tu escritura = Aumentado`,
-    position: { x: 65, y: 65 },
+    neuroscience: `Fortalece la corteza prefrontal mediante el uso intencional de herramientas cognitivas. Crea "andamiaje mental" que extiende la capacidad de procesamiento sin atrofiar habilidades base.`,
+    position: { x: 30, y: 65 },
   },
   {
     id: "hibrido",
     color: "#BD10E0",
-    emoji: "🔮",
+    emoji: "hibrido",
     title: "Pensamiento Híbrido",
-    description: `El futuro cercano:
-
-Interfaces cerebro-computadora
-que borran la línea entre
-pensamiento biológico y digital.
-
-¿Dónde termina tu mente?
-¿Dónde empieza la máquina?`,
+    description: `Alternas conscientemente entre modos cognitivos según el contexto. Sabes cuándo necesitas profundidad y cuándo necesitas rapidez. Controlas tu relación con la tecnología en vez de ser controlado por ella.`,
     examples: [
-      "Neuralink y otras BCIs (Brain-Computer Interfaces)",
-      "Realidad aumentada cognitiva permanente",
-      "Memoria expandida artificialmente en tiempo real",
-      "Prótesis cognitivas que compensan déficits neurológicos",
-      "Interfaces neuronales para comunicación directa",
+      "Modo 'deep work' (2 horas sin interrupciones) + Modo 'comunicación' (30 min respondiendo todo)",
+      "Usar IA como co-pensador (le preguntas, cuestionas sus respuestas, sintetizas)",
+      "Reconocer cuándo estás en modo fragmentado y conscientemente cambiar de estado",
     ],
-    neuroscience: `Territorio inexplorado.
-
-La pregunta fundamental:
-
-¿Seguirá siendo "tu" pensamiento
-si está mediado por un algoritmo en tiempo real?
-
-¿La identidad personal sobrevive 
-la integración con una inteligencia no biológica?
-
-¿Dónde está la frontera del "yo"?
-
-Estas preguntas no son ciencia ficción.
-Son dilemas que la próxima generación
-tendrá que resolver.
-
-No en teoría.
-En práctica.`,
-    position: { x: 45, y: 50 },
+    neuroscience: `Metacognición avanzada: tu corteza prefrontal monitorea y regula tus propios estados cognitivos. Requiere entrenamiento en mindfulness y autoobservación. Es el estado más difícil de sostener pero el más poderoso.`,
+    position: { x: 70, y: 70 },
+  },
+  {
+    id: "profundo",
+    color: "#4A90E2",
+    emoji: "profundo",
+    title: "Pensamiento Profundo",
+    description: `Es la capacidad de sostener la atención en una sola tarea compleja durante períodos extendidos. Leer un libro completo, escribir un ensayo, resolver un problema matemático sin interrupciones.`,
+    examples: [
+      "Leer un libro físico durante 2 horas sin revisar el teléfono",
+      "Escribir un documento importante con notificaciones desactivadas",
+      "Resolver un problema complejo siguiendo un hilo de pensamiento sin interrupciones",
+    ],
+    neuroscience: `Activa principalmente la corteza prefrontal dorsolateral y el hipocampo. Requiere altos niveles de dopamina sostenida y baja activación de la amígdala (ansiedad por FOMO).`,
+    position: { x: 50, y: 45 },
   },
 ];
 
@@ -284,29 +179,14 @@ const Seccion3 = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-black relative overflow-hidden">
-      {/* Stars background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 100 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: 'linear-gradient(180deg, #E8DFF5 0%, #f4f1de 50%, #faf8f3 100%)'
+    }}>
+      {/* Watercolor texture overlay */}
+      <div className="absolute inset-0 opacity-20" style={{
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'0.3\'/%3E%3C/svg%3E")',
+        backgroundSize: '200px 200px'
+      }} />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16">
@@ -316,18 +196,20 @@ const Seccion3 = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16 max-w-2xl mx-auto"
         >
-          <h1 className="text-5xl font-bold text-white mb-8">
-            Cinco formas de pensar en la era digital
+          <h1 className="text-6xl font-semibold mb-8" style={{
+            fontFamily: 'Crimson Pro, serif',
+            color: '#2D1B3D',
+            lineHeight: '1.3'
+          }}>
+            Cinco formas de pensar<br />en la era digital
           </h1>
-          <p className="text-xl text-gray-300 mb-4 whitespace-pre-line">
-            {`Cada esfera representa un patrón cognitivo
-que tu cerebro ha desarrollado.
-
-Algunos te expanden.
-Otros te fragmentan.`}
-          </p>
-          <p className="text-lg text-gray-400 mt-8">
-            Explora cada una. Descubre cuál domina en ti.
+          <p className="text-xl mb-4" style={{
+            fontFamily: 'Crimson Pro, serif',
+            color: '#2D1B3D',
+            lineHeight: '1.8'
+          }}>
+            Explora cada esfera.<br />
+            Descubre cuál es la tuya.
           </p>
         </motion.div>
 
@@ -350,15 +232,23 @@ Otros te fragmentan.`}
           animate={{ opacity: 1 }}
           className="text-center mb-8"
         >
-          <p className="text-gray-400 mb-4">
-            Has explorado {userJourney.spheresClicked.length} de 5 esferas
+          <p className="mb-6" style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14px',
+            color: '#8B6BA5'
+          }}>
+            Has explorado {userJourney.spheresClicked.length} de 5
           </p>
           {canViewConstellation && (
             <motion.button
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               onClick={handleViewConstellation}
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg"
+              className="px-10 py-4 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-lg"
+              style={{
+                backgroundColor: '#9B87B5',
+                fontFamily: 'Inter, sans-serif'
+              }}
             >
               → Ver mi constelación
             </motion.button>
@@ -368,7 +258,13 @@ Otros te fragmentan.`}
         {/* Back button */}
         <button
           onClick={() => navigate("/seccion-2")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-sm border rounded-full font-semibold hover:scale-105 transition-all duration-300"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            borderColor: '#9B87B5',
+            color: '#2D1B3D',
+            fontFamily: 'Inter, sans-serif'
+          }}
         >
           ← Volver
         </button>
