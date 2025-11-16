@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import sunflowerField from "@/assets/sunflower-field.jpg";
+import { useEffect, useState } from "react";
 
 const MuseumEntrance = () => {
   const navigate = useNavigate();
+  const [circles, setCircles] = useState<Array<{ x: number; y: number; size: number; color: string; delay: number }>>([]);
 
   const doors = [
     { id: 1, label: "I. LA DERIVA", route: "/seccion-1" },
@@ -11,15 +12,70 @@ const MuseumEntrance = () => {
     { id: 3, label: "III. CINCO MOMENTOS", route: "/seccion-3" },
   ];
 
+  useEffect(() => {
+    // Generate random colorful circles for the wreath effect
+    const colors = [
+      'rgba(255, 100, 150, 0.6)',
+      'rgba(100, 200, 255, 0.6)',
+      'rgba(150, 255, 100, 0.6)',
+      'rgba(255, 200, 100, 0.6)',
+      'rgba(200, 100, 255, 0.6)',
+      'rgba(255, 150, 100, 0.6)',
+    ];
+
+    const newCircles = [];
+    for (let i = 0; i < 150; i++) {
+      // Create wreath pattern - circles around the edges
+      const angle = (Math.PI * 2 * i) / 150;
+      const radiusVariation = Math.random() * 200 + 250;
+      const centerX = 50;
+      const centerY = 50;
+      
+      newCircles.push({
+        x: centerX + Math.cos(angle) * radiusVariation + (Math.random() - 0.5) * 150,
+        y: centerY + Math.sin(angle) * radiusVariation + (Math.random() - 0.5) * 150,
+        size: Math.random() * 80 + 40,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        delay: Math.random() * 2,
+      });
+    }
+    setCircles(newCircles);
+  }, []);
+
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${sunflowerField})` }}
-      >
-        <div className="absolute inset-0 bg-black/40" />
+    <div className="relative min-h-screen w-full overflow-hidden bg-black">
+      {/* Colorful Circles Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {circles.map((circle, index) => (
+          <motion.div
+            key={index}
+            className="absolute rounded-full border-2 opacity-70"
+            style={{
+              left: `${circle.x}%`,
+              top: `${circle.y}%`,
+              width: `${circle.size}px`,
+              height: `${circle.size}px`,
+              borderColor: circle.color,
+              transform: 'translate(-50%, -50%)',
+            }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.7 }}
+            transition={{ duration: 1.5, delay: circle.delay }}
+          />
+        ))}
       </div>
+
+      {/* Decorative Sparkle Bottom Right */}
+      <motion.div
+        className="fixed bottom-8 right-8 w-12 h-12"
+        initial={{ opacity: 0, rotate: 0 }}
+        animate={{ opacity: 0.6, rotate: 360 }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="#888" />
+        </svg>
+      </motion.div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
@@ -27,71 +83,63 @@ const MuseumEntrance = () => {
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="text-center mb-12"
+          transition={{ duration: 1, delay: 0.5 }}
+          className="text-center mb-16"
         >
-          <div className="flex items-center justify-center gap-6 mb-4">
-            <div className="h-px w-16 md:w-24 bg-[#F5F5DC]/60" />
-            <h1 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-[#F5F5DC] tracking-wide">
-              MUSEO DIGITAL
-            </h1>
-            <div className="h-px w-16 md:w-24 bg-[#F5F5DC]/60" />
-          </div>
-          <h2 className="font-['Playfair_Display'] text-3xl md:text-5xl lg:text-6xl text-[#F5F5DC] mb-6">
-            de la Atención Fragmentada
+          <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl text-white tracking-wider mb-4">
+            MUSEO DIGITAL
+          </h1>
+          <h2 className="font-['Playfair_Display'] text-2xl md:text-4xl text-white/90">
+            Mil Caminos, Tres Puertas.
           </h2>
-          <p className="font-['Lora'] text-base md:text-lg lg:text-xl text-[#F5F5DC]/80 max-w-2xl mx-auto leading-relaxed">
-            Una experiencia inmersiva sobre cómo<br />
-            la tecnología reescribe nuestro cerebro
-          </p>
         </motion.div>
 
         {/* Three Doors */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-12 mb-12 w-full max-w-5xl"
+          transition={{ duration: 0.8, delay: 1 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12 w-full max-w-6xl"
         >
           {doors.map((door, index) => (
-            <motion.button
+            <motion.div
               key={door.id}
-              onClick={() => navigate(door.route)}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1 + index * 0.2 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="group relative bg-gradient-to-b from-[#8B1A1A] to-[#6B0F1A] rounded-lg p-8 md:p-12 shadow-2xl border-4 border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all duration-300"
-              style={{
-                boxShadow: "0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(212, 175, 55, 0.2)"
-              }}
+              transition={{ duration: 0.6, delay: 1.2 + index * 0.2 }}
+              className="flex flex-col items-center"
             >
-              {/* Door Panel Effect */}
-              <div className="absolute inset-4 border-2 border-[#D4AF37]/20 rounded" />
-              
-              {/* Glow Effect on Hover */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-[#D4AF37]/0 to-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
               {/* Door Label */}
-              <div className="relative z-10">
-                <span className="block font-['Playfair_Display'] text-2xl md:text-3xl text-[#F5F5DC] group-hover:text-[#D4AF37] transition-colors duration-300 tracking-wide">
-                  {door.label}
-                </span>
-              </div>
-            </motion.button>
+              <p className="font-['Playfair_Display'] text-lg md:text-xl text-white/80 mb-4 tracking-wide">
+                {door.label}
+              </p>
+              
+              {/* Door */}
+              <motion.button
+                onClick={() => navigate(door.route)}
+                whileHover={{ scale: 1.03, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[3/4] max-w-[280px]"
+                style={{
+                  boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
+                }}
+              >
+                {/* Outer Door Frame */}
+                <div className="absolute inset-0 border-[6px] border-[#2a2a2a] rounded-sm" />
+                
+                {/* Inner Door Panel */}
+                <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm" />
+                
+                {/* Door Knobs */}
+                <div className="absolute left-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
+                <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
+                
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-sm" />
+              </motion.button>
+            </motion.div>
           ))}
         </motion.div>
-
-        {/* Bottom Text */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.8 }}
-          className="font-['Lora'] italic text-sm md:text-base text-[#F5F5DC]/60 text-center"
-        >
-          Recomendamos seguir el recorrido sugerido
-        </motion.p>
       </div>
     </div>
   );
