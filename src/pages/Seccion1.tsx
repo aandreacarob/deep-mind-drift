@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomCursor } from "@/components/CustomCursor";
-import vanGoghVideo from "@/assets/Van Gogh Style Video.mp4";
+import caminoBackground from "@/assets/camino.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,14 +72,14 @@ const Seccion1 = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const backgroundRef = useRef<HTMLVideoElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
   const [stars, setStars] = useState<Star[]>([]);
   const MAX_STARS = 8; // Límite máximo de estrellas visibles
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ScrollTrigger para el efecto de parallax en el video de fondo
+    // ScrollTrigger para el efecto de parallax en la imagen de fondo
     if (containerRef.current && backgroundRef.current && !prefersReducedMotion) {
       ScrollTrigger.create({
         trigger: containerRef.current,
@@ -88,14 +88,10 @@ const Seccion1 = () => {
         scrub: true,
         onUpdate: (self) => {
           const progress = self.progress;
-          // Mover el video verticalmente para crear efecto parallax
-          // El video es más alto que el viewport, así que lo desplazamos
-          const video = backgroundRef.current!;
-          const videoHeight = video.videoHeight || video.clientHeight;
-          const viewportHeight = window.innerHeight;
-          const maxTranslate = Math.max(0, videoHeight - viewportHeight);
-          const translateY = -progress * maxTranslate;
-          video.style.transform = `translateY(${translateY}px)`;
+          // Mover el backgroundPosition desde top (0%) hasta bottom (100%)
+          // Usamos center para mantener centrado horizontalmente
+          const backgroundPosition = `${50}% ${progress * 100}%`;
+          backgroundRef.current!.style.backgroundPosition = backgroundPosition;
         },
       });
     }
@@ -314,17 +310,13 @@ const Seccion1 = () => {
     <>
       <CustomCursor />
       <div ref={containerRef} className="scrollytelling-container">
-        <video
+        <div
           ref={backgroundRef}
           className="fixed-background"
-          src={vanGoghVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
           style={{
-            objectFit: "cover",
-            objectPosition: "center top",
+            backgroundImage: `url(${caminoBackground})`,
+            backgroundPosition: "center top",
+            backgroundSize: "cover",
           }}
         />
       
