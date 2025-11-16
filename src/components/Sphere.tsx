@@ -11,10 +11,10 @@ interface SphereProps {
 const getSymbolPath = (type: string) => {
   switch (type) {
     case "fragmentado":
-      // Líneas fragmentadas radiando
+      // Líneas fragmentadas radiando (※)
       return (
         <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0 m-auto">
-          <g stroke="currentColor" strokeWidth="3" fill="none" opacity="0.7">
+          <g stroke="rgba(255, 255, 255, 0.6)" strokeWidth="3" fill="none">
             <line x1="40" y1="20" x2="40" y2="30" />
             <line x1="52" y1="24" x2="58" y2="30" />
             <line x1="60" y1="40" x2="50" y2="40" />
@@ -26,51 +26,49 @@ const getSymbolPath = (type: string) => {
           </g>
         </svg>
       );
-    case "delegado":
-      // Flechas saliendo del centro
+    case "acumulador":
+      // Diamante (◈)
       return (
         <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0 m-auto">
-          <g stroke="currentColor" strokeWidth="2.5" fill="none" opacity="0.7">
-            <path d="M40 40 L40 20 M35 25 L40 20 L45 25" />
-            <path d="M40 40 L60 40 M55 35 L60 40 L55 45" />
-            <path d="M40 40 L40 60 M35 55 L40 60 L45 55" />
-            <path d="M40 40 L20 40 M25 35 L20 40 L25 45" />
+          <g stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2.5" fill="none">
+            <path d="M40 20 L55 40 L40 60 L25 40 Z" />
+            <line x1="40" y1="20" x2="40" y2="60" />
+            <line x1="25" y1="40" x2="55" y2="40" />
           </g>
         </svg>
       );
-    case "aumentado":
-      // Red de nodos
+    case "reactivo":
+      // Cruz decorada (✤)
       return (
         <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0 m-auto">
-          <g stroke="currentColor" strokeWidth="2" fill="currentColor" opacity="0.7">
-            <line x1="40" y1="25" x2="30" y2="45" />
-            <line x1="40" y1="25" x2="50" y2="45" />
-            <line x1="30" y1="45" x2="50" y2="45" />
-            <line x1="30" y1="45" x2="40" y2="55" />
-            <line x1="50" y1="45" x2="40" y2="55" />
-            <circle cx="40" cy="25" r="4" />
-            <circle cx="30" cy="45" r="4" />
-            <circle cx="50" cy="45" r="4" />
-            <circle cx="40" cy="55" r="4" />
+          <g stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2.5" fill="none">
+            <line x1="40" y1="20" x2="40" y2="60" />
+            <line x1="20" y1="40" x2="60" y2="40" />
+            <circle cx="40" cy="20" r="3" fill="rgba(255, 255, 255, 0.6)" />
+            <circle cx="60" cy="40" r="3" fill="rgba(255, 255, 255, 0.6)" />
+            <circle cx="40" cy="60" r="3" fill="rgba(255, 255, 255, 0.6)" />
+            <circle cx="20" cy="40" r="3" fill="rgba(255, 255, 255, 0.6)" />
           </g>
         </svg>
       );
-    case "hibrido":
-      // Formas fusionándose
+    case "buscador":
+      // Círculo con punto central (◉)
       return (
         <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0 m-auto">
-          <g fill="currentColor" opacity="0.6">
-            <ellipse cx="32" cy="40" rx="15" ry="20" />
-            <ellipse cx="48" cy="40" rx="15" ry="20" />
+          <g stroke="rgba(255, 255, 255, 0.6)" fill="none">
+            <circle cx="40" cy="40" r="20" strokeWidth="2.5" />
+            <circle cx="40" cy="40" r="6" fill="rgba(255, 255, 255, 0.6)" />
           </g>
         </svg>
       );
-    case "profundo":
-      // Espiral concéntrica
+    case "ausente":
+      // Semicírculo (◐)
       return (
         <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0 m-auto">
-          <g stroke="currentColor" strokeWidth="2.5" fill="none" opacity="0.7">
-            <path d="M40 40 Q45 35 50 40 T50 50 Q45 55 40 50 T30 40 Q35 30 45 30" />
+          <g stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2.5" fill="none">
+            <circle cx="40" cy="40" r="20" />
+            <path d="M40 20 L40 60" fill="rgba(255, 255, 255, 0.6)" />
+            <path d="M40 20 A20 20 0 0 1 40 60 Z" fill="rgba(255, 255, 255, 0.6)" />
           </g>
         </svg>
       );
@@ -119,19 +117,30 @@ export const Sphere = ({ sphere, onClick, isExplored, delay }: SphereProps) => {
 
       {/* Sphere with watercolor texture */}
       <div
-        className="relative rounded-full flex items-center justify-center shadow-xl transition-all duration-300"
+        className="relative flex items-center justify-center shadow-xl transition-all duration-500"
         style={{
-          width: '180px',
-          height: '180px',
+          width: '200px',
+          height: '200px',
           backgroundColor: sphere.color,
-          opacity: 0.85,
-          filter: 'blur(0.5px)',
-          boxShadow: `0 8px 32px ${sphere.color}60, inset 0 0 20px rgba(255,255,255,0.2)`,
+          borderRadius: '48% 52% 49% 51% / 52% 48% 51% 49%',
+          filter: 'contrast(1.05) brightness(1.02)',
+          boxShadow: `10px 15px 20px ${sphere.color}4D`,
         }}
       >
+        {/* Watercolor effect overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            borderRadius: 'inherit',
+            background: 'inherit',
+            opacity: 0.15,
+            filter: 'url(#watercolor-effect)'
+          }}
+        />
+        
         {/* Symbol */}
-        <div style={{ color: `${sphere.color}` }} className="brightness-75">
-          {getSymbolPath(sphere.emoji)}
+        <div className="relative z-10">
+          {getSymbolPath(sphere.symbol)}
         </div>
 
         {/* Explored indicator */}
