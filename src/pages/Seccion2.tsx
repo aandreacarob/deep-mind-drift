@@ -623,6 +623,20 @@ Sino cómo la habitas.`,
           ← Volver
         </motion.button>
 
+        {/* Next Section button - appears when scroll reaches 99% */}
+        {isTransitioning && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            onClick={() => navigate("/seccion-3")}
+            className="fixed bottom-8 right-8 z-50 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 backdrop-blur-sm border border-white/30 rounded-full text-white font-bold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-110 shadow-lg"
+          >
+            Esferas de Pensamiento →
+          </motion.button>
+        )}
+      
+
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
