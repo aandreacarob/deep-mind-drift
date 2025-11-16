@@ -59,7 +59,7 @@ export const LeafPreview = ({
     >
       <h3
         className="text-lg font-semibold mb-2 font-['Cormorant_Garamond'] italic"
-        style={{ color }}
+        style={{ color: 'hsl(225, 73%, 57%)' }}
       >
         {title}
       </h3>
