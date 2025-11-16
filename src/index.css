@@ -194,7 +194,9 @@ All colors MUST be HSL.
     
     /* Borde fino y sutil - blanco al 10% de opacidad */
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    
+    /* Border-radius asimétrico para simular pincelada orgánica irregular */
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
     
     padding: 3rem 4rem;
     max-width: 700px;
