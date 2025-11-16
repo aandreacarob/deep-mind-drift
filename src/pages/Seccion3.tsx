@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { CustomCursor } from "@/components/CustomCursor";
 import { Sphere } from "@/components/Sphere";
 import { SphereModal } from "@/components/SphereModal";
 import { Constellation } from "@/components/Constellation";
@@ -159,27 +160,35 @@ const Seccion3 = () => {
 
   if (stage === "constellation") {
     return (
-      <Constellation
-        userJourney={userJourney}
-        spheresData={spheresData}
-        onGeneratePainting={() => setStage("painting")}
-        onBack={() => navigate("/seccion-2")}
-      />
+      <>
+        <CustomCursor />
+        <Constellation
+          userJourney={userJourney}
+          spheresData={spheresData}
+          onGeneratePainting={() => setStage("painting")}
+          onBack={() => navigate("/seccion-2")}
+        />
+      </>
     );
   }
 
   if (stage === "painting") {
     return (
-      <CognitivePainting
-        userJourney={userJourney}
-        spheresData={spheresData}
-        onBack={() => setStage("constellation")}
-      />
+      <>
+        <CustomCursor />
+        <CognitivePainting
+          userJourney={userJourney}
+          spheresData={spheresData}
+          onBack={() => setStage("constellation")}
+        />
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <>
+      <CustomCursor />
+      <div className="min-h-screen relative overflow-hidden" style={{
       background: 'linear-gradient(180deg, #E8DFF5 0%, #f4f1de 50%, #faf8f3 100%)'
     }}>
       {/* Watercolor texture overlay */}
@@ -280,6 +289,7 @@ const Seccion3 = () => {
         )}
       </AnimatePresence>
     </div>
+    </>
   );
 };
 

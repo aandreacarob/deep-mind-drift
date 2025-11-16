@@ -80,6 +80,11 @@ const getSymbolPath = (type: string) => {
 };
 
 export const Sphere = ({ sphere, onClick, isExplored, delay }: SphereProps) => {
+  // Generate unique animation parameters for each sphere to create organic movement
+  const floatDuration = 4 + (delay * 0.5); // Vary duration based on delay
+  const floatOffset = 8 + (delay * 2); // Vary movement distance
+  const breatheDuration = 3 + (delay * 0.3); // Vary breathing speed
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
@@ -95,72 +100,97 @@ export const Sphere = ({ sphere, onClick, isExplored, delay }: SphereProps) => {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
     >
-      {/* Soft glow */}
+      {/* Floating wrapper - handles the continuous floating animation */}
       <motion.div
-        className="absolute inset-0 rounded-full blur-2xl"
-        style={{
-          backgroundColor: sphere.color,
-          opacity: 0.3,
-          width: '180px',
-          height: '180px',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
+        className="relative"
         animate={{
-          scale: [0.98, 1, 0.98],
+          y: [
+            -floatOffset * 0.5,
+            floatOffset * 0.3,
+            -floatOffset * 0.7,
+            floatOffset * 0.2,
+            -floatOffset * 0.5
+          ],
+          x: [
+            -floatOffset * 0.3,
+            floatOffset * 0.5,
+            -floatOffset * 0.2,
+            floatOffset * 0.4,
+            -floatOffset * 0.3
+          ],
         }}
         transition={{
-          duration: 4,
+          delay: delay + 0.5,
+          duration: floatDuration,
           repeat: Infinity,
           ease: "easeInOut",
-        }}
-      />
-
-      {/* Sphere with watercolor texture */}
-      <div
-        className="relative rounded-full flex items-center justify-center shadow-xl transition-all duration-300"
-        style={{
-          width: '180px',
-          height: '180px',
-          backgroundColor: sphere.color,
-          opacity: 0.85,
-          filter: 'blur(0.5px)',
-          boxShadow: `0 8px 32px ${sphere.color}60, inset 0 0 20px rgba(255,255,255,0.2)`,
+          times: [0, 0.25, 0.5, 0.75, 1],
         }}
       >
-        {/* Symbol */}
-        <div style={{ color: `${sphere.color}` }} className="brightness-75">
-          {getSymbolPath(sphere.emoji)}
-        </div>
+        {/* Soft glow with breathing effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full blur-2xl"
+          style={{
+            backgroundColor: sphere.color,
+            opacity: 0.3,
+            width: '180px',
+            height: '180px',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+          animate={{
+            scale: [0.95, 1.05, 0.95],
+            opacity: [0.25, 0.35, 0.25],
+          }}
+          transition={{
+            duration: breatheDuration,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
-        {/* Explored indicator */}
-        {isExplored && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg"
-            style={{
-              backgroundColor: '#7ED321'
-            }}
-          >
-            ✓
-          </motion.div>
-        )}
-      </div>
+        {/* Sphere with watercolor texture - breathing animation */}
+        <motion.div
+          className="relative rounded-full flex items-center justify-center shadow-xl transition-all duration-300"
+          style={{
+            width: '180px',
+            height: '180px',
+            backgroundColor: sphere.color,
+            opacity: 0.85,
+            filter: 'blur(0.5px)',
+            boxShadow: `0 8px 32px ${sphere.color}60, inset 0 0 20px rgba(255,255,255,0.2)`,
+          }}
+          animate={{
+            scale: [1, 1.03, 0.97, 1.02, 1],
+          }}
+          transition={{
+            duration: breatheDuration * 1.2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            times: [0, 0.3, 0.6, 0.8, 1],
+          }}
+        >
+          {/* Symbol */}
+          <div style={{ color: `${sphere.color}` }} className="brightness-75">
+            {getSymbolPath(sphere.emoji)}
+          </div>
 
-      {/* Subtle floating */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{
-          y: [-3, 3, -3],
-        }}
-        transition={{
-          duration: 5 + Math.random(),
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+          {/* Explored indicator */}
+          {isExplored && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg"
+              style={{
+                backgroundColor: '#7ED321'
+              }}
+            >
+              ✓
+            </motion.div>
+          )}
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };
