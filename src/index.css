@@ -250,6 +250,33 @@ All colors MUST be HSL.
     box-shadow: 0 6px 20px rgba(255, 154, 60, 0.6);
   }
 
+  .lobby-btn {
+    margin-top: 2rem;
+    padding: 0.9rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .lobby-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  }
+
+  .lobby-section {
+    padding-bottom: 100px;
+  }
+
   @media (max-width: 768px) {
     .message-box {
       padding: 1.5rem;
@@ -264,6 +291,11 @@ All colors MUST be HSL.
     .continue-btn {
       padding: 0.8rem 2rem;
       font-size: 1rem;
+    }
+
+    .lobby-btn {
+      padding: 0.7rem 2rem;
+      font-size: 0.95rem;
     }
   }
 
@@ -286,6 +318,10 @@ All colors MUST be HSL.
     }
     
     .continue-btn {
+      transition: none;
+    }
+
+    .lobby-btn {
       transition: none;
     }
 
