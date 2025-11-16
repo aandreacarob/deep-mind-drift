@@ -98,8 +98,8 @@ export const TreeLeaf = ({
         style={{
           filter: isActive 
             ? isHovered 
-              ? `hue-rotate(195deg) saturate(1.5) brightness(1.5) contrast(1.1) drop-shadow(0 12px 30px ${color}CC) drop-shadow(0 0 20px ${color}AA)` 
-              : "hue-rotate(195deg) saturate(1.5) brightness(1.4) contrast(1.1) drop-shadow(0 4px 12px rgba(0,0,0,0.2))"
+              ? `hue-rotate(155deg) saturate(1.8) brightness(1.6) contrast(1.05) drop-shadow(0 12px 30px ${color}CC) drop-shadow(0 0 20px ${color}AA)` 
+              : "hue-rotate(155deg) saturate(1.8) brightness(1.5) contrast(1.05) drop-shadow(0 4px 12px rgba(0,0,0,0.2))"
             : "none",
           pointerEvents: isActive ? "auto" : "none",
           transition: "filter 0.2s ease-out",
