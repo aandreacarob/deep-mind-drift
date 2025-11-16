@@ -114,11 +114,16 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    cursor: none !important;
   }
 
   body {
     @apply bg-background text-foreground overflow-x-hidden;
-    cursor: none;
+    cursor: none !important;
+  }
+
+  html {
+    cursor: none !important;
   }
 
   @font-face {

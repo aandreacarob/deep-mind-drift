@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ThreadCircle } from "@/components/ThreadCircle";
+import { CustomCursor } from "@/components/CustomCursor";
 
 const MuseumEntrance = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const MuseumEntrance = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
+      <CustomCursor />
       {/* Thread Circle Effect */}
       <ThreadCircle />
       
@@ -71,24 +73,76 @@ const MuseumEntrance = () => {
               <motion.button
                 onClick={() => navigate(door.route)}
                 whileHover={{ scale: 1.03, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[3/4] max-w-[280px]"
-              style={{
+                whileTap={{ scale: 0.98 }}
+                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[3/4] max-w-[280px] overflow-hidden"
+                style={{
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
-              }}
-            >
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = `
+                    0 0 30px rgba(255, 255, 255, 0.6),
+                    0 0 50px rgba(255, 215, 0, 0.4),
+                    0 0 70px rgba(255, 192, 203, 0.3),
+                    0 15px 40px rgba(0, 0, 0, 0.8)
+                  `;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 0, 0, 0.8)";
+                }}
+              >
+                {/* Glow perlado en hover - capa base */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"
+                  style={{
+                    background: `
+                      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.2) 0%, transparent 60%),
+                      radial-gradient(circle at 20% 80%, rgba(200, 230, 255, 0.2) 0%, transparent 50%)
+                    `,
+                    boxShadow: `
+                      0 0 30px rgba(255, 255, 255, 0.8),
+                      0 0 50px rgba(255, 215, 0, 0.6),
+                      0 0 70px rgba(255, 192, 203, 0.4),
+                      0 0 90px rgba(200, 230, 255, 0.3),
+                      inset 0 0 40px rgba(255, 255, 255, 0.15)
+                    `,
+                    filter: 'blur(2px)',
+                  }}
+                />
+                
+                {/* Efecto de brillo animado */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                  animate={{
+                    background: [
+                      'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                      'radial-gradient(circle at 100% 100%, rgba(255, 215, 0, 0.4), transparent 50%)',
+                      'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                    ],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    mixBlendMode: 'overlay',
+                  }}
+                />
+                
                 {/* Outer Door Frame */}
-                <div className="absolute inset-0 border-[6px] border-[#2a2a2a] rounded-sm" />
+                <div className="absolute inset-0 border-[6px] border-[#2a2a2a] rounded-sm z-10" />
               
                 {/* Inner Door Panel */}
-                <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm" />
+                <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm z-10" />
               
                 {/* Door Knob */}
-                <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
+                <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner z-20" />
               
-                {/* Hover Effect */}
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-sm" />
-            </motion.button>
+                {/* Hover Effect Overlay */}
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-300 rounded-sm z-10" />
+              </motion.button>
             </motion.div>
           ))}
         </motion.div>

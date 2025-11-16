@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export const CustomCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -13,6 +12,14 @@ export const CustomCursor = () => {
 
     const handleMouseEnter = () => setIsVisible(true);
     const handleMouseLeave = () => setIsVisible(false);
+
+    // Inicializar posición al cargar
+    if (typeof window !== 'undefined') {
+      setMousePosition({ 
+        x: window.innerWidth / 2, 
+        y: window.innerHeight / 2 
+      });
+    }
 
     window.addEventListener("mousemove", updateMousePosition);
     document.addEventListener("mouseenter", handleMouseEnter);
@@ -28,50 +35,39 @@ export const CustomCursor = () => {
   if (!isVisible) return null;
 
   return (
-    <motion.div
+    <div
       className="fixed pointer-events-none z-[9999]"
-      animate={{
-        x: mousePosition.x - 12,
-        y: mousePosition.y - 12,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 500,
-        damping: 28,
-        mass: 0.5,
+      style={{
+        width: '32px',
+        height: '32px',
+        left: `${mousePosition.x - 16}px`,
+        top: `${mousePosition.y - 16}px`,
+        transform: 'translate(0, 0)',
       }}
     >
-      {/* Burbuja neón principal */}
-      <div 
-        className="w-6 h-6 rounded-full relative"
+      {/* Girasol pequeño */}
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
         style={{
-          background: 'radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.9), rgba(0, 200, 255, 0.8), rgba(0, 150, 255, 0.6))',
-          boxShadow: `
-            0 0 10px rgba(0, 255, 255, 1),
-            0 0 20px rgba(0, 255, 255, 0.8),
-            0 0 30px rgba(0, 255, 255, 0.6),
-            0 0 40px rgba(0, 200, 255, 0.4),
-            inset 0 0 10px rgba(255, 255, 255, 0.3)
-          `,
+          filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.8))',
         }}
       >
-        {/* Reflejo de luz en la burbuja */}
-        <div 
-          className="absolute top-1 left-1 w-2 h-2 rounded-full"
-          style={{
-            background: 'rgba(255, 255, 255, 0.8)',
-            boxShadow: '0 0 5px rgba(255, 255, 255, 1)',
-          }}
-        />
-      </div>
-      {/* Resplandor exterior adicional */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full -z-10"
-        style={{
-          background: 'radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent 70%)',
-          animation: 'pulse 2s ease-in-out infinite',
-        }}
-      />
-    </motion.div>
+        {/* Pétalos del girasol - 8 pétalos alrededor del centro */}
+        <ellipse cx="16" cy="6" rx="3" ry="6" fill="#FFD700" />
+        <ellipse cx="23" cy="9" rx="3" ry="6" fill="#FFD700" transform="rotate(45 16 16)" />
+        <ellipse cx="26" cy="16" rx="3" ry="6" fill="#FFD700" transform="rotate(90 16 16)" />
+        <ellipse cx="23" cy="23" rx="3" ry="6" fill="#FFD700" transform="rotate(135 16 16)" />
+        <ellipse cx="16" cy="26" rx="3" ry="6" fill="#FFD700" transform="rotate(180 16 16)" />
+        <ellipse cx="9" cy="23" rx="3" ry="6" fill="#FFD700" transform="rotate(225 16 16)" />
+        <ellipse cx="6" cy="16" rx="3" ry="6" fill="#FFD700" transform="rotate(270 16 16)" />
+        <ellipse cx="9" cy="9" rx="3" ry="6" fill="#FFD700" transform="rotate(315 16 16)" />
+        
+        {/* Centro del girasol */}
+        <circle cx="16" cy="16" r="5" fill="#8B4513" />
+        <circle cx="16" cy="16" r="3" fill="#A0522D" />
+      </svg>
+    </div>
   );
 };
