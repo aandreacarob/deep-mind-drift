@@ -66,7 +66,6 @@ const messages: MessageSection[] = [
   { id: 40, content: "<em>No es apocalíptico.</em>\n<em>No es una adicción.</em>\n<em>No es el fin del mundo.</em>" },
   { id: 41, content: "<em class='highlight-doubt'>Es algo más sutil.</em>\n<em class='highlight-doubt'>Más profundo.</em>\n<em class='highlight-doubt'>Más... invisible.</em>" },
   { id: 42, content: "<h2 class='highlight-question'>¿Quieres ver qué es?</h2>\n<button class='continue-btn'>→ Continuar</button>", className: "heading final" },
-  { id: 43, content: "<button class='lobby-btn'>← Volver al Lobby</button>", className: "lobby-section" },
 ];
 
 const Seccion1 = () => {
@@ -318,6 +317,13 @@ const Seccion1 = () => {
   return (
     <>
       <CustomCursor />
+      <button 
+        className="fixed-lobby-btn"
+        onClick={handleBackToLobby}
+        aria-label="Volver al Lobby"
+      >
+        ← Lobby
+      </button>
       <div ref={containerRef} className="scrollytelling-container">
         <video
           ref={backgroundRef}
@@ -373,11 +379,8 @@ const Seccion1 = () => {
               <div 
                 dangerouslySetInnerHTML={{ __html: message.content }} 
                 onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  if (target.classList.contains('continue-btn')) {
+                  if ((e.target as HTMLElement).classList.contains('continue-btn')) {
                     handleContinue();
-                  } else if (target.classList.contains('lobby-btn')) {
-                    handleBackToLobby();
                   }
                 }}
               />
