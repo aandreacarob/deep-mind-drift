@@ -1,192 +1,136 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Sphere } from "@/components/Sphere";
 import { SphereModal } from "@/components/SphereModal";
-import { Constellation } from "@/components/Constellation";
-import { CognitivePainting } from "@/components/CognitivePainting";
 
 export interface SphereData {
   id: string;
   color: string;
-  emoji: string;
+  symbol: string;
   title: string;
   description: string;
-  examples: string[];
-  neuroscience: string;
+  light: string;
+  shadow: string;
+  phrase: string;
   position: { x: number; y: number };
-}
-
-export interface UserJourney {
-  spheresClicked: string[];
-  timeSpent: Record<string, number>;
-  clickOrder: string[];
-  dominantSphere: string;
-  timestamp: string;
 }
 
 const spheresData: SphereData[] = [
   {
     id: "fragmentado",
-    color: "#F5A623",
-    emoji: "fragmentado",
-    title: "Pensamiento Fragmentado",
-    description: `Saltar constantemente entre tareas, apps y estímulos. 
-Tu atención está dividida en docenas de microtareas 
-simultáneas. Nunca terminas nada profundamente.`,
-    examples: [
-      "Trabajar con 15 pestañas abiertas, cambiando entre ellas cada 30 segundos",
-      "Ver una serie mientras scrolleas Instagram y respondes mensajes",
-      "Empezar 5 tareas diferentes en una hora y no terminar ninguna",
-    ],
-    neuroscience: `Sobrecarga el sistema de atención ejecutiva. Cada cambio de tarea cuesta entre 5-15 minutos de recuperación cognitiva. Activa constantemente el núcleo accumbens (dopamina de novedad) sin permitir satisfacción profunda.`,
-    position: { x: 20, y: 25 },
+    color: "#F39C35",
+    symbol: "fragmentado",
+    title: "El Fragmentado",
+    description: "Vives en modo multitarea constante. 15 pestañas abiertas. Revisas el teléfono mientras trabajas, comes, conversas.",
+    light: "Alta capacidad de procesar múltiples fuentes de información simultáneamente. Conectado con muchos frentes.",
+    shadow: "Atención superficial. Nunca estás completamente presente en ningún lado. Fatiga cognitiva crónica.",
+    phrase: "Estoy en todas partes y en ninguna al mismo tiempo.",
+    position: { x: 10, y: 20 },
   },
   {
-    id: "delegado",
-    color: "#E74C3C",
-    emoji: "delegado",
-    title: "Pensamiento Delegado",
-    description: `Has externalizado tu memoria y razonamiento a Google, ChatGPT y algoritmos. Ya no recuerdas números de teléfono, direcciones, o datos que "están en internet".`,
-    examples: [
-      "Googlear algo que sabías hace 5 años pero ya no recuerdas",
-      "Depender de GPS incluso para ir a lugares que has visitado 20 veces",
-      "No recordar cumpleaños sin que Facebook te lo recuerde",
-    ],
-    neuroscience: `Atrofia el hipocampo (responsable de la memoria a largo plazo). El cerebro aprende que no necesita retener información porque "está disponible externamente". Fenómeno conocido como "Efecto Google" o amnesia digital.`,
-    position: { x: 75, y: 30 },
+    id: "acumulador",
+    color: "#45B329",
+    symbol: "acumulador",
+    title: "El Acumulador",
+    description: "Guardas todo. 847 artículos marcados, 234 videos guardados, 15 cursos iniciados. Consumes inspiración pero no creas acción.",
+    light: "Curioso, siempre aprendiendo, valoras el conocimiento. Tienes un archivo mental rico.",
+    shadow: "Parálisis por abundancia. La información acumulada se vuelve una carga. Confundes consumir con hacer.",
+    phrase: "Algún día haré algo con todo esto.",
+    position: { x: 15, y: 65 },
   },
   {
-    id: "aumentado",
-    color: "#7ED321",
-    emoji: "aumentado",
-    title: "Pensamiento Aumentado",
-    description: `Usas la tecnología como una extensión intencional de tu cognición. No delegas, sino que amplificas. Usas herramientas digitales para pensar mejor, no para pensar menos.`,
-    examples: [
-      "Usar Notion/Obsidian para construir un 'segundo cerebro' conectando ideas",
-      "Investigar en profundidad con múltiples fuentes, luego sintetizar sin IA",
-      "Usar apps de meditación, aprendizaje espaciado, o journaling estructurado",
-    ],
-    neuroscience: `Fortalece la corteza prefrontal mediante el uso intencional de herramientas cognitivas. Crea "andamiaje mental" que extiende la capacidad de procesamiento sin atrofiar habilidades base.`,
-    position: { x: 30, y: 65 },
-  },
-  {
-    id: "hibrido",
-    color: "#BD10E0",
-    emoji: "hibrido",
-    title: "Pensamiento Híbrido",
-    description: `Alternas conscientemente entre modos cognitivos según el contexto. Sabes cuándo necesitas profundidad y cuándo necesitas rapidez. Controlas tu relación con la tecnología en vez de ser controlado por ella.`,
-    examples: [
-      "Modo 'deep work' (2 horas sin interrupciones) + Modo 'comunicación' (30 min respondiendo todo)",
-      "Usar IA como co-pensador (le preguntas, cuestionas sus respuestas, sintetizas)",
-      "Reconocer cuándo estás en modo fragmentado y conscientemente cambiar de estado",
-    ],
-    neuroscience: `Metacognición avanzada: tu corteza prefrontal monitorea y regula tus propios estados cognitivos. Requiere entrenamiento en mindfulness y autoobservación. Es el estado más difícil de sostener pero el más poderoso.`,
-    position: { x: 70, y: 70 },
-  },
-  {
-    id: "profundo",
-    color: "#4A90E2",
-    emoji: "profundo",
-    title: "Pensamiento Profundo",
-    description: `Es la capacidad de sostener la atención en una sola tarea compleja durante períodos extendidos. Leer un libro completo, escribir un ensayo, resolver un problema matemático sin interrupciones.`,
-    examples: [
-      "Leer un libro físico durante 2 horas sin revisar el teléfono",
-      "Escribir un documento importante con notificaciones desactivadas",
-      "Resolver un problema complejo siguiendo un hilo de pensamiento sin interrupciones",
-    ],
-    neuroscience: `Activa principalmente la corteza prefrontal dorsolateral y el hipocampo. Requiere altos niveles de dopamina sostenida y baja activación de la amígdala (ansiedad por FOMO).`,
+    id: "reactivo",
+    color: "#4A89C8",
+    symbol: "reactivo",
+    title: "El Reactivo",
+    description: "Vives respondiendo a estímulos externos. Cada notificación es urgente. Tu tiempo está secuestrado por las demandas digitales de otros.",
+    light: "Altamente responsivo, atento a tu comunidad, disponible para otros.",
+    shadow: "No tienes tiempo propio. Tu agenda la escriben otros. Agotamiento por hiperconexión. El FOMO te gobierna.",
+    phrase: "¿Qué me perdí mientras no estaba mirando?",
     position: { x: 50, y: 45 },
+  },
+  {
+    id: "buscador",
+    color: "#E85D5D",
+    symbol: "buscador",
+    title: "El Buscador",
+    description: "Usas la tecnología como herramienta intencional. Sabes qué quieres encontrar. Entras, tomas lo que necesitas, sales.",
+    light: "Control sobre tu atención. Usas la tecnología en lugar de ser usado por ella. Propósito claro.",
+    shadow: "Puedes perderte la serendipia. A veces la rigidez te impide descubrir lo inesperado. Riesgo de aislamiento.",
+    phrase: "Entro cuando decido, salgo cuando termino.",
+    position: { x: 78, y: 22 },
+  },
+  {
+    id: "ausente",
+    color: "#A04FD3",
+    symbol: "ausente",
+    title: "El Ausente",
+    description: "Resistencia activa o pasiva. Minimizas tu presencia digital. Puede ser por elección consciente o por alienación.",
+    light: "Proteges tu atención profunda. Menos ruido, más silencio. Capacidad de concentración sostenida.",
+    shadow: "Puedes estar desconectado de conversaciones importantes. Riesgo de quedarse fuera de comunidades. A veces es huida, no elección.",
+    phrase: "Prefiero no estar ahí.",
+    position: { x: 75, y: 68 },
   },
 ];
 
 const Seccion3 = () => {
   const navigate = useNavigate();
-  const [stage, setStage] = useState<"intro" | "constellation" | "painting">("intro");
   const [selectedSphere, setSelectedSphere] = useState<SphereData | null>(null);
-  const [modalOpenTime, setModalOpenTime] = useState<number>(0);
-  const [userJourney, setUserJourney] = useState<UserJourney>({
-    spheresClicked: [],
-    timeSpent: {},
-    clickOrder: [],
-    dominantSphere: "",
-    timestamp: new Date().toISOString(),
-  });
+  const [clickedSpheres, setClickedSpheres] = useState<string[]>([]);
 
   const handleSphereClick = (sphere: SphereData) => {
     setSelectedSphere(sphere);
-    setModalOpenTime(Date.now());
-
-    // Track click if first time
-    if (!userJourney.spheresClicked.includes(sphere.id)) {
-      setUserJourney((prev) => ({
-        ...prev,
-        spheresClicked: [...prev.spheresClicked, sphere.id],
-        clickOrder: [...prev.clickOrder, sphere.id],
-      }));
+    if (!clickedSpheres.includes(sphere.id)) {
+      setClickedSpheres(prev => [...prev, sphere.id]);
     }
   };
 
   const handleModalClose = () => {
-    if (selectedSphere && modalOpenTime) {
-      const timeSpent = Date.now() - modalOpenTime;
-      setUserJourney((prev) => ({
-        ...prev,
-        timeSpent: {
-          ...prev.timeSpent,
-          [selectedSphere.id]: (prev.timeSpent[selectedSphere.id] || 0) + timeSpent,
-        },
-      }));
-    }
     setSelectedSphere(null);
   };
 
-  const handleViewConstellation = () => {
-    // Calculate dominant sphere
-    const dominant = Object.entries(userJourney.timeSpent).reduce((a, b) =>
-      b[1] > a[1] ? b : a
-    )[0];
-
-    setUserJourney((prev) => ({
-      ...prev,
-      dominantSphere: dominant,
-    }));
-
-    setStage("constellation");
-  };
-
-  const canViewConstellation = userJourney.spheresClicked.length >= 3;
-
-  if (stage === "constellation") {
-    return (
-      <Constellation
-        userJourney={userJourney}
-        spheresData={spheresData}
-        onGeneratePainting={() => setStage("painting")}
-        onBack={() => navigate("/seccion-2")}
-      />
-    );
-  }
-
-  if (stage === "painting") {
-    return (
-      <CognitivePainting
-        userJourney={userJourney}
-        spheresData={spheresData}
-        onBack={() => setStage("constellation")}
-      />
-    );
-  }
-
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      background: 'linear-gradient(180deg, #E8DFF5 0%, #f4f1de 50%, #faf8f3 100%)'
-    }}>
-      {/* Watercolor texture overlay */}
-      <div className="absolute inset-0 opacity-20" style={{
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'0.3\'/%3E%3C/svg%3E")',
-        backgroundSize: '200px 200px'
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Watercolor background layers */}
+      <div className="absolute inset-0" style={{ backgroundColor: '#E8DFF5' }}>
+        <div className="absolute inset-0 opacity-40" style={{
+          background: 'radial-gradient(ellipse 800px 600px at 20% 30%, rgba(208, 196, 224, 0.8) 0%, rgba(232, 223, 245, 0) 60%)',
+          filter: 'blur(50px)',
+          mixBlendMode: 'multiply'
+        }} />
+        <div className="absolute inset-0 opacity-40" style={{
+          background: 'radial-gradient(ellipse 700px 700px at 80% 60%, rgba(216, 211, 225, 0.6) 0%, rgba(232, 223, 245, 0) 55%)',
+          filter: 'blur(60px)',
+          mixBlendMode: 'multiply'
+        }} />
+        <div className="absolute inset-0 opacity-40" style={{
+          background: 'radial-gradient(ellipse 500px 800px at 50% 80%, rgba(240, 234, 248, 0.7) 0%, rgba(232, 223, 245, 0) 50%)',
+          filter: 'blur(45px)',
+          mixBlendMode: 'multiply'
+        }} />
+        <div className="absolute inset-0 opacity-40" style={{
+          background: 'radial-gradient(ellipse 600px 500px at 10% 90%, rgba(248, 244, 232, 0.5) 0%, rgba(232, 223, 245, 0) 60%)',
+          filter: 'blur(55px)',
+          mixBlendMode: 'multiply'
+        }} />
+      </div>
+
+      {/* Grain texture */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")'
       }} />
+
+      {/* SVG filter for watercolor effect */}
+      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="watercolor-effect">
+            <feTurbulence baseFrequency="0.03" numOctaves="3" seed="2" />
+            <feDisplacementMap in="SourceGraphic" scale="8" />
+            <feGaussianBlur stdDeviation="0.5" />
+          </filter>
+        </defs>
+      </svg>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16">
@@ -196,20 +140,21 @@ const Seccion3 = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16 max-w-2xl mx-auto"
         >
-          <h1 className="text-6xl font-semibold mb-8" style={{
+          <h1 className="text-6xl font-bold mb-6" style={{
             fontFamily: 'Crimson Pro, serif',
             color: '#2D1B3D',
-            lineHeight: '1.3'
+            lineHeight: '1.2',
+            textShadow: '2px 2px 8px rgba(155, 135, 181, 0.15)'
           }}>
             Cinco formas de pensar<br />en la era digital
           </h1>
-          <p className="text-xl mb-4" style={{
+          <p className="text-lg" style={{
             fontFamily: 'Crimson Pro, serif',
-            color: '#2D1B3D',
-            lineHeight: '1.8'
+            color: '#4A3A5A',
+            lineHeight: '1.6'
           }}>
             Explora cada esfera.<br />
-            Descubre cuál es la tuya.
+            Descubre cuál es <em style={{ fontStyle: 'italic', fontWeight: 500 }}>la tuya</em>.
           </p>
         </motion.div>
 
@@ -220,39 +165,28 @@ const Seccion3 = () => {
               key={sphere.id}
               sphere={sphere}
               onClick={() => handleSphereClick(sphere)}
-              isExplored={userJourney.spheresClicked.includes(sphere.id)}
+              isExplored={clickedSpheres.includes(sphere.id)}
               delay={index * 0.2}
             />
           ))}
         </div>
 
-        {/* Progress indicator */}
+        {/* Closing text */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center mb-8"
+          className="text-center max-w-2xl mx-auto mb-20"
         >
-          <p className="mb-6" style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            color: '#8B6BA5'
+          <p className="italic" style={{
+            fontFamily: 'Crimson Pro, serif',
+            fontSize: '20px',
+            color: '#4A3A5A',
+            lineHeight: '1.8'
           }}>
-            Has explorado {userJourney.spheresClicked.length} de 5
+            No se trata de elegir el patrón "correcto".<br />
+            Se trata de notar cuál habitas ahora.<br />
+            Y decidir si es el que quieres habitar mañana.
           </p>
-          {canViewConstellation && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              onClick={handleViewConstellation}
-              className="px-10 py-4 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-lg"
-              style={{
-                backgroundColor: '#9B87B5',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              → Ver mi constelación
-            </motion.button>
-          )}
         </motion.div>
 
         {/* Back button */}
