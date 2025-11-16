@@ -1,48 +1,54 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export const CustomCursor = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(true);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      setIsVisible(true);
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Actualización directa e instantánea usando requestAnimationFrame para suavidad
+      requestAnimationFrame(() => {
+        cursor.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+      });
+      cursor.style.opacity = '1';
     };
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => {
+      cursor.style.opacity = '1';
+    };
 
-    // Inicializar posición al cargar
-    if (typeof window !== 'undefined') {
-      setMousePosition({ 
-        x: window.innerWidth / 2, 
-        y: window.innerHeight / 2 
-      });
-    }
+    const handleMouseLeave = () => {
+      cursor.style.opacity = '0';
+    };
 
-    window.addEventListener("mousemove", updateMousePosition);
+    // Inicializar posición
+    const initialX = window.innerWidth / 2;
+    const initialY = window.innerHeight / 2;
+    cursor.style.transform = `translate(${initialX - 16}px, ${initialY - 16}px)`;
+    cursor.style.opacity = '1';
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseenter", handleMouseEnter);
     document.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 
-  if (!isVisible) return null;
-
   return (
     <div
+      ref={cursorRef}
       className="fixed pointer-events-none z-[9999]"
       style={{
         width: '32px',
         height: '32px',
-        left: `${mousePosition.x - 16}px`,
-        top: `${mousePosition.y - 16}px`,
-        transform: 'translate(0, 0)',
+        willChange: 'transform',
+        transition: 'opacity 0.2s ease-out',
       }}
     >
       {/* Girasol pequeño */}

@@ -18,19 +18,6 @@ const MuseumEntrance = () => {
       <CustomCursor />
       {/* Thread Circle Effect */}
       <ThreadCircle />
-      
-
-      {/* Decorative Sparkle Bottom Right */}
-      <motion.div
-        className="fixed bottom-8 right-8 w-12 h-12"
-        initial={{ opacity: 0, rotate: 0 }}
-        animate={{ opacity: 0.6, rotate: 360 }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      >
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="#888" />
-        </svg>
-      </motion.div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
