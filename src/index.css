@@ -187,21 +187,51 @@ All colors MUST be HSL.
   }
 
   .message-box {
-    background: rgba(15, 15, 15, 0.75);
+    /* Pincelada de Óleo Elegante - Forma orgánica asimétrica */
+    background: rgba(14, 22, 38, 0.9); /* Azul Prusia Profundo #0e1626 90% opacidad */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 2.5rem;
+    
+    /* Border-radius asimétrico para simular pincelada orgánica */
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    
+    padding: 3rem 4rem; /* Padding generoso para simular trazo ancho */
     max-width: 700px;
     width: 90%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
+    
+    /* Box-shadow sutil y difuso para profundidad */
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.4),
+      0 6px 20px rgba(14, 22, 38, 0.3),
+      inset 0 2px 4px rgba(255, 255, 255, 0.05);
+    
+    border: 1.5px solid rgba(245, 245, 220, 0.15); /* Borde crema sutil */
+    
+    /* Tipografía elegante tipo Van Gogh */
+    font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+    font-style: italic; /* Cursiva para elegancia */
+    font-size: 1.2rem; /* Tamaño legible pero refinado */
     line-height: 1.8;
-    color: white;
+    letter-spacing: 2px; /* Tracking positivo para elegancia */
+    color: #F5F5DC; /* Crema/Marfil - no blanco puro */
     text-align: center;
     white-space: pre-line;
+    
+    /* Animación de entrada suave */
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  
+  /* Animación de entrada: Fade In + movimiento hacia arriba */
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .message-box em {
@@ -211,24 +241,33 @@ All colors MUST be HSL.
   .message-box h2 {
     font-size: 2rem;
     font-weight: 600;
-    color: hsl(var(--soft-yellow));
+    color: #FFE082; /* Amarillo suave dorado */
     margin: 0;
+    font-style: italic;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(255, 224, 130, 0.4);
   }
 
   .message-box .highlight-doubt {
-    color: hsl(var(--highlight-doubt));
+    /* Contenedor con pincelada variante - tono azul verdoso */
+    color: #87CEEB; /* Sky Blue suave */
     font-weight: 600;
+    text-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
   }
 
   .message-box .highlight-action {
-    color: hsl(var(--highlight-action));
+    /* Contenedor con pincelada variante - tono naranja cálido */
+    color: #FFB86C; /* Naranja melocotón */
     font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 184, 108, 0.3);
   }
 
   .message-box .highlight-question {
-    color: hsl(var(--highlight-question));
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                 0 0 40px rgba(255, 255, 255, 0.3);
+    color: #FFF8E7; /* Crema brillante */
+    text-shadow: 
+      0 0 20px rgba(255, 248, 231, 0.6),
+      0 0 40px rgba(255, 248, 231, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   .message-box .small-text {
@@ -284,13 +323,15 @@ All colors MUST be HSL.
 
   @media (max-width: 768px) {
     .message-box {
-      padding: 1.5rem;
-      font-size: 1.2rem;
+      padding: 2rem 2.5rem; /* Mantener padding generoso en móvil */
+      font-size: 1.1rem;
       width: 90%;
+      letter-spacing: 1px; /* Reducir tracking en móvil */
     }
 
     .message-box h2 {
       font-size: 1.6rem;
+      letter-spacing: 1.5px;
     }
 
     .continue-btn {
@@ -308,13 +349,15 @@ All colors MUST be HSL.
 
   @media (min-width: 768px) and (max-width: 1024px) {
     .message-box {
-      padding: 2rem;
-      font-size: 1.4rem;
+      padding: 2.5rem 3.5rem; /* Mantener padding generoso en tablet */
+      font-size: 1.15rem;
       width: 80%;
+      letter-spacing: 1.5px;
     }
 
     .message-box h2 {
       font-size: 1.8rem;
+      letter-spacing: 1.8px;
     }
   }
 
