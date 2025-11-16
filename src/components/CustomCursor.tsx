@@ -22,7 +22,7 @@ export const CustomCursor = () => {
 
   return (
     <motion.div
-      className="fixed w-6 h-6 rounded-full border-2 border-narrative-yellow pointer-events-none z-[100] mix-blend-difference"
+      className="fixed w-6 h-6 rounded-full bg-white/90 border-2 border-narrative-yellow pointer-events-none z-[100] shadow-[0_0_8px_rgba(255,255,255,0.8),0_0_16px_rgba(255,255,255,0.4)]"
       animate={{
         x: mousePosition.x - 12,
         y: mousePosition.y - 12,

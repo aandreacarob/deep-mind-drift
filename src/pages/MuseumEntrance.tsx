@@ -40,8 +40,8 @@ const MuseumEntrance = () => {
           className="text-center mb-16"
         >
           <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl text-white tracking-wider mb-4">
-            MUSEO DIGITAL
-          </h1>
+              MUSEO DIGITAL
+            </h1>
           <h2 className="font-['Playfair_Display'] text-2xl md:text-4xl text-white/90">
             Mil Caminos, Tres Puertas.
           </h2>
@@ -71,24 +71,24 @@ const MuseumEntrance = () => {
               <motion.button
                 onClick={() => navigate(door.route)}
                 whileHover={{ scale: 1.03, y: -5 }}
-                whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.98 }}
                 className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[3/4] max-w-[280px]"
-                style={{
+              style={{
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
-                }}
-              >
+              }}
+            >
                 {/* Outer Door Frame */}
                 <div className="absolute inset-0 border-[6px] border-[#2a2a2a] rounded-sm" />
-                
+              
                 {/* Inner Door Panel */}
                 <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm" />
-                
+              
                 {/* Door Knob */}
                 <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
-                
+              
                 {/* Hover Effect */}
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-sm" />
-              </motion.button>
+            </motion.button>
             </motion.div>
           ))}
         </motion.div>
