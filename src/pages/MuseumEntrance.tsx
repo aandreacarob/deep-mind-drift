@@ -83,8 +83,7 @@ const MuseumEntrance = () => {
                 {/* Inner Door Panel */}
                 <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm" />
                 
-                {/* Door Knobs */}
-                <div className="absolute left-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
+                {/* Door Knob */}
                 <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner" />
                 
                 {/* Hover Effect */}
