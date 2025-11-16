@@ -188,24 +188,37 @@ All colors MUST be HSL.
 
   .message-box {
     /* Efecto de vidrio esmerilado (glassmorphism) elegante y puro */
-    background: rgba(255, 255, 255, 0.15); /* Blanco translúcido al 15% para mejor legibilidad */
+    background: rgba(255, 255, 255, 0.18); /* Blanco translúcido más visible para mayor profundidad */
     backdrop-filter: blur(20px) saturate(120%);
     -webkit-backdrop-filter: blur(20px) saturate(120%);
     
-    /* Borde fino y sutil - blanco al 10% de opacidad */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Borde sutil pero visible para separación del fondo */
+    border: 2px solid rgba(255, 255, 255, 0.25);
     
-    /* Border-radius asimétrico para simular pincelada orgánica irregular */
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    /* Usar la imagen de pincelada como máscara para forma orgánica */
+    mask-image: url('/src/assets/pincelada.png');
+    -webkit-mask-image: url('/src/assets/pincelada.png');
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
     
-    padding: 3rem 4rem;
-    max-width: 700px;
+    padding: 12rem 18rem; /* Márgenes masivos para máximo espacio */
+    max-width: 1100px;
     width: 90%;
     
-    /* Box-shadow sutil para profundidad sin ser agresivo */
+    /* Box-shadow profunda y con múltiples capas para crear profundidad 3D */
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.2),
-      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      0 8px 16px rgba(0, 0, 0, 0.15),
+      0 16px 32px rgba(0, 0, 0, 0.2),
+      0 32px 64px rgba(0, 0, 0, 0.25),
+      0 0 100px rgba(0, 0, 0, 0.15), /* Sombra difusa para profundidad */
+      0 0 40px rgba(255, 255, 255, 0.08), /* Resplandor sutil alrededor */
+      inset 0 1px 2px rgba(255, 255, 255, 0.2),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.1);
     
     /* Tipografía elegante tipo Van Gogh */
     font-family: 'Playfair Display', 'Cormorant Garamond', serif;
@@ -338,7 +351,7 @@ All colors MUST be HSL.
 
   @media (max-width: 768px) {
     .message-box {
-      padding: 2rem 2.5rem; /* Mantener padding generoso en móvil */
+      padding: 7rem 8rem; /* Márgenes masivos en móvil */
       font-size: 1.1rem;
       width: 90%;
       letter-spacing: 1px; /* Reducir tracking en móvil */
@@ -364,9 +377,9 @@ All colors MUST be HSL.
 
   @media (min-width: 768px) and (max-width: 1024px) {
     .message-box {
-      padding: 2.5rem 3.5rem; /* Mantener padding generoso en tablet */
+      padding: 10rem 15rem; /* Márgenes masivos en tablet */
       font-size: 1.15rem;
-      width: 80%;
+      width: 85%;
       letter-spacing: 1.5px;
     }
 
