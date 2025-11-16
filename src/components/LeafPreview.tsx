@@ -58,15 +58,15 @@ export const LeafPreview = ({
       }}
     >
       <h3
-        className="text-lg font-semibold mb-2"
+        className="text-lg font-semibold mb-2 font-['Cormorant_Garamond'] italic"
         style={{ color }}
       >
         {title}
       </h3>
-      <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+      <p className="text-sm text-gray-700 mb-4 leading-relaxed font-['Cormorant_Garamond']">
         {summary}
       </p>
-      <p className="w-full text-right text-sm font-medium italic" style={{ color }}>
+      <p className="w-full text-right text-sm font-medium italic font-['Cormorant_Garamond']" style={{ color }}>
         Da click en la hoja para leer mas
       </p>
     </motion.div>
