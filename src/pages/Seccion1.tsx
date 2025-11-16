@@ -65,7 +65,7 @@ const messages: MessageSection[] = [
   { id: 39, content: "<em class='highlight-action'>Algo está pasando.</em>" },
   { id: 40, content: "<em>No es apocalíptico.</em>\n<em>No es una adicción.</em>\n<em>No es el fin del mundo.</em>" },
   { id: 41, content: "<em class='highlight-doubt'>Es algo más sutil.</em>\n<em class='highlight-doubt'>Más profundo.</em>\n<em class='highlight-doubt'>Más... invisible.</em>" },
-  { id: 42, content: "<h2 class='highlight-question'>¿Quieres ver qué es?</h2>\n<button class='continue-btn'>→ Continuar</button>", className: "heading final" },
+  { id: 42, content: "<h2 class='highlight-question'>¿Quieres ver qué es?</h2>\n<button class='continue-btn'><svg class='tulip-icon' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 5C10.5 7 9.5 9 9 11.5C8.5 14 8.5 16 9 17C9.5 18 10.5 18.5 12 18.5C13.5 18.5 14.5 18 15 17C15.5 16 15.5 14 15 11.5C14.5 9 13.5 7 12 5Z' fill='#A78BFA'/><path d='M10 6C9.5 7.5 9 9 8.5 10.5C8 12 7.8 13.5 8 14.5C8.2 15.5 8.8 16 9.5 16C10.2 16 10.8 15.5 11 14.5C11.2 13.5 11 12 10.5 10.5C10 9 9.5 7.5 10 6Z' fill='#C084FC' opacity='0.8'/><path d='M14 6C14.5 7.5 15 9 15.5 10.5C16 12 16.2 13.5 16 14.5C15.8 15.5 15.2 16 14.5 16C13.8 16 13.2 15.5 13 14.5C12.8 13.5 13 12 13.5 10.5C14 9 14.5 7.5 14 6Z' fill='#C084FC' opacity='0.8'/><path d='M12 18.5L12 21' stroke='#A78BFA' stroke-width='2.5' stroke-linecap='round'/><path d='M10 21L14 21' stroke='#A78BFA' stroke-width='2.5' stroke-linecap='round'/></svg>→ Continuar</button>", className: "heading final" },
 ];
 
 const Seccion1 = () => {
@@ -322,6 +322,20 @@ const Seccion1 = () => {
         onClick={handleBackToLobby}
         aria-label="Volver al Lobby"
       >
+        <svg className="sunflower-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Pétalos del girasol - 8 pétalos alrededor del centro */}
+          <ellipse cx="12" cy="4" rx="2.5" ry="5" fill="#FFD700" />
+          <ellipse cx="19" cy="7" rx="2.5" ry="5" fill="#FFD700" transform="rotate(45 12 12)" />
+          <ellipse cx="20" cy="12" rx="2.5" ry="5" fill="#FFD700" transform="rotate(90 12 12)" />
+          <ellipse cx="19" cy="17" rx="2.5" ry="5" fill="#FFD700" transform="rotate(135 12 12)" />
+          <ellipse cx="12" cy="20" rx="2.5" ry="5" fill="#FFD700" transform="rotate(180 12 12)" />
+          <ellipse cx="5" cy="17" rx="2.5" ry="5" fill="#FFD700" transform="rotate(225 12 12)" />
+          <ellipse cx="4" cy="12" rx="2.5" ry="5" fill="#FFD700" transform="rotate(270 12 12)" />
+          <ellipse cx="5" cy="7" rx="2.5" ry="5" fill="#FFD700" transform="rotate(315 12 12)" />
+          {/* Centro del girasol */}
+          <circle cx="12" cy="12" r="4" fill="#8B4513" />
+          <circle cx="12" cy="12" r="2.5" fill="#A0522D" />
+        </svg>
         ← Lobby
       </button>
       <div ref={containerRef} className="scrollytelling-container">
