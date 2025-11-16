@@ -66,7 +66,7 @@ export const LeafPreview = ({
       <p className="text-sm text-gray-700 mb-4 leading-relaxed font-['Cormorant_Garamond']">
         {summary}
       </p>
-      <p className="w-full text-right text-sm font-medium italic font-['Cormorant_Garamond']" style={{ color }}>
+      <p className="w-full text-right text-sm font-medium italic font-['Cormorant_Garamond']" style={{ color: 'hsl(225, 73%, 57%)' }}>
         Da click en la hoja para leer mas
       </p>
     </motion.div>
