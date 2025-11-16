@@ -5,7 +5,6 @@ import { ThreadCircle } from "@/components/ThreadCircle";
 
 const MuseumEntrance = () => {
   const navigate = useNavigate();
-  const [circles, setCircles] = useState<Array<{ x: number; y: number; size: number; color: string; delay: number }>>([]);
 
   const doors = [
     { id: 1, label: "I. LA DERIVA", route: "/seccion-1" },
@@ -13,61 +12,11 @@ const MuseumEntrance = () => {
     { id: 3, label: "III. CINCO MOMENTOS", route: "/seccion-3" },
   ];
 
-  useEffect(() => {
-    // Generate random colorful circles for the wreath effect
-    const colors = [
-      'rgba(255, 100, 150, 0.6)',
-      'rgba(100, 200, 255, 0.6)',
-      'rgba(150, 255, 100, 0.6)',
-      'rgba(255, 200, 100, 0.6)',
-      'rgba(200, 100, 255, 0.6)',
-      'rgba(255, 150, 100, 0.6)',
-    ];
-
-    const newCircles = [];
-    for (let i = 0; i < 150; i++) {
-      // Create wreath pattern - circles around the edges
-      const angle = (Math.PI * 2 * i) / 150;
-      const radiusVariation = Math.random() * 200 + 250;
-      const centerX = 50;
-      const centerY = 50;
-      
-      newCircles.push({
-        x: centerX + Math.cos(angle) * radiusVariation + (Math.random() - 0.5) * 150,
-        y: centerY + Math.sin(angle) * radiusVariation + (Math.random() - 0.5) * 150,
-        size: Math.random() * 80 + 40,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        delay: Math.random() * 2,
-      });
-    }
-    setCircles(newCircles);
-  }, []);
-
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
       {/* Thread Circle Effect */}
       <ThreadCircle />
       
-      {/* Colorful Circles Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {circles.map((circle, index) => (
-          <motion.div
-            key={index}
-            className="absolute rounded-full border-2 opacity-70"
-            style={{
-              left: `${circle.x}%`,
-              top: `${circle.y}%`,
-              width: `${circle.size}px`,
-              height: `${circle.size}px`,
-              borderColor: circle.color,
-              transform: 'translate(-50%, -50%)',
-            }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.7 }}
-            transition={{ duration: 1.5, delay: circle.delay }}
-          />
-        ))}
-      </div>
 
       {/* Decorative Sparkle Bottom Right */}
       <motion.div
