@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ThreadCircle } from "@/components/ThreadCircle";
 
 const MuseumEntrance = () => {
   const navigate = useNavigate();
@@ -44,6 +45,9 @@ const MuseumEntrance = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
+      {/* Thread Circle Effect */}
+      <ThreadCircle />
+      
       {/* Colorful Circles Background */}
       <div className="absolute inset-0 overflow-hidden">
         {circles.map((circle, index) => (
