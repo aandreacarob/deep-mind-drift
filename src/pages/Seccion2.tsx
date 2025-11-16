@@ -643,11 +643,11 @@ Sino cómo la habitas.`,
             {selectedLeaf && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-semibold mb-4" style={{ color: selectedLeaf.color }}>
+                  <DialogTitle className="text-2xl font-semibold mb-4 font-['Cormorant_Garamond'] italic" style={{ color: selectedLeaf.color }}>
                     {selectedLeaf.title}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="text-base whitespace-pre-line leading-relaxed text-foreground">
+                <div className="text-lg whitespace-pre-line leading-relaxed text-foreground font-['Cormorant_Garamond']">
                   {selectedLeaf.content}
                 </div>
               </>
