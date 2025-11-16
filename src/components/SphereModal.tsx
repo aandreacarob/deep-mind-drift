@@ -8,6 +8,7 @@ interface SphereModalProps {
 }
 
 const getSymbolPath = (type: string, size: number = 40) => {
+  const scale = size / 80;
   switch (type) {
     case "fragmentado":
       return (
@@ -24,45 +25,47 @@ const getSymbolPath = (type: string, size: number = 40) => {
           </g>
         </svg>
       );
-    case "acumulador":
+    case "delegado":
       return (
         <svg width={size} height={size} viewBox="0 0 80 80">
           <g stroke="currentColor" strokeWidth="2.5" fill="none" opacity="0.8">
-            <path d="M40 20 L55 40 L40 60 L25 40 Z" />
-            <line x1="40" y1="20" x2="40" y2="60" />
-            <line x1="25" y1="40" x2="55" y2="40" />
+            <path d="M40 40 L40 20 M35 25 L40 20 L45 25" />
+            <path d="M40 40 L60 40 M55 35 L60 40 L55 45" />
+            <path d="M40 40 L40 60 M35 55 L40 60 L45 55" />
+            <path d="M40 40 L20 40 M25 35 L20 40 L25 45" />
           </g>
         </svg>
       );
-    case "reactivo":
+    case "aumentado":
+      return (
+        <svg width={size} height={size} viewBox="0 0 80 80">
+          <g stroke="currentColor" strokeWidth="2" fill="currentColor" opacity="0.8">
+            <line x1="40" y1="25" x2="30" y2="45" />
+            <line x1="40" y1="25" x2="50" y2="45" />
+            <line x1="30" y1="45" x2="50" y2="45" />
+            <line x1="30" y1="45" x2="40" y2="55" />
+            <line x1="50" y1="45" x2="40" y2="55" />
+            <circle cx="40" cy="25" r="4" />
+            <circle cx="30" cy="45" r="4" />
+            <circle cx="50" cy="45" r="4" />
+            <circle cx="40" cy="55" r="4" />
+          </g>
+        </svg>
+      );
+    case "hibrido":
+      return (
+        <svg width={size} height={size} viewBox="0 0 80 80">
+          <g fill="currentColor" opacity="0.7">
+            <ellipse cx="32" cy="40" rx="15" ry="20" />
+            <ellipse cx="48" cy="40" rx="15" ry="20" />
+          </g>
+        </svg>
+      );
+    case "profundo":
       return (
         <svg width={size} height={size} viewBox="0 0 80 80">
           <g stroke="currentColor" strokeWidth="2.5" fill="none" opacity="0.8">
-            <line x1="40" y1="20" x2="40" y2="60" />
-            <line x1="20" y1="40" x2="60" y2="40" />
-            <circle cx="40" cy="20" r="3" fill="currentColor" />
-            <circle cx="60" cy="40" r="3" fill="currentColor" />
-            <circle cx="40" cy="60" r="3" fill="currentColor" />
-            <circle cx="20" cy="40" r="3" fill="currentColor" />
-          </g>
-        </svg>
-      );
-    case "buscador":
-      return (
-        <svg width={size} height={size} viewBox="0 0 80 80">
-          <g stroke="currentColor" fill="none" opacity="0.8">
-            <circle cx="40" cy="40" r="20" strokeWidth="2.5" />
-            <circle cx="40" cy="40" r="6" fill="currentColor" />
-          </g>
-        </svg>
-      );
-    case "ausente":
-      return (
-        <svg width={size} height={size} viewBox="0 0 80 80">
-          <g stroke="currentColor" strokeWidth="2.5" fill="none" opacity="0.8">
-            <circle cx="40" cy="40" r="20" />
-            <path d="M40 20 L40 60" fill="currentColor" />
-            <path d="M40 20 A20 20 0 0 1 40 60 Z" fill="currentColor" />
+            <path d="M40 40 Q45 35 50 40 T50 50 Q45 55 40 50 T30 40 Q35 30 45 30" />
           </g>
         </svg>
       );
@@ -79,55 +82,53 @@ export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{
-        backgroundColor: 'rgba(45, 27, 61, 0.6)',
-        backdropFilter: 'blur(8px)'
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backdropFilter: 'blur(4px)'
       }}
       onClick={onClose}
     >
       <motion.div
-        initial={{ scale: 0.9, y: 30 }}
+        initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 30 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative rounded-3xl p-10 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl"
+        exit={{ scale: 0.8, y: 50 }}
+        className="relative rounded-3xl p-10 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.98)',
-          backdropFilter: 'blur(20px)',
-          border: `3px solid ${sphere.color}66`,
-          boxShadow: `0 20px 60px rgba(45, 27, 61, 0.2)`
+          backgroundColor: 'rgba(250, 248, 243, 0.95)',
+          border: `3px solid ${sphere.color}`,
+          boxShadow: `0 20px 60px rgba(0,0,0,0.3)`
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 transition-all duration-200 hover:rotate-90"
-          style={{ color: '#8B6BA5' }}
+          className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
+          style={{ color: sphere.color }}
         >
           <X className="w-6 h-6" />
         </button>
 
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-4 mb-5">
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-6">
             <div style={{ color: sphere.color }}>
-              {getSymbolPath(sphere.symbol, 40)}
+              {getSymbolPath(sphere.emoji, 40)}
             </div>
             <h2
-              className="font-bold"
+              className="font-semibold"
               style={{ 
-                color: sphere.color,
-                fontSize: '24px',
+                color: '#2D1B3D',
+                fontSize: '22px',
                 fontFamily: 'Inter, sans-serif',
-                fontWeight: 700
+                fontWeight: 600
               }}
             >
               {sphere.title}
             </h2>
           </div>
-          <p style={{
+          <p className="whitespace-pre-line" style={{
             fontFamily: 'Crimson Pro, serif',
-            fontSize: '16px',
+            fontSize: '18px',
             color: '#3A2A4A',
             lineHeight: '1.7'
           }}>
@@ -135,118 +136,64 @@ export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
           </p>
         </div>
 
+        {/* Separator */}
+        <div className="h-px mb-8" style={{ backgroundColor: '#E8DFF5' }} />
+
         {/* Examples section */}
-        <div className="mb-4 p-4 rounded-xl" style={{
-          backgroundColor: 'rgba(139, 107, 165, 0.08)'
-        }}>
-          <h3 className="mb-2" style={{
+        <div className="mb-8">
+          <h3 className="mb-4" style={{
             fontFamily: 'Inter, sans-serif',
             fontSize: '14px',
             fontWeight: 600,
             color: '#8B6BA5',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.1em',
             textTransform: 'uppercase'
           }}>
-            Ejemplos cotidianos
+            EJEMPLOS COTIDIANOS
           </h3>
-          <p style={{
-            fontFamily: 'Crimson Pro, serif',
-            fontSize: '15px',
-            color: '#3A2A4A',
-            lineHeight: '1.7',
-            margin: 0,
-            whiteSpace: 'pre-line'
-          }}>
-            {sphere.examples}
-          </p>
+          <ul className="space-y-3">
+            {sphere.examples.map((example, index) => (
+              <li key={index} className="flex items-start gap-3">
+                <span className="mt-1" style={{ color: sphere.color, fontSize: '16px' }}>
+                  →
+                </span>
+                <span style={{
+                  fontFamily: 'Crimson Pro, serif',
+                  fontSize: '16px',
+                  color: '#4A3A5A',
+                  lineHeight: '1.7'
+                }}>
+                  {example}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
 
+        {/* Separator */}
+        <div className="h-px mb-8" style={{ backgroundColor: '#E8DFF5' }} />
+
         {/* Neuroscience section */}
-        <div className="mb-6 p-4 rounded-xl" style={{
-          backgroundColor: 'rgba(74, 137, 200, 0.08)'
-        }}>
-          <h3 className="mb-2" style={{
+        <div>
+          <h3 className="mb-4" style={{
             fontFamily: 'Inter, sans-serif',
             fontSize: '14px',
             fontWeight: 600,
-            color: '#4A89C8',
-            letterSpacing: '0.05em',
+            color: '#8B6BA5',
+            letterSpacing: '0.1em',
             textTransform: 'uppercase'
           }}>
-            Neurociencia
+            NEUROCIENCIA
           </h3>
-          <p style={{
+          <p className="whitespace-pre-line" style={{
             fontFamily: 'Crimson Pro, serif',
-            fontSize: '15px',
-            color: '#3A2A4A',
-            lineHeight: '1.7',
-            margin: 0
+            fontSize: '16px',
+            color: '#4A3A5A',
+            lineHeight: '1.7'
           }}>
             {sphere.neuroscience}
           </p>
         </div>
-
-        {/* Light section */}
-        <div className="mb-4 p-4 rounded-xl" style={{
-          backgroundColor: 'rgba(91, 199, 59, 0.08)'
-        }}>
-          <h3 className="mb-2" style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#5BC73B',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase'
-          }}>
-            Luz ☀
-          </h3>
-          <p style={{
-            fontFamily: 'Crimson Pro, serif',
-            fontSize: '15px',
-            color: '#3A2A4A',
-            lineHeight: '1.7',
-            margin: 0
-          }}>
-            {sphere.light}
-          </p>
-        </div>
-
-        {/* Shadow section */}
-        <div className="mb-6 p-4 rounded-xl" style={{
-          backgroundColor: 'rgba(160, 79, 211, 0.08)'
-        }}>
-          <h3 className="mb-2" style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#A04FD3',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase'
-          }}>
-            Sombra ☾
-          </h3>
-          <p style={{
-            fontFamily: 'Crimson Pro, serif',
-            fontSize: '15px',
-            color: '#3A2A4A',
-            lineHeight: '1.7',
-            margin: 0
-          }}>
-            {sphere.shadow}
-          </p>
-        </div>
-
-        {/* Phrase */}
-        <p className="text-center pt-5 border-t italic" style={{
-          fontFamily: 'Crimson Pro, serif',
-          fontSize: '18px',
-          fontWeight: 500,
-          color: sphere.color,
-          lineHeight: '1.6',
-          borderTopColor: 'rgba(0, 0, 0, 0.1)'
-        }}>
-          "{sphere.phrase}"
-        </p>
       </motion.div>
     </motion.div>
   );
