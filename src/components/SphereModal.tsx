@@ -135,6 +135,57 @@ export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
           </p>
         </div>
 
+        {/* Examples section */}
+        <div className="mb-4 p-4 rounded-xl" style={{
+          backgroundColor: 'rgba(139, 107, 165, 0.08)'
+        }}>
+          <h3 className="mb-2" style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#8B6BA5',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase'
+          }}>
+            Ejemplos cotidianos
+          </h3>
+          <p style={{
+            fontFamily: 'Crimson Pro, serif',
+            fontSize: '15px',
+            color: '#3A2A4A',
+            lineHeight: '1.7',
+            margin: 0,
+            whiteSpace: 'pre-line'
+          }}>
+            {sphere.examples}
+          </p>
+        </div>
+
+        {/* Neuroscience section */}
+        <div className="mb-6 p-4 rounded-xl" style={{
+          backgroundColor: 'rgba(74, 137, 200, 0.08)'
+        }}>
+          <h3 className="mb-2" style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#4A89C8',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase'
+          }}>
+            Neurociencia
+          </h3>
+          <p style={{
+            fontFamily: 'Crimson Pro, serif',
+            fontSize: '15px',
+            color: '#3A2A4A',
+            lineHeight: '1.7',
+            margin: 0
+          }}>
+            {sphere.neuroscience}
+          </p>
+        </div>
+
         {/* Light section */}
         <div className="mb-4 p-4 rounded-xl" style={{
           backgroundColor: 'rgba(91, 199, 59, 0.08)'
