@@ -27,19 +27,23 @@ export const ThreadCircle = () => {
   ];
 
   useEffect(() => {
-    const threadCount = 80;
+    const threadCount = 300;
     const newThreads: Thread[] = [];
 
     for (let i = 0; i < threadCount; i++) {
+      // Create multiple layers of circles in the wreath
+      const layer = Math.floor(i / 60);
+      const baseRadius = 35 + layer * 3;
+      
       newThreads.push({
         id: i,
-        angle: (Math.PI * 2 * i) / threadCount,
-        radius: 45 + Math.random() * 8, // radius in percentage
+        angle: (Math.PI * 2 * i) / 60 + (layer * 0.5), // Offset each layer
+        radius: baseRadius + Math.random() * 4,
         color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-        thickness: Math.random() * 2 + 1,
-        speed: Math.random() * 0.5 + 0.3,
-        waveAmplitude: Math.random() * 3 + 2,
-        waveFrequency: Math.random() * 2 + 1,
+        thickness: Math.random() * 1.5 + 0.8,
+        speed: Math.random() * 0.3 + 0.2,
+        waveAmplitude: Math.random() * 2 + 1,
+        waveFrequency: Math.random() * 3 + 2,
       });
     }
 
@@ -99,41 +103,31 @@ const ThreadPath = ({ thread }: { thread: Thread }) => {
     return () => cancelAnimationFrame(animationFrameId);
   }, [thread.speed]);
 
-  // Calculate path points
-  const points = [];
-  const segments = 50;
+  // Calculate circle path with dynamic movement
+  const wave = Math.sin(time * 2) * thread.waveAmplitude;
+  const currentRadius = thread.radius + wave;
   
-  for (let i = 0; i <= segments; i++) {
-    const progress = i / segments;
-    const angle = thread.angle + Math.PI * 2 * progress;
-    
-    // Create wave motion
-    const wave = Math.sin(angle * thread.waveFrequency + time) * thread.waveAmplitude;
-    const currentRadius = thread.radius + wave;
-    
-    const x = 50 + Math.cos(angle) * currentRadius;
-    const y = 50 + Math.sin(angle) * currentRadius;
-    
-    points.push(`${x},${y}`);
-  }
-
-  const pathData = `M ${points.join(" L ")} Z`;
+  const x = 50 + Math.cos(thread.angle + time * 0.5) * currentRadius;
+  const y = 50 + Math.sin(thread.angle + time * 0.5) * currentRadius;
+  
+  // Circle size varies
+  const circleSize = thread.thickness + Math.sin(time * 3) * 0.5;
 
   return (
-    <motion.path
-      d={pathData}
+    <motion.circle
+      cx={`${x}%`}
+      cy={`${y}%`}
+      r={circleSize}
       fill="none"
       stroke={thread.color}
-      strokeWidth={thread.thickness}
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeWidth={thread.thickness * 0.5}
       style={{
         filter: "url(#threadGlow)",
         mixBlendMode: "screen",
       }}
-      initial={{ opacity: 0, pathLength: 0 }}
-      animate={{ opacity: 1, pathLength: 1 }}
-      transition={{ duration: 2, delay: thread.id * 0.01 }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 0.8, scale: 1 }}
+      transition={{ duration: 1.5, delay: thread.id * 0.003 }}
     />
   );
 };
