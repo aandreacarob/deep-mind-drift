@@ -66,12 +66,22 @@ const MuseumEntrance = () => {
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = `
-                    0 0 30px rgba(255, 255, 255, 0.6),
-                    0 0 50px rgba(255, 215, 0, 0.4),
-                    0 0 70px rgba(255, 192, 203, 0.3),
-                    0 15px 40px rgba(0, 0, 0, 0.8)
-                  `;
+                  // Blue glow for LA DERIVA (door 1), yellow for others
+                  if (door.id === 1) {
+                    e.currentTarget.style.boxShadow = `
+                      0 0 30px rgba(135, 206, 250, 0.6),
+                      0 0 50px rgba(100, 149, 237, 0.4),
+                      0 0 70px rgba(135, 206, 250, 0.3),
+                      0 15px 40px rgba(0, 0, 0, 0.8)
+                    `;
+                  } else {
+                    e.currentTarget.style.boxShadow = `
+                      0 0 30px rgba(255, 255, 255, 0.6),
+                      0 0 50px rgba(255, 215, 0, 0.4),
+                      0 0 70px rgba(255, 192, 203, 0.3),
+                      0 15px 40px rgba(0, 0, 0, 0.8)
+                    `;
+                  }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 0, 0, 0.8)";
@@ -80,34 +90,67 @@ const MuseumEntrance = () => {
                 {/* Glow perlado en hover - capa base */}
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"
-                  style={{
-                    background: `
-                      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
-                      radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
-                      radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.2) 0%, transparent 60%),
-                      radial-gradient(circle at 20% 80%, rgba(200, 230, 255, 0.2) 0%, transparent 50%)
-                    `,
-                    boxShadow: `
-                      0 0 30px rgba(255, 255, 255, 0.8),
-                      0 0 50px rgba(255, 215, 0, 0.6),
-                      0 0 70px rgba(255, 192, 203, 0.4),
-                      0 0 90px rgba(200, 230, 255, 0.3),
-                      inset 0 0 40px rgba(255, 255, 255, 0.15)
-                    `,
-                    filter: 'blur(2px)',
-                  }}
+                  style={
+                    door.id === 1 
+                      ? {
+                          // Blue sky glow for LA DERIVA
+                          background: `
+                            radial-gradient(circle at 30% 30%, rgba(135, 206, 250, 0.5) 0%, transparent 50%),
+                            radial-gradient(circle at 70% 70%, rgba(100, 149, 237, 0.4) 0%, transparent 50%),
+                            radial-gradient(circle at 50% 50%, rgba(173, 216, 230, 0.3) 0%, transparent 60%),
+                            radial-gradient(circle at 20% 80%, rgba(135, 206, 250, 0.3) 0%, transparent 50%)
+                          `,
+                          boxShadow: `
+                            0 0 30px rgba(135, 206, 250, 0.8),
+                            0 0 50px rgba(100, 149, 237, 0.6),
+                            0 0 70px rgba(173, 216, 230, 0.4),
+                            0 0 90px rgba(135, 206, 250, 0.3),
+                            inset 0 0 40px rgba(135, 206, 250, 0.15)
+                          `,
+                          filter: 'blur(2px)',
+                        }
+                      : {
+                          // Original yellow glow for other doors
+                          background: `
+                            radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+                            radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                            radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.2) 0%, transparent 60%),
+                            radial-gradient(circle at 20% 80%, rgba(200, 230, 255, 0.2) 0%, transparent 50%)
+                          `,
+                          boxShadow: `
+                            0 0 30px rgba(255, 255, 255, 0.8),
+                            0 0 50px rgba(255, 215, 0, 0.6),
+                            0 0 70px rgba(255, 192, 203, 0.4),
+                            0 0 90px rgba(200, 230, 255, 0.3),
+                            inset 0 0 40px rgba(255, 255, 255, 0.15)
+                          `,
+                          filter: 'blur(2px)',
+                        }
+                  }
                 />
                 
                 {/* Efecto de brillo animado */}
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                  animate={{
-                    background: [
-                      'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
-                      'radial-gradient(circle at 100% 100%, rgba(255, 215, 0, 0.4), transparent 50%)',
-                      'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
-                    ],
-                  }}
+                  animate={
+                    door.id === 1
+                      ? {
+                          // Blue animated glow for LA DERIVA
+                          background: [
+                            'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
+                            'radial-gradient(circle at 100% 100%, rgba(100, 149, 237, 0.4), transparent 50%)',
+                            'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
+                          ],
+                        }
+                      : {
+                          // Original yellow animated glow for other doors
+                          background: [
+                            'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                            'radial-gradient(circle at 100% 100%, rgba(255, 215, 0, 0.4), transparent 50%)',
+                            'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                          ],
+                        }
+                  }
                   transition={{
                     duration: 3,
                     repeat: Infinity,

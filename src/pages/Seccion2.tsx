@@ -8,7 +8,7 @@ import { LeafPreview } from "@/components/LeafPreview";
 import { FallingLeaf } from "@/components/FallingLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import vangoghBg from "@/assets/vangogh-background.jpg";
+import fondoAzul from "@/assets/fondoazul.png";
 import treeImage from "@/assets/tree.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,7 +52,7 @@ const Seccion2 = () => {
       x: 400,
       y: 650,
       rotation: 0,
-      color: "#E8DFF5",
+      color: "#FFD700",
       title: "EL MAPA CEREBRAL",
       summary: "Tu cerebro tiene 86 mil millones de neuronas. No necesitas conocerlas todas. Solo necesitas entender cuatro regiones que se activan cada vez que interactúas con una pantalla.",
       content: `Tu cerebro tiene 86 mil millones de neuronas.
@@ -83,7 +83,7 @@ Hasta ahora.`,
       x: 250,
       y: 550,
       rotation: -25,
-      color: "#7FB3D5",
+      color: "#F4C430",
       title: "47 SEGUNDOS",
       summary: "47 segundos es el tiempo promedio que pasas en una pantalla antes de cambiar. No es falta de atención, es fragmentación aprendida.",
       content: `Ese es el tiempo promedio que pasas mirando 
@@ -102,7 +102,7 @@ redirigida.`,
       x: 200,
       y: 450,
       rotation: -35,
-      color: "#95C2E0",
+      color: "#FFE55C",
       title: "23 MINUTOS",
       summary: "23 minutos y 15 segundos. Ese es el tiempo que tu cerebro necesita para recuperar la concentración plena después de una interrupción. No es el segundo que tardas en revisar la notificación, es el cuarto de hora que pierdes después.",
       content: `23 MINUTOS Y 15 SEGUNDOS
@@ -125,7 +125,7 @@ Y esto sucede docenas de veces al día.`,
       x: 180,
       y: 350,
       rotation: -20,
-      color: "#A8D5E2",
+      color: "#FFC125",
       title: "40% DE PÉRDIDA",
       summary: "40% de pérdida de productividad. Esa es la penalización que paga tu cerebro por los 'costos de cambio' acumulados. Milisegundos que se acumulan hasta convertirse en horas perdidas.",
       content: `40% DE PÉRDIDA DE PRODUCTIVIDAD
@@ -149,7 +149,7 @@ Hasta convertirse en horas perdidas.`,
       x: 550,
       y: 530,
       rotation: 25,
-      color: "#5D9BD5",
+      color: "#DAA520",
       title: "CORTEZA PREFRONTAL",
       summary: "Tu 'CEO Interno'. La parte que razona, planifica y dice 'no' a los impulsos. Cuando estás constantemente cambiando entre tareas, ella trabaja más duro. No se apaga, se sobrecarga.",
       content: `Tu "CEO Interno"
@@ -180,7 +180,7 @@ Necesita más esfuerzo para hacer lo mismo.`,
       x: 600,
       y: 430,
       rotation: 35,
-      color: "#E76F51",
+      color: "#FFDB58",
       title: "NÚCLEO ACCUMBENS",
       summary: "Tu Centro de Recompensa. Se enciende cuando recibes un 'like', un mensaje o descubres un video. Las apps te recompensan a veces, impredeciblemente. Esto se llama 'refuerzo variable'.",
       content: `Tu Centro de Recompensa
@@ -218,7 +218,7 @@ sabe cómo está diseñado.`,
       x: 620,
       y: 330,
       rotation: 20,
-      color: "#F4A261",
+      color: "#FFD966",
       title: "AMÍGDALA",
       summary: "Tu Detector de Amenazas. Heredado de cuando vivías en la sabana. Ella no distingue entre un tigre que te persigue y una notificación que vibra. Para ella, todo es una alarma.",
       content: `Tu Detector de Amenazas
@@ -260,7 +260,7 @@ una notificación de un juego.`,
       x: 600,
       y: 230,
       rotation: 15,
-      color: "#8FB996",
+      color: "#D4AF37",
       title: "HIPOCAMPO",
       summary: "Tu Archivador de Memorias. Solo guarda lo que considera importante. Pero cuando puedes Googlearlo, tu hipocampo aprende: 'No necesito guardar esto'. Se llama 'Efecto Google'.",
       content: `Tu Archivador de Memorias
@@ -302,7 +302,7 @@ y un poco peor en recordar.`,
       x: 380,
       y: 280,
       rotation: -10,
-      color: "#9B87B5",
+      color: "#B8860B",
       title: "SIN VILLANOS",
       summary: "La mecánica sin villanos. Cuatro sistemas. Ninguno roto. Todos funcionando perfectamente. El problema es que fueron diseñados para un mundo diferente. Y alguien más lo sabe.",
       content: `LA MECÁNICA SIN VILLANOS
@@ -341,7 +341,7 @@ Para hacerte quedarte.`,
       x: 400,
       y: 150,
       rotation: 0,
-      color: "#B8A5C8",
+      color: "#EEC900",
       title: "LA PREGUNTA ESPEJO",
       summary: "La pregunta ya no es: '¿Por qué me pasa esto?'. La pregunta ahora es: '¿Lo noto cuando sucede?'. Porque si lo notas, si ves la mecánica mientras sucede, entonces puedes elegir.",
       content: `Has visto el mapa.
@@ -420,9 +420,9 @@ Sino cómo la habitas.`,
               delay: i * (300 + Math.random() * 400),
               duration: 4000 + Math.random() * 3000,
               color: [
-                "#E8DFF5", "#7FB3D5", "#95C2E0", "#A8D5E2", 
-                "#5D9BD5", "#E76F51", "#F4A261", "#8FB996", 
-                "#9B87B5", "#B8A5C8"
+                "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
+                "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
+                "#B8860B", "#EEC900"
               ][Math.floor(Math.random() * 10)],
               createdAt: Date.now(),
             }));
@@ -467,9 +467,9 @@ Sino cómo la habitas.`,
         delay: i * 200,
         duration: 4000 + Math.random() * 3000,
         color: [
-          "#E8DFF5", "#7FB3D5", "#95C2E0", "#A8D5E2", 
-          "#5D9BD5", "#E76F51", "#F4A261", "#8FB996", 
-          "#9B87B5", "#B8A5C8"
+          "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
+          "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
+          "#B8860B", "#EEC900"
         ][Math.floor(Math.random() * 10)],
         createdAt: Date.now(),
       }));
@@ -506,7 +506,7 @@ Sino cómo la habitas.`,
         ref={containerRef}
         className="min-h-[300vh] relative"
         style={{
-          backgroundImage: `url(${vangoghBg})`,
+          backgroundImage: `url(${fondoAzul})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",

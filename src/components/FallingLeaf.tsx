@@ -62,7 +62,7 @@ export const FallingLeaf = ({
         alt="Falling leaf"
         className="w-16 h-24 object-contain"
         style={{
-          filter: `drop-shadow(0 2px 8px ${color}40)`,
+          filter: `hue-rotate(30deg) saturate(1.8) brightness(1.1) drop-shadow(0 2px 8px ${color}40)`,
         }}
       />
     </motion.div>
