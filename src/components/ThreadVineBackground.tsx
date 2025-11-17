@@ -24,6 +24,8 @@ export const ThreadVineBackground = () => {
       const numCursors = 90; // Más cursores
       const cursors: Cursor[] = [];
       let globalRotation = 0; // Rotación global del frame
+      let mouseInfluenceRadius = 0; // Radio de influencia del mouse
+      let targetMouseRadius = 0; // Radio objetivo para suavizar
 
       p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
@@ -35,7 +37,7 @@ export const ThreadVineBackground = () => {
 
         // Initialize multiple cursors with different starting parameters
         for (let i = 0; i < numCursors; i++) {
-          const isOutlier = p.random() < 0.15; // 15% de cursores son outliers
+          const isOutlier = p.random() < 0.25; // 15% de cursores son outliers
           cursors.push({
             anguloPrincipal: (p.TWO_PI / numCursors) * i,
             tiempoRuidoRadio: p.random(1000),
@@ -48,6 +50,13 @@ export const ThreadVineBackground = () => {
             isOutlier: isOutlier,
           });
         }
+      };
+
+      p.mouseMoved = () => {
+        // Activar influencia del mouse cuando se mueve
+        const minDim = Math.min(p.width, p.height);
+        targetMouseRadius = minDim * 0.25;
+        return false; // Permite que otros eventos se propaguen
       };
 
       p.windowResized = () => {
@@ -76,6 +85,11 @@ export const ThreadVineBackground = () => {
 
         // Actualizar rotación global suave
         globalRotation += 0.0008; // Rotación muy suave
+
+        // Suavizar el radio de influencia del mouse
+        mouseInfluenceRadius = p.lerp(mouseInfluenceRadius, targetMouseRadius, 0.1);
+        // Decrementar gradualmente cuando el mouse no se mueve
+        targetMouseRadius *= 0.95;
 
         // Draw each cursor
         for (const cursor of cursors) {
@@ -128,9 +142,27 @@ export const ThreadVineBackground = () => {
           const xRotated = xLocal * cosR - yLocal * sinR;
           const yRotated = xLocal * sinR + yLocal * cosR;
           
-          // Posición final
-          const x = centroX + xRotated;
-          const y = centroY + yRotated;
+          // Posición antes de la influencia del mouse
+          let x = centroX + xRotated;
+          let y = centroY + yRotated;
+          
+          // INTERACCIÓN CON EL MOUSE: Los cursores se alejan del mouse
+          if (mouseInfluenceRadius > 0) {
+            const dx = x - p.mouseX;
+            const dy = y - p.mouseY;
+            const distanceToMouse = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distanceToMouse < mouseInfluenceRadius && distanceToMouse > 0) {
+              // Calcular fuerza de repulsión (más fuerte cerca del mouse)
+              const force = p.map(distanceToMouse, 0, mouseInfluenceRadius, 1, 0);
+              const pushStrength = force * force * minDim * 0.15; // Efecto cuadrático para más impacto
+              
+              // Aplicar desplazamiento en dirección opuesta al mouse
+              const angle = Math.atan2(dy, dx);
+              x += Math.cos(angle) * pushStrength;
+              y += Math.sin(angle) * pushStrength;
+            }
+          }
 
           // PASO D: Dibujar
           if (cursor.prevX !== null && cursor.prevY !== null) {
