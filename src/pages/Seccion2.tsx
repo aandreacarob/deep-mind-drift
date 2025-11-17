@@ -8,7 +8,7 @@ import { LeafPreview } from "@/components/LeafPreview";
 import { FallingLeaf } from "@/components/FallingLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import fondoAzul from "@/assets/fondoazul.png";
+import fondoAzul from "@/assets/hojas:neuronas.png";
 import treeImage from "@/assets/tree.png";
 
 gsap.registerPlugin(ScrollTrigger);
