@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ThreadCircle } from "@/components/ThreadCircle";
+import { ThreadVineBackground } from "@/components/ThreadVineBackground";
 import { CustomCursor } from "@/components/CustomCursor";
 
 const MuseumEntrance = () => {
@@ -16,8 +16,8 @@ const MuseumEntrance = () => {
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
       <CustomCursor />
-      {/* Thread Circle Effect */}
-      <ThreadCircle />
+      {/* Thread Vine p5 Background */}
+      <ThreadVineBackground />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
