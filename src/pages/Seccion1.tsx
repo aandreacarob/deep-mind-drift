@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -73,7 +74,9 @@ const Seccion1 = () => {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLVideoElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const [stars, setStars] = useState<Star[]>([]);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const MAX_STARS = 8; // Límite máximo de estrellas visibles
 
   useEffect(() => {
@@ -100,6 +103,44 @@ const Seccion1 = () => {
       });
     }
 
+    // ScrollTrigger para el indicador de scroll (pincel) - ejecutar después de un pequeño delay
+    setTimeout(() => {
+      if (scrollIndicatorRef.current && sectionsRef.current[0] && showScrollIndicator) {
+        // Animación de la flecha hacia abajo
+        const arrow = scrollIndicatorRef.current.querySelector('#arrow');
+        if (arrow) {
+          gsap.to(arrow, {
+            y: 5,
+            opacity: 0.6,
+            duration: 1.5,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+          });
+        }
+
+        ScrollTrigger.create({
+          trigger: sectionsRef.current[0],
+          start: "top 50%",
+          end: "top 20%",
+          onEnter: () => {
+            // Desvanecer el indicador cuando el usuario pasa el primer mensaje
+            if (scrollIndicatorRef.current) {
+              gsap.to(scrollIndicatorRef.current, {
+                opacity: 0,
+                y: -20,
+                duration: 0.8,
+                ease: "power2.in",
+                onComplete: () => {
+                  setShowScrollIndicator(false);
+                }
+              });
+            }
+          },
+        });
+      }
+    }, 100);
+
     sectionsRef.current.forEach((section, index) => {
       if (!section) return;
 
@@ -116,7 +157,12 @@ const Seccion1 = () => {
         return;
       }
 
-      gsap.set(box, { opacity: 0, y: 30 });
+      // El primer mensaje debe ser visible desde el inicio
+      if (index === 0) {
+        gsap.set(box, { opacity: 1, y: 0 });
+      } else {
+        gsap.set(box, { opacity: 0, y: 30 });
+      }
 
       ScrollTrigger.create({
         trigger: section,
@@ -274,7 +320,7 @@ const Seccion1 = () => {
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [showScrollIndicator]);
 
   const handleContinue = () => {
     navigate("/seccion-2");
@@ -388,6 +434,73 @@ const Seccion1 = () => {
           ref={(el) => (sectionsRef.current[index] = el)}
           className={`story-section ${message.className || ""}`}
         >
+          {/* Scroll indicator (pincel) - solo aparece antes del primer mensaje */}
+          {index === 0 && showScrollIndicator && (
+            <div 
+              ref={scrollIndicatorRef}
+              className="scroll-indicator"
+              style={{
+                position: 'absolute',
+                top: '-100px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 100,
+                opacity: 1,
+                pointerEvents: 'none',
+              }}
+            >
+              <svg 
+                width="60" 
+                height="80" 
+                viewBox="0 0 60 80" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+                }}
+              >
+                {/* Pincel - estilo Van Gogh */}
+                <g>
+                  {/* Mango del pincel */}
+                  <path 
+                    d="M25 10 L25 50 L30 55 L30 10 Z" 
+                    fill="#8B4513" 
+                    stroke="#654321" 
+                    strokeWidth="1"
+                  />
+                  {/* Cuerpo del pincel */}
+                  <ellipse 
+                    cx="27.5" 
+                    cy="52" 
+                    rx="8" 
+                    ry="12" 
+                    fill="#D4A574" 
+                    stroke="#8B6F47" 
+                    strokeWidth="1"
+                  />
+                  {/* Cerdas del pincel */}
+                  <path 
+                    d="M20 60 Q22 65 20 70 Q18 75 20 80 Q22 75 24 70 Q26 65 28 60 Q30 65 28 70 Q26 75 28 80 Q30 75 32 70 Q34 65 36 60" 
+                    fill="none" 
+                    stroke="#4A3A2A" 
+                    strokeWidth="2" 
+                    strokeLinecap="round"
+                    opacity="0.8"
+                  />
+                  {/* Gotas de pintura */}
+                  <circle cx="22" cy="68" r="2" fill="#A78BFA" opacity="0.6" />
+                  <circle cx="30" cy="72" r="1.5" fill="#C084FC" opacity="0.5" />
+                  <circle cx="33" cy="68" r="1.5" fill="#A78BFA" opacity="0.6" />
+                </g>
+                {/* Flecha hacia abajo animada */}
+                <g id="arrow">
+                  <line x1="27" y1="45" x2="27" y2="65" stroke="#F5F5DC" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M22 60 L27 65 L32 60" stroke="#F5F5DC" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                </g>
+              </svg>
+            </div>
+          )}
+          
           {message.content && (
             <div className="message-box">
               <div 

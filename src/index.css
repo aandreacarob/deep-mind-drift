@@ -234,9 +234,14 @@ All colors MUST be HSL.
       0 2px 8px rgba(255, 255, 255, 0.3),
       0 0 20px rgba(255, 255, 255, 0.2); /* Sombra sutil para destacar el texto negro */
     
-    /* Animación de entrada suave */
-    animation: fade-in-up 0.8s ease-out forwards;
+    /* Animación de entrada suave - solo para mensajes que no son el primero */
     opacity: 0;
+  }
+  
+  /* El primer mensaje debe ser visible desde el inicio */
+  .story-section:first-child .message-box {
+    opacity: 1 !important;
+    animation: none;
   }
   
   /* Animación de entrada: Fade In + movimiento hacia arriba */
