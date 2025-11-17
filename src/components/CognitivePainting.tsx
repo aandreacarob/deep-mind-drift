@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import type { SphereData, UserJourney } from "@/pages/Seccion3";
 
 interface CognitivePaintingProps {
@@ -13,6 +14,7 @@ export const CognitivePainting = ({
   spheresData,
   onBack,
 }: CognitivePaintingProps) => {
+  const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isGenerating, setIsGenerating] = useState(true);
 
@@ -290,16 +292,18 @@ Y los patrones pueden cambiar.`}
 
         {/* Back button */}
         <button
-          onClick={onBack}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-sm border rounded-full font-semibold hover:scale-105 transition-all duration-300"
+          onClick={() => navigate("/")}
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-md border rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            borderColor: '#9B87B5',
-            color: '#2D1B3D',
-            fontFamily: 'Inter, sans-serif'
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            borderColor: 'rgba(255, 255, 255, 0.3)',
+            color: '#1a1a1a',
+            fontFamily: 'Inter, sans-serif',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
           }}
         >
-          ← Volver
+          🌳 ← Lobby
         </button>
       </div>
     </div>

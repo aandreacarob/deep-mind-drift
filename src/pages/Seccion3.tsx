@@ -7,6 +7,7 @@ import { SphereModal } from "@/components/SphereModal";
 import { Constellation } from "@/components/Constellation";
 import { CognitivePainting } from "@/components/CognitivePainting";
 import { InteractivePaintLayer } from "@/components/InteractivePaintLayer";
+import acuarelaImage from "@/assets/acuarela.png";
 
 export interface SphereData {
   id: string;
@@ -23,6 +24,7 @@ export interface UserJourney {
   spheresClicked: string[];
   timeSpent: Record<string, number>;
   clickOrder: string[];
+  ratings: Record<string, number>; // 1-5 rating for each sphere
   dominantSphere: string;
   timestamp: string;
 }
@@ -111,9 +113,22 @@ const Seccion3 = () => {
     spheresClicked: [],
     timeSpent: {},
     clickOrder: [],
+    ratings: {},
     dominantSphere: "",
     timestamp: new Date().toISOString(),
   });
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("cognitiveJourney");
+    if (saved) {
+      try {
+        setUserJourney(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error loading cognitive journey:", e);
+      }
+    }
+  }, []);
 
   const handleSphereClick = (sphere: SphereData) => {
     setSelectedSphere(sphere);
@@ -129,31 +144,65 @@ const Seccion3 = () => {
     }
   };
 
+  const handleRatingChange = (sphereId: string, rating: number) => {
+    setUserJourney((prev) => {
+      const updated = {
+        ...prev,
+        ratings: {
+          ...prev.ratings,
+          [sphereId]: rating,
+        },
+      };
+      // Save to localStorage
+      localStorage.setItem("cognitiveJourney", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   const handleModalClose = () => {
     if (selectedSphere && modalOpenTime) {
       const timeSpent = Date.now() - modalOpenTime;
-      setUserJourney((prev) => ({
-        ...prev,
-        timeSpent: {
-          ...prev.timeSpent,
-          [selectedSphere.id]: (prev.timeSpent[selectedSphere.id] || 0) + timeSpent,
-        },
-      }));
+      setUserJourney((prev) => {
+        const updated = {
+          ...prev,
+          timeSpent: {
+            ...prev.timeSpent,
+            [selectedSphere.id]: (prev.timeSpent[selectedSphere.id] || 0) + timeSpent,
+          },
+        };
+        // Save to localStorage
+        localStorage.setItem("cognitiveJourney", JSON.stringify(updated));
+        return updated;
+      });
     }
     setSelectedSphere(null);
   };
 
   const handleViewConstellation = () => {
-    // Calculate dominant sphere
-    const dominant = Object.entries(userJourney.timeSpent).reduce((a, b) =>
-      b[1] > a[1] ? b : a
-    )[0];
+    // Calculate dominant sphere based on ratings (if available) or time spent
+    let dominant = "";
+    
+    if (Object.keys(userJourney.ratings).length > 0) {
+      // Use ratings if available
+      const entries = Object.entries(userJourney.ratings);
+      if (entries.length > 0) {
+        dominant = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
+      }
+    } else if (Object.keys(userJourney.timeSpent).length > 0) {
+      // Fallback to time spent
+      const entries = Object.entries(userJourney.timeSpent);
+      if (entries.length > 0) {
+        dominant = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
+      }
+    }
 
-    setUserJourney((prev) => ({
-      ...prev,
+    const updated = {
+      ...userJourney,
       dominantSphere: dominant,
-    }));
-
+    };
+    
+    setUserJourney(updated);
+    localStorage.setItem("cognitiveJourney", JSON.stringify(updated));
     setStage("constellation");
   };
 
@@ -190,89 +239,16 @@ const Seccion3 = () => {
     <>
       <CustomCursor />
       <div className="min-h-screen relative overflow-hidden">
-      {/* Base vibrant Van Gogh inspired background */}
-      <div className="absolute inset-0" style={{
-        background: `
-          linear-gradient(135deg, #FFE5B4 0%, #FFC8A2 25%, #E8B4F0 50%, #B4D4FF 75%, #A8E6CF 100%)
-        `,
-      }} />
-      
-      {/* Van Gogh style brushstroke layer 1 - Blue strokes */}
-      <div className="absolute inset-0 opacity-60" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur stdDeviation='3'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M100,150 Q200,100 300,150 T500,150 Q600,100 700,150' stroke='%234A90E2' stroke-width='25' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur)'/%3E%3Cpath d='M800,200 Q850,150 900,200 T1000,200 Q1050,150 1100,200' stroke='%235B9BD5' stroke-width='20' fill='none' stroke-linecap='round' opacity='0.6' filter='url(%23blur)'/%3E%3Cpath d='M200,400 Q250,350 300,400 T400,400 Q450,350 500,400' stroke='%2367B3E8' stroke-width='30' fill='none' stroke-linecap='round' opacity='0.65' filter='url(%23blur)'/%3E%3Cpath d='M600,500 Q700,450 800,500 T1000,500 Q1100,450 1200,500' stroke='%234A90E2' stroke-width='22' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur)'/%3E%3Cpath d='M50,600 Q150,550 250,600 T450,600 Q550,550 650,600' stroke='%235B9BD5' stroke-width='28' fill='none' stroke-linecap='round' opacity='0.6' filter='url(%23blur)'/%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        mixBlendMode: 'multiply',
-      }} />
-      
-      {/* Van Gogh style brushstroke layer 2 - Yellow/Orange strokes */}
-      <div className="absolute inset-0 opacity-55" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3Cfilter id='blur2'%3E%3CfeGaussianBlur stdDeviation='4'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M150,100 Q200,50 250,100 T350,100 Q400,50 450,100' stroke='%23FFD700' stroke-width='30' fill='none' stroke-linecap='round' opacity='0.75' filter='url(%23blur2)'/%3E%3Cpath d='M500,250 Q550,200 600,250 T700,250 Q750,200 800,250' stroke='%23FFA500' stroke-width='25' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur2)'/%3E%3Cpath d='M300,300 Q400,250 500,300 T700,300 Q800,250 900,300' stroke='%23FFB84D' stroke-width='32' fill='none' stroke-linecap='round' opacity='0.65' filter='url(%23blur2)'/%3E%3Cpath d='M100,450 Q200,400 300,450 T500,450 Q600,400 700,450' stroke='%23FFD700' stroke-width='28' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur2)'/%3E%3Cpath d='M850,350 Q950,300 1050,350 T1200,350' stroke='%23FFA500' stroke-width='24' fill='none' stroke-linecap='round' opacity='0.6' filter='url(%23blur2)'/%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        mixBlendMode: 'multiply',
-      }} />
-      
-      {/* Van Gogh style brushstroke layer 3 - Purple/Magenta strokes */}
-      <div className="absolute inset-0 opacity-50" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3Cfilter id='blur3'%3E%3CfeGaussianBlur stdDeviation='3.5'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M400,200 Q450,150 500,200 T600,200 Q650,150 700,200' stroke='%23BD10E0' stroke-width='26' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur3)'/%3E%3Cpath d='M200,350 Q300,300 400,350 T600,350 Q700,300 800,350' stroke='%23D94DFF' stroke-width='29' fill='none' stroke-linecap='round' opacity='0.65' filter='url(%23blur3)'/%3E%3Cpath d='M50,500 Q150,450 250,500 T450,500 Q550,450 650,500' stroke='%23A855C7' stroke-width='27' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur3)'/%3E%3Cpath d='M750,600 Q850,550 950,600 T1150,600' stroke='%23BD10E0' stroke-width='24' fill='none' stroke-linecap='round' opacity='0.6' filter='url(%23blur3)'/%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        mixBlendMode: 'multiply',
-      }} />
-      
-      {/* Van Gogh style brushstroke layer 4 - Green strokes */}
-      <div className="absolute inset-0 opacity-45" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3Cfilter id='blur4'%3E%3CfeGaussianBlur stdDeviation='3'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M300,150 Q350,100 400,150 T500,150 Q550,100 600,150' stroke='%237ED321' stroke-width='28' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur4)'/%3E%3Cpath d='M700,300 Q800,250 900,300 T1100,300' stroke='%235CB85C' stroke-width='25' fill='none' stroke-linecap='round' opacity='0.65' filter='url(%23blur4)'/%3E%3Cpath d='M100,550 Q200,500 300,550 T500,550 Q600,500 700,550' stroke='%234CAF50' stroke-width='30' fill='none' stroke-linecap='round' opacity='0.7' filter='url(%23blur4)'/%3E%3Cpath d='M800,700 Q900,650 1000,700 T1200,700' stroke='%237ED321' stroke-width='26' fill='none' stroke-linecap='round' opacity='0.6' filter='url(%23blur4)'/%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        mixBlendMode: 'multiply',
-      }} />
-      
-      {/* Watercolor blobs - Large organic color patches */}
-      <div className="absolute inset-0 opacity-50" style={{
-        background: `
-          radial-gradient(ellipse 800px 600px at 10% 20%, rgba(255, 215, 0, 0.4) 0%, transparent 60%),
-          radial-gradient(ellipse 700px 500px at 90% 30%, rgba(74, 144, 226, 0.35) 0%, transparent 55%),
-          radial-gradient(ellipse 900px 700px at 50% 50%, rgba(189, 16, 224, 0.3) 0%, transparent 65%),
-          radial-gradient(ellipse 600px 800px at 20% 80%, rgba(126, 211, 33, 0.35) 0%, transparent 60%),
-          radial-gradient(ellipse 750px 600px at 80% 70%, rgba(255, 165, 0, 0.4) 0%, transparent 55%),
-          radial-gradient(ellipse 500px 600px at 5% 50%, rgba(168, 85, 199, 0.3) 0%, transparent 50%),
-          radial-gradient(ellipse 650px 500px at 95% 80%, rgba(91, 155, 213, 0.35) 0%, transparent 60%)
-        `,
-        filter: 'blur(50px)',
-        mixBlendMode: 'multiply',
-      }} />
-      
-      {/* Additional vibrant color splashes */}
-      <div className="absolute inset-0 opacity-40" style={{
-        background: `
-          radial-gradient(circle 400px at 15% 25%, rgba(255, 184, 77, 0.5) 0%, transparent 50%),
-          radial-gradient(circle 350px at 85% 15%, rgba(74, 144, 226, 0.45) 0%, transparent 45%),
-          radial-gradient(circle 450px at 50% 75%, rgba(189, 16, 224, 0.4) 0%, transparent 55%),
-          radial-gradient(circle 380px at 25% 90%, rgba(126, 211, 33, 0.45) 0%, transparent 50%),
-          radial-gradient(circle 420px at 75% 60%, rgba(255, 215, 0, 0.5) 0%, transparent 48%),
-          radial-gradient(circle 300px at 5% 60%, rgba(168, 85, 199, 0.4) 0%, transparent 45%),
-          radial-gradient(circle 400px at 95% 45%, rgba(91, 155, 213, 0.45) 0%, transparent 50%)
-        `,
-        filter: 'blur(35px)',
-        mixBlendMode: 'screen',
-      }} />
-      
-      {/* Paper texture with visible grain */}
-      <div className="absolute inset-0 opacity-25" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E")`,
-        backgroundSize: '150px 150px',
-        mixBlendMode: 'overlay',
-      }} />
-      
-      {/* Additional brushstroke texture overlay */}
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3Cfilter id='blur5'%3E%3CfeGaussianBlur stdDeviation='2'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M0,200 Q100,150 200,200 T400,200 Q500,150 600,200 T800,200 Q900,150 1000,200 T1200,200' stroke='%23FFD700' stroke-width='15' fill='none' stroke-linecap='round' opacity='0.4' filter='url(%23blur5)'/%3E%3Cpath d='M0,400 Q150,350 300,400 T600,400 Q750,350 900,400 T1200,400' stroke='%234A90E2' stroke-width='18' fill='none' stroke-linecap='round' opacity='0.35' filter='url(%23blur5)'/%3E%3Cpath d='M0,600 Q120,550 240,600 T480,600 Q600,550 720,600 T960,600 Q1080,550 1200,600' stroke='%23BD10E0' stroke-width='16' fill='none' stroke-linecap='round' opacity='0.4' filter='url(%23blur5)'/%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        mixBlendMode: 'multiply',
-      }} />
+      {/* Acuarela background */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(${acuarelaImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
 
       {/* Interactive Paint Layer - behind spheres */}
       <InteractivePaintLayer />
@@ -283,28 +259,113 @@ const Seccion3 = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16 max-w-2xl mx-auto"
+          className="text-center mb-16 max-w-4xl mx-auto relative"
         >
-          <h1 className="mb-8" style={{
-            fontFamily: 'Crimson Pro, serif',
-            fontSize: '56px',
+          {/* Decorative elements - subtle leaf shapes */}
+          <div className="absolute -top-8 left-[10%] text-3xl" style={{ color: '#8B6F47', transform: 'rotate(-15deg)', opacity: 0.4 }}>✿</div>
+          <div className="absolute top-0 right-[15%] text-2xl" style={{ color: '#A0826D', transform: 'rotate(25deg)', opacity: 0.4 }}>❀</div>
+          <div className="absolute -bottom-4 left-[20%] text-2xl" style={{ color: '#6B5D4F', transform: 'rotate(-20deg)', opacity: 0.4 }}>✿</div>
+          <div className="absolute bottom-8 right-[25%] text-3xl" style={{ color: '#7D6B57', transform: 'rotate(15deg)', opacity: 0.4 }}>❀</div>
+          
+          <h1 className="mb-8 flex flex-wrap justify-center items-center gap-4 px-4" style={{
+            fontFamily: "'Playfair Display', 'Bodoni Moda', 'Cormorant Garamond', 'EB Garamond', serif",
+            fontSize: '64px',
             fontWeight: 700,
-            color: '#2D1B3D',
-            lineHeight: '1.3',
-            letterSpacing: '-0.01em',
-            textShadow: '0 2px 8px rgba(45, 27, 61, 0.15)',
+            lineHeight: '1.2',
+            letterSpacing: '0.01em',
           }}>
-            Cinco formas de pensar<br />en la era digital
+            <motion.span 
+              style={{ 
+                color: '#8B6F47',
+                display: 'inline-block',
+                fontStyle: 'italic',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              Cinco
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#A0826D',
+                display: 'inline-block',
+                fontStyle: 'italic',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              formas
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#6B5D4F',
+                display: 'inline-block',
+                fontSize: '56px',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              de
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#7D6B57',
+                display: 'inline-block',
+                fontStyle: 'italic',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              pensar
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#8B7355',
+                display: 'inline-block',
+                fontSize: '56px',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              en
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#9A8169',
+                display: 'inline-block',
+                fontSize: '56px',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              la
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#6D5A45',
+                display: 'inline-block',
+                fontStyle: 'italic',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              era
+            </motion.span>
+            <motion.span 
+              style={{ 
+                color: '#8B6F47',
+                display: 'inline-block',
+                fontStyle: 'italic',
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              digital
+            </motion.span>
           </h1>
           <p className="mb-4" style={{
-            fontFamily: 'Crimson Pro, serif',
-            fontSize: '20px',
+            fontFamily: "'Cormorant Garamond', 'EB Garamond', 'Crimson Pro', serif",
+            fontSize: '24px',
             fontWeight: 400,
-            color: '#4A3A5A',
-            lineHeight: '1.8',
+            color: '#7D6B57',
+            lineHeight: '1.7',
+            letterSpacing: '0.02em',
           }}>
-            Explora cada esfera.<br />
-            <span style={{ fontStyle: 'italic' }}>Descubre cuál es la tuya.</span>
+            <span style={{ fontStyle: 'italic', color: '#8B6F47' }}>Explora cada esfera.</span>
+            <br />
+            <span style={{ fontWeight: 500, color: '#6B5D4F' }}>Descubre cuál es la tuya.</span>
           </p>
         </motion.div>
 
@@ -352,16 +413,18 @@ const Seccion3 = () => {
 
         {/* Back button */}
         <button
-          onClick={() => navigate("/seccion-2")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-sm border rounded-full font-semibold hover:scale-105 transition-all duration-300"
+          onClick={() => navigate("/")}
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-md border rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            borderColor: '#9B87B5',
-            color: '#2D1B3D',
-            fontFamily: 'Inter, sans-serif'
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            borderColor: 'rgba(255, 255, 255, 0.3)',
+            color: '#1a1a1a',
+            fontFamily: 'Inter, sans-serif',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
           }}
         >
-          ← Volver
+          🌳 ← Lobby
         </button>
       </div>
 
@@ -371,6 +434,8 @@ const Seccion3 = () => {
           <SphereModal
             sphere={selectedSphere}
             onClose={handleModalClose}
+            currentRating={userJourney.ratings[selectedSphere.id] || 0}
+            onRatingChange={handleRatingChange}
           />
         )}
       </AnimatePresence>

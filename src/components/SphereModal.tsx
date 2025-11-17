@@ -1,10 +1,14 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { SphereData } from "@/pages/Seccion3";
 import { X } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 
 interface SphereModalProps {
   sphere: SphereData;
   onClose: () => void;
+  currentRating: number;
+  onRatingChange: (sphereId: string, rating: number) => void;
 }
 
 const getSymbolPath = (type: string, size: number = 40) => {
@@ -74,7 +78,19 @@ const getSymbolPath = (type: string, size: number = 40) => {
   }
 };
 
-export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
+export const SphereModal = ({ sphere, onClose, currentRating, onRatingChange }: SphereModalProps) => {
+  const [rating, setRating] = useState<number>(currentRating);
+
+  useEffect(() => {
+    setRating(currentRating);
+  }, [currentRating]);
+
+  const handleSliderChange = (value: number[]) => {
+    const newRating = value[0];
+    setRating(newRating);
+    onRatingChange(sphere.id, newRating);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -174,7 +190,7 @@ export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
         <div className="h-px mb-8" style={{ backgroundColor: '#E8DFF5' }} />
 
         {/* Neuroscience section */}
-        <div>
+        <div className="mb-8">
           <h3 className="mb-4" style={{
             fontFamily: 'Inter, sans-serif',
             fontSize: '14px',
@@ -193,6 +209,103 @@ export const SphereModal = ({ sphere, onClose }: SphereModalProps) => {
           }}>
             {sphere.neuroscience}
           </p>
+        </div>
+
+        {/* Separator */}
+        <div className="h-px mb-8" style={{ backgroundColor: '#E8DFF5' }} />
+
+        {/* Identification Rating */}
+        <div>
+          <h3 className="mb-6" style={{
+            fontFamily: "'Cormorant Garamond', 'EB Garamond', serif",
+            fontSize: '20px',
+            fontWeight: 500,
+            color: '#6B5D4F',
+            textAlign: 'center',
+            fontStyle: 'italic'
+          }}>
+            ¿Qué tan identificado te sientes con este tipo de pensamiento?
+          </h3>
+          
+          <div className="px-4">
+            <div className="mb-4" style={{
+              '--slider-color': sphere.color,
+            } as React.CSSProperties}>
+              <style>
+                {`
+                  .custom-slider [data-orientation="horizontal"] {
+                    height: 8px;
+                    background-color: #E8DFF5;
+                    border-radius: 9999px;
+                  }
+                  .custom-slider [data-orientation="horizontal"] [role="slider"] {
+                    width: 24px;
+                    height: 24px;
+                    background-color: ${sphere.color};
+                    border: 3px solid white;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                    transition: all 0.2s;
+                  }
+                  .custom-slider [data-orientation="horizontal"] [role="slider"]:hover {
+                    transform: scale(1.1);
+                  }
+                  .custom-slider [data-orientation="horizontal"] > span:first-child > span {
+                    background-color: ${sphere.color};
+                  }
+                `}
+              </style>
+              <Slider
+                value={[rating]}
+                onValueChange={handleSliderChange}
+                min={1}
+                max={5}
+                step={1}
+                className="custom-slider"
+              />
+            </div>
+            
+            <div className="flex justify-between items-center mb-2">
+              <span style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                color: '#8B6BA5',
+                fontWeight: 500
+              }}>
+                1 - Poco identificado
+              </span>
+              <span style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                color: '#8B6BA5',
+                fontWeight: 500
+              }}>
+                5 - Muy identificado
+              </span>
+            </div>
+
+            <div className="text-center mt-6">
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: rating > 0 ? 1 : 0.8 }}
+                style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  borderRadius: '12px',
+                  backgroundColor: rating > 0 ? sphere.color : '#E0E0E0',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  color: 'white'
+                }}>
+                  {rating > 0 ? rating : '-'}
+                </span>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </motion.div>
     </motion.div>

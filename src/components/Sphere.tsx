@@ -1,5 +1,10 @@
 import { motion } from "framer-motion";
 import type { SphereData } from "@/pages/Seccion3";
+import amararillagirasolImage from "@/assets/amararillagirasol.png";
+import hortensia2Image from "@/assets/hortensia2.png";
+import lavandaImage from "@/assets/LAVANDA.png";
+import suculentaImage from "@/assets/suculenta.png";
+import rosasImage from "@/assets/rosas.png";
 
 interface SphereProps {
   sphere: SphereData;
@@ -336,36 +341,513 @@ export const Sphere = ({ sphere, onClick, isExplored, delay }: SphereProps) => {
               transformStyle: 'preserve-3d',
             }}
           >
-            <motion.div
-              style={{ 
-                color: sphere.color,
-                fontSize: '56px',
-                fontFamily: 'Crimson Pro, serif',
-                fontWeight: 700,
-                textShadow: `
-                  0 0 25px ${colors.glow},
-                  0 0 50px ${colors.glow},
-                  0 0 75px ${hexToRgba(sphere.color, 0.5)},
-                  0 5px 10px rgba(0,0,0,0.3)
-                `,
-                filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
-                transform: 'translateZ(30px)',
-              }}
-              animate={{
-                filter: [
-                  'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
-                  'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
-                  'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
-                ],
-              }}
-              transition={{
-                duration: breatheDuration * 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              {getSymbol(sphere.emoji)}
-            </motion.div>
+            {sphere.id === "fragmentado" ? (
+              // Girasol image with crystal ball effect
+              <motion.div
+                className="relative"
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  transform: 'translateZ(30px)',
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  rotateY: [0, 5, -5, 5, 0],
+                  rotateX: [0, 3, -3, 3, 0],
+                }}
+                transition={{
+                  duration: breatheDuration * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Image container with crystal distortion effect */}
+                <div
+                  className="absolute inset-0 rounded-full overflow-hidden"
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                    filter: `
+                      blur(0.5px)
+                      contrast(1.1)
+                      brightness(1.05)
+                    `,
+                  }}
+                >
+                  <img
+                    src={amararillagirasolImage}
+                    alt="Girasol Amarillo"
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: 'scale(1.1)',
+                      filter: 'saturate(1.2)',
+                    }}
+                  />
+                </div>
+                
+                {/* Crystal refraction overlay - simulates light bending through glass */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                      radial-gradient(ellipse at 70% 70%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 80%)
+                    `,
+                    mixBlendMode: 'overlay',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                
+                {/* Crystal highlight reflections */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '25%',
+                    height: '25%',
+                    left: '20%',
+                    top: '15%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(3px)',
+                    transform: 'translateZ(5px)',
+                  }}
+                />
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '15%',
+                    height: '15%',
+                    left: '65%',
+                    top: '25%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+                    filter: 'blur(2px)',
+                    transform: 'translateZ(3px)',
+                  }}
+                />
+                
+                {/* Dark edges for depth - simulates glass thickness */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 0 40px rgba(0, 0, 0, 0.1)
+                    `,
+                  }}
+                />
+              </motion.div>
+            ) : sphere.id === "profundo" ? (
+              // Hortensia image with crystal ball effect
+              <motion.div
+                className="relative"
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  transform: 'translateZ(30px)',
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  rotateY: [0, 5, -5, 5, 0],
+                  rotateX: [0, 3, -3, 3, 0],
+                }}
+                transition={{
+                  duration: breatheDuration * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Image container with crystal distortion effect */}
+                <div
+                  className="absolute inset-0 rounded-full overflow-hidden"
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                    filter: `
+                      blur(0.5px)
+                      contrast(1.1)
+                      brightness(1.05)
+                    `,
+                  }}
+                >
+                  <img
+                    src={hortensia2Image}
+                    alt="Hortensia"
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: 'scale(1.1)',
+                      filter: 'saturate(1.2)',
+                    }}
+                  />
+                </div>
+                
+                {/* Crystal refraction overlay - simulates light bending through glass */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                      radial-gradient(ellipse at 70% 70%, rgba(74, 144, 226, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 80%)
+                    `,
+                    mixBlendMode: 'overlay',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                
+                {/* Crystal highlight reflections */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '25%',
+                    height: '25%',
+                    left: '20%',
+                    top: '15%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(3px)',
+                    transform: 'translateZ(5px)',
+                  }}
+                />
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '15%',
+                    height: '15%',
+                    left: '65%',
+                    top: '25%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+                    filter: 'blur(2px)',
+                    transform: 'translateZ(3px)',
+                  }}
+                />
+                
+                {/* Dark edges for depth - simulates glass thickness */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 0 40px rgba(0, 0, 0, 0.1)
+                    `,
+                  }}
+                />
+              </motion.div>
+            ) : sphere.id === "hibrido" ? (
+              // Lavanda image with crystal ball effect
+              <motion.div
+                className="relative"
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  transform: 'translateZ(30px)',
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  rotateY: [0, 5, -5, 5, 0],
+                  rotateX: [0, 3, -3, 3, 0],
+                }}
+                transition={{
+                  duration: breatheDuration * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Image container with crystal distortion effect */}
+                <div
+                  className="absolute inset-0 rounded-full overflow-hidden"
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                    filter: `
+                      blur(0.5px)
+                      contrast(1.1)
+                      brightness(1.05)
+                    `,
+                  }}
+                >
+                  <img
+                    src={lavandaImage}
+                    alt="Lavanda"
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: 'scale(1.1)',
+                      filter: 'saturate(1.2)',
+                    }}
+                  />
+                </div>
+                
+                {/* Crystal refraction overlay - simulates light bending through glass */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                      radial-gradient(ellipse at 70% 70%, rgba(189, 16, 224, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 80%)
+                    `,
+                    mixBlendMode: 'overlay',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                
+                {/* Crystal highlight reflections */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '25%',
+                    height: '25%',
+                    left: '20%',
+                    top: '15%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(3px)',
+                    transform: 'translateZ(5px)',
+                  }}
+                />
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '15%',
+                    height: '15%',
+                    left: '65%',
+                    top: '25%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+                    filter: 'blur(2px)',
+                    transform: 'translateZ(3px)',
+                  }}
+                />
+                
+                {/* Dark edges for depth - simulates glass thickness */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 0 40px rgba(0, 0, 0, 0.1)
+                    `,
+                  }}
+                />
+              </motion.div>
+            ) : sphere.id === "aumentado" ? (
+              // Suculenta image with crystal ball effect
+              <motion.div
+                className="relative"
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  transform: 'translateZ(30px)',
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  rotateY: [0, 5, -5, 5, 0],
+                  rotateX: [0, 3, -3, 3, 0],
+                }}
+                transition={{
+                  duration: breatheDuration * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Image container with crystal distortion effect */}
+                <div
+                  className="absolute inset-0 rounded-full overflow-hidden"
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                    filter: `
+                      blur(0.5px)
+                      contrast(1.1)
+                      brightness(1.05)
+                    `,
+                  }}
+                >
+                  <img
+                    src={suculentaImage}
+                    alt="Suculenta"
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: 'scale(1.1)',
+                      filter: 'saturate(1.2)',
+                    }}
+                  />
+                </div>
+                
+                {/* Crystal refraction overlay - simulates light bending through glass */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                      radial-gradient(ellipse at 70% 70%, rgba(126, 211, 33, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 80%)
+                    `,
+                    mixBlendMode: 'overlay',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                
+                {/* Crystal highlight reflections */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '25%',
+                    height: '25%',
+                    left: '20%',
+                    top: '15%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(3px)',
+                    transform: 'translateZ(5px)',
+                  }}
+                />
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '15%',
+                    height: '15%',
+                    left: '65%',
+                    top: '25%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+                    filter: 'blur(2px)',
+                    transform: 'translateZ(3px)',
+                  }}
+                />
+                
+                {/* Dark edges for depth - simulates glass thickness */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 0 40px rgba(0, 0, 0, 0.1)
+                    `,
+                  }}
+                />
+              </motion.div>
+            ) : sphere.id === "delegado" ? (
+              // Rosas image with crystal ball effect
+              <motion.div
+                className="relative"
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  transform: 'translateZ(30px)',
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  rotateY: [0, 5, -5, 5, 0],
+                  rotateX: [0, 3, -3, 3, 0],
+                }}
+                transition={{
+                  duration: breatheDuration * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Image container with crystal distortion effect */}
+                <div
+                  className="absolute inset-0 rounded-full overflow-hidden"
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                    filter: `
+                      blur(0.5px)
+                      contrast(1.1)
+                      brightness(1.05)
+                    `,
+                  }}
+                >
+                  <img
+                    src={rosasImage}
+                    alt="Rosas"
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: 'scale(1.1)',
+                      filter: 'saturate(1.2)',
+                    }}
+                  />
+                </div>
+                
+                {/* Crystal refraction overlay - simulates light bending through glass */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                      radial-gradient(ellipse at 70% 70%, rgba(231, 76, 60, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 80%)
+                    `,
+                    mixBlendMode: 'overlay',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                
+                {/* Crystal highlight reflections */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '25%',
+                    height: '25%',
+                    left: '20%',
+                    top: '15%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(3px)',
+                    transform: 'translateZ(5px)',
+                  }}
+                />
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '15%',
+                    height: '15%',
+                    left: '65%',
+                    top: '25%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+                    filter: 'blur(2px)',
+                    transform: 'translateZ(3px)',
+                  }}
+                />
+                
+                {/* Dark edges for depth - simulates glass thickness */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 0 40px rgba(0, 0, 0, 0.1)
+                    `,
+                  }}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                style={{ 
+                  color: sphere.color,
+                  fontSize: '56px',
+                  fontFamily: 'Crimson Pro, serif',
+                  fontWeight: 700,
+                  textShadow: `
+                    0 0 25px ${colors.glow},
+                    0 0 50px ${colors.glow},
+                    0 0 75px ${hexToRgba(sphere.color, 0.5)},
+                    0 5px 10px rgba(0,0,0,0.3)
+                  `,
+                  filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
+                  transform: 'translateZ(30px)',
+                }}
+                animate={{
+                  filter: [
+                    'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
+                    'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+                    'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
+                  ],
+                }}
+                transition={{
+                  duration: breatheDuration * 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {getSymbol(sphere.emoji)}
+              </motion.div>
+            )}
           </div>
 
           {/* Explored indicator - crystal style */}

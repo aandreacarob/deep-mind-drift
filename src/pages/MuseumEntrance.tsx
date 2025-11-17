@@ -1,17 +1,118 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { ThreadVineBackground } from "@/components/ThreadVineBackground";
 import { CustomCursor } from "@/components/CustomCursor";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+
+interface UserInfo {
+  nombre: string;
+  correo: string;
+  porque: string;
+}
 
 const MuseumEntrance = () => {
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedDoor, setSelectedDoor] = useState<{ id: number; label: string; route: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [formData, setFormData] = useState({
+    nombre: "",
+    correo: "",
+    porque: "",
+  });
+
+  // Cargar información del usuario al montar el componente
+  useEffect(() => {
+    const savedUserInfo = localStorage.getItem("museumUserInfo");
+    if (savedUserInfo) {
+      try {
+        const parsed = JSON.parse(savedUserInfo);
+        setUserInfo(parsed);
+      } catch (error) {
+        console.error("Error al cargar información del usuario:", error);
+      }
+    }
+  }, []);
 
   const doors = [
     { id: 1, label: "I. LA DERIVA", route: "/seccion-1" },
     { id: 2, label: "II. RAÍCES", route: "/seccion-2" },
     { id: 3, label: "III. CINCO MOMENTOS", route: "/seccion-3" },
   ];
+
+  const handleDoorClick = (door: { id: number; label: string; route: string }) => {
+    setSelectedDoor(door);
+    
+    // Si ya existe información del usuario, navegar directamente
+    if (userInfo) {
+      // Registrar la visita con la información existente
+      const visitorData = {
+        ...userInfo,
+        door: door.label,
+        route: door.route,
+        timestamp: new Date().toISOString(),
+      };
+      
+      const existingData = JSON.parse(localStorage.getItem("museumVisitors") || "[]");
+      existingData.push(visitorData);
+      localStorage.setItem("museumVisitors", JSON.stringify(existingData));
+      
+      // Navegar directamente
+      navigate(door.route);
+    } else {
+      // Si no hay información, mostrar el formulario
+      setIsDialogOpen(true);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Guardar información del usuario para futuras visitas
+    const userData: UserInfo = {
+      nombre: formData.nombre,
+      correo: formData.correo,
+      porque: formData.porque,
+    };
+    localStorage.setItem("museumUserInfo", JSON.stringify(userData));
+    setUserInfo(userData);
+    
+    // Guardar registro de visita
+    const visitorData = {
+      ...formData,
+      door: selectedDoor?.label,
+      route: selectedDoor?.route,
+      timestamp: new Date().toISOString(),
+    };
+    
+    const existingData = JSON.parse(localStorage.getItem("museumVisitors") || "[]");
+    existingData.push(visitorData);
+    localStorage.setItem("museumVisitors", JSON.stringify(existingData));
+    
+    // Cerrar el modal y navegar
+    setIsDialogOpen(false);
+    if (selectedDoor) {
+      navigate(selectedDoor.route);
+    }
+    
+    // Resetear el formulario
+    setFormData({
+      nombre: "",
+      correo: "",
+      porque: "",
+    });
+  };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
@@ -52,16 +153,16 @@ const MuseumEntrance = () => {
               className="flex flex-col items-center"
             >
               {/* Door Label */}
-              <p className="font-['Playfair_Display'] text-lg md:text-xl text-white/80 mb-4 tracking-wide">
+              <p className="font-['Playfair_Display'] text-sm md:text-base text-white/80 mb-3 tracking-wide">
                 {door.label}
               </p>
               
               {/* Door */}
               <motion.button
-                onClick={() => navigate(door.route)}
+                onClick={() => handleDoorClick(door)}
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[3/4] max-w-[280px] overflow-hidden"
+                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[2/3] max-w-[200px] overflow-hidden"
                 style={{
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
                 }}
@@ -177,6 +278,82 @@ const MuseumEntrance = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Formulario Modal */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] bg-[#1a1a1a] border-[#3a3a3a] text-white">
+          <DialogHeader>
+            <DialogTitle className="font-['Playfair_Display'] text-2xl text-white">
+              Antes de entrar...
+            </DialogTitle>
+            <DialogDescription className="text-white/70">
+              Por favor, comparte un poco sobre ti antes de explorar {selectedDoor?.label}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="nombre" className="text-sm font-medium text-white/90">
+                Nombre
+              </label>
+              <Input
+                id="nombre"
+                type="text"
+                required
+                value={formData.nombre}
+                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                className="bg-[#2a2a2a] border-[#3a3a3a] text-white placeholder:text-white/50 focus:border-[#F5F5DC]"
+                placeholder="Tu nombre"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="correo" className="text-sm font-medium text-white/90">
+                Correo electrónico
+              </label>
+              <Input
+                id="correo"
+                type="email"
+                required
+                value={formData.correo}
+                onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
+                className="bg-[#2a2a2a] border-[#3a3a3a] text-white placeholder:text-white/50 focus:border-[#F5F5DC]"
+                placeholder="tu@correo.com"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="porque" className="text-sm font-medium text-white/90">
+                ¿Por qué estás aquí?
+              </label>
+              <Textarea
+                id="porque"
+                required
+                value={formData.porque}
+                onChange={(e) => setFormData({ ...formData, porque: e.target.value })}
+                className="bg-[#2a2a2a] border-[#3a3a3a] text-white placeholder:text-white/50 focus:border-[#F5F5DC] min-h-[100px]"
+                placeholder="Comparte tu razón para visitar esta sección..."
+              />
+            </div>
+            
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
+                className="border-[#3a3a3a] text-white hover:bg-[#2a2a2a]"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                className="bg-[#F5F5DC] text-black hover:bg-[#E5E5CC]"
+              >
+                Entrar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
