@@ -283,10 +283,46 @@ Es difícil de sostener, pero poderoso.`,
     return stars;
   }, []);
 
-  // Get constellation shape based on dominant type
+  // Get constellation shape based on dominant type and scale it to use more space
   const constellationShape = useMemo(() => {
-    return getConstellationShape(userJourney.dominantSphere);
-  }, [userJourney.dominantSphere]);
+    // Determine the dominant sphere - use the one from userJourney or calculate it
+    let dominantType = userJourney.dominantSphere;
+    
+    // If no dominant sphere is set, calculate it from ratings or clicked spheres
+    if (!dominantType && exploredSpheres.length > 0) {
+      if (Object.keys(userJourney.ratings || {}).length > 0) {
+        const entries = Object.entries(userJourney.ratings);
+        dominantType = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
+      } else {
+        // Default to first explored sphere
+        dominantType = exploredSpheres[0].id;
+      }
+    }
+    
+    console.log('🌟 Dominant Type:', dominantType); // Debug log
+    console.log('📊 Ratings:', userJourney.ratings); // Debug log
+    
+    const baseShape = getConstellationShape(dominantType);
+    
+    // Scale the constellation to use more of the canvas (from ~10% to ~90% instead of ~25% to ~75%)
+    // This expands the constellation by approximately 1.5x
+    const scaleFactor = 1.5;
+    const centerX = 50;
+    const centerY = 50;
+    const minBound = 8; // Minimum position (8% from edge)
+    const maxBound = 92; // Maximum position (92% from edge)
+    
+    return baseShape.map(point => {
+      const scaledX = centerX + (point.x - centerX) * scaleFactor;
+      const scaledY = centerY + (point.y - centerY) * scaleFactor;
+      
+      return {
+        ...point,
+        x: Math.max(minBound, Math.min(maxBound, scaledX)),
+        y: Math.max(minBound, Math.min(maxBound, scaledY)),
+      };
+    });
+  }, [userJourney.dominantSphere, userJourney.ratings, exploredSpheres]);
 
   // Assign explored spheres to main constellation points
   const constellationPoints = useMemo(() => {
@@ -423,11 +459,27 @@ Es difícil de sostener, pero poderoso.`,
             color: '#B8A9D4',
             opacity: 0.9
           }}>
-            {userJourney.dominantSphere === "fragmentado" && "La Mariposa - Transformación y Dispersión"}
-            {userJourney.dominantSphere === "profundo" && "El Búho - Sabiduría y Contemplación"}
-            {userJourney.dominantSphere === "delegado" && "El Pulpo - Múltiples Caminos"}
-            {userJourney.dominantSphere === "aumentado" && "El Águila - Visión Expandida"}
-            {userJourney.dominantSphere === "hibrido" && "El Camaleón - Adaptación Consciente"}
+            {(() => {
+              // Calculate dominant sphere if not set
+              let dominant = userJourney.dominantSphere;
+              if (!dominant && exploredSpheres.length > 0) {
+                if (Object.keys(userJourney.ratings || {}).length > 0) {
+                  const entries = Object.entries(userJourney.ratings);
+                  dominant = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
+                } else {
+                  dominant = exploredSpheres[0].id;
+                }
+              }
+              
+              switch(dominant) {
+                case "fragmentado": return "La Mariposa - Transformación y Dispersión";
+                case "profundo": return "El Búho - Sabiduría y Contemplación";
+                case "delegado": return "El Pulpo - Múltiples Caminos";
+                case "aumentado": return "El Águila - Visión Expandida";
+                case "hibrido": return "El Camaleón - Adaptación Consciente";
+                default: return "Tu Constelación Única";
+              }
+            })()}
           </p>
           <p className="text-xl" style={{
             fontFamily: 'Crimson Pro, serif',
@@ -443,9 +495,9 @@ Es difícil de sostener, pero poderoso.`,
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="relative w-full max-w-5xl mx-auto mb-16"
+          className="relative w-full max-w-6xl mx-auto mb-16"
           style={{
-            height: '700px',
+            height: '800px',
           }}
         >
           <svg className="absolute inset-0 w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.1))' }}>
@@ -936,7 +988,7 @@ Es difícil de sostener, pero poderoso.`,
             }}
             whileTap={{ scale: 0.98 }}
           >
-            ✨ Generar mi pintura cognitiva
+            ✨ Descubrir mi animal espiritual
           </motion.button>
         </motion.div>
 

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import type { SphereData, UserJourney } from "@/pages/Seccion3";
+import { AnimalSilhouette } from "./AnimalSilhouette";
 
 interface CognitivePaintingProps {
   userJourney: UserJourney;
@@ -15,119 +16,38 @@ export const CognitivePainting = ({
   onBack,
 }: CognitivePaintingProps) => {
   const navigate = useNavigate();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isGenerating, setIsGenerating] = useState(true);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Get explored spheres
+  const exploredSpheres = spheresData.filter((s) =>
+    userJourney.spheresClicked.includes(s.id)
+  );
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas size
-    canvas.width = 900;
-    canvas.height = 600;
-
-    // Background
-    ctx.fillStyle = "#f4f1de";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Calculate color distribution based on time spent
-    const totalTime = Object.values(userJourney.timeSpent).reduce((a, b) => a + b, 0);
-    const colorDistribution: Array<{ color: string; weight: number }> = [];
-
-    spheresData.forEach((sphere) => {
-      if (userJourney.spheresClicked.includes(sphere.id)) {
-        const weight = (userJourney.timeSpent[sphere.id] || 0) / totalTime;
-        colorDistribution.push({ color: sphere.color, weight });
+  // Determine dominant sphere and colors
+  const { dominantType, animalColors } = useMemo(() => {
+    let dominant = userJourney.dominantSphere;
+    
+    // If no dominant sphere is set, calculate it from ratings
+    if (!dominant && exploredSpheres.length > 0) {
+      if (Object.keys(userJourney.ratings || {}).length > 0) {
+        const entries = Object.entries(userJourney.ratings);
+        dominant = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
+      } else {
+        dominant = exploredSpheres[0].id;
       }
-    });
+    }
 
-    // Generate Van Gogh style brushstrokes
-    const brushstrokes = 250;
-    let strokesDrawn = 0;
+    // Get colors from explored spheres (sorted by rating or time)
+    const colors = exploredSpheres
+      .sort((a, b) => {
+        const ratingA = userJourney.ratings?.[a.id] || 0;
+        const ratingB = userJourney.ratings?.[b.id] || 0;
+        return ratingB - ratingA;
+      })
+      .map(s => s.color)
+      .slice(0, 3); // Top 3 colors
 
-    const drawBrushstroke = () => {
-      if (strokesDrawn >= brushstrokes) {
-        setIsGenerating(false);
-        return;
-      }
-
-      // Select color based on distribution
-      const rand = Math.random();
-      let cumulativeWeight = 0;
-      let selectedColor = colorDistribution[0].color;
-
-      for (const dist of colorDistribution) {
-        cumulativeWeight += dist.weight;
-        if (rand <= cumulativeWeight) {
-          selectedColor = dist.color;
-          break;
-        }
-      }
-
-      // Random position
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-
-      // Random curve parameters
-      const length = 30 + Math.random() * 60;
-      const angle = Math.random() * Math.PI * 2;
-      const curve = (Math.random() - 0.5) * Math.PI;
-      const width = 8 + Math.random() * 12;
-
-      // Draw curved brushstroke
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-
-      for (let i = 0; i <= length; i += 5) {
-        const progress = i / length;
-        const curveOffset = Math.sin(progress * Math.PI) * curve * 20;
-        ctx.lineTo(i, curveOffset);
-      }
-
-      ctx.strokeStyle = selectedColor;
-      ctx.lineWidth = width;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.globalAlpha = 0.6 + Math.random() * 0.4;
-      ctx.stroke();
-
-      ctx.restore();
-
-      strokesDrawn++;
-      setTimeout(drawBrushstroke, 20);
-    };
-
-    drawBrushstroke();
-
-    // Add signature
-    setTimeout(() => {
-      ctx.font = "italic 16px serif";
-      ctx.fillStyle = "#333";
-      ctx.globalAlpha = 0.8;
-      ctx.fillText(
-        `Tu cognición · ${new Date().toLocaleDateString()}`,
-        20,
-        canvas.height - 20
-      );
-    }, brushstrokes * 20 + 500);
-  }, [userJourney, spheresData]);
-
-  const handleDownload = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const link = document.createElement("a");
-    link.download = `mi-pintura-cognitiva-${Date.now()}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
-  };
+    return { dominantType: dominant, animalColors: colors };
+  }, [userJourney, exploredSpheres]);
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
@@ -154,141 +74,145 @@ export const CognitivePainting = ({
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-semibold mb-6" style={{
-            fontFamily: 'Inter, sans-serif',
-            color: '#2D1B3D'
+          <h1 className="font-semibold mb-6" style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            color: '#6B5D4F',
+            fontSize: '56px'
           }}>
-            TU DÍA DIGITAL, PINTADO
+            Tu Animal Espiritual Cognitivo
           </h1>
-          <p className="text-lg mb-8" style={{
+          <p className="mb-8" style={{
             fontFamily: 'Crimson Pro, serif',
-            color: '#4A3A5A',
-            lineHeight: '1.8'
+            color: '#8B7BA8',
+            lineHeight: '1.8',
+            fontSize: '24px'
           }}>
-            ¿Cómo se vería tu mente<br />
-            si la pintara un algoritmo?
+            Una representación visual de tu mente<br />
+            en la era digital
           </p>
         </motion.div>
 
-        {/* Canvas and Legend */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start justify-center mb-12">
-          {/* Canvas */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="relative"
-          >
-            <canvas
-              ref={canvasRef}
-              className="rounded-2xl shadow-2xl border-4 border-white/20 max-w-full h-auto"
-            />
-            {isGenerating && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl backdrop-blur-sm">
-                <div className="text-white text-xl font-semibold">
-                  Generando tu pintura...
-                </div>
-              </div>
-            )}
-          </motion.div>
+        {/* Animal Silhouette and Legend - Side by side */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="flex flex-col lg:flex-row items-center justify-center gap-12 mb-16 max-w-7xl mx-auto"
+        >
+          {/* Animal */}
+          <div className="flex flex-col items-center">
+            <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-white/30">
+              <AnimalSilhouette 
+                animalType={dominantType} 
+                colors={animalColors}
+                size={450}
+              />
+            </div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+              className="mt-6 text-center"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: '32px',
+                fontStyle: 'italic',
+                color: '#6B5D4F'
+              }}
+            >
+              {(() => {
+                switch(dominantType) {
+                  case "fragmentado": return "Tu espíritu: La Mariposa";
+                  case "profundo": return "Tu espíritu: El Búho";
+                  case "delegado": return "Tu espíritu: El Pulpo";
+                  case "aumentado": return "Tu espíritu: El Águila";
+                  case "hibrido": return "Tu espíritu: El Camaleón";
+                  default: return "Tu Esencia Cognitiva";
+                }
+              })()}
+            </motion.p>
+          </div>
 
           {/* Legend */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
-            className="rounded-2xl p-8"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              border: '1px solid rgba(155, 135, 181, 0.3)'
-            }}
+            transition={{ delay: 1.4 }}
+            className="flex-shrink-0"
           >
-            <h3 className="text-lg font-semibold mb-6" style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#8B6BA5',
-              letterSpacing: '0.1em'
-            }}>
-              LEYENDA
-            </h3>
-            <div className="space-y-3">
-              {spheresData.map((sphere) => (
-                <div key={sphere.id} className="flex items-center gap-3">
-                  <div
-                    className="w-4 h-4 rounded-sm"
-                    style={{ 
-                      backgroundColor: sphere.color,
-                      filter: 'blur(0.3px)',
-                      opacity: 0.8
-                    }}
-                  />
-                  <span style={{
-                    fontFamily: 'Crimson Pro, serif',
-                    fontSize: '14px',
-                    color: '#4A3A5A'
-                  }}>
-                    {sphere.title}
-                  </span>
-                </div>
-              ))}
+            <div className="rounded-2xl p-8 bg-white/50 backdrop-blur-sm border border-white/30 shadow-xl">
+              <h3 className="text-2xl font-semibold mb-6 text-center" style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                color: '#6B5D4F',
+                fontStyle: 'italic'
+              }}>
+                Colores de tu Mente
+              </h3>
+              <div className="space-y-4">
+                {exploredSpheres.map((sphere) => {
+                  const rating = userJourney.ratings?.[sphere.id] || 0;
+                  return (
+                    <div key={sphere.id} className="flex items-center gap-4">
+                      <div
+                        className="w-7 h-7 rounded-full shadow-md flex-shrink-0"
+                        style={{ 
+                          backgroundColor: sphere.color,
+                          boxShadow: `0 0 15px ${sphere.color}60`
+                        }}
+                      />
+                      <div className="flex-1 min-w-[200px]">
+                        <span style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '16px',
+                          color: '#4A3A5A',
+                          fontWeight: 500
+                        }}>
+                          {sphere.title}
+                        </span>
+                        {rating > 0 && (
+                          <span style={{
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '14px',
+                            color: sphere.color,
+                            marginLeft: '10px'
+                          }}>
+                            ★ {rating}/5
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Description */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="max-w-2xl mx-auto text-center mb-12"
+          transition={{ delay: 1.6 }}
+          className="max-w-3xl mx-auto text-center mb-12"
         >
           <p className="whitespace-pre-line" style={{
             fontFamily: 'Crimson Pro, serif',
-            fontSize: '16px',
+            fontSize: '22px',
             color: '#4A3A5A',
-            lineHeight: '1.8'
+            lineHeight: '1.9'
           }}>
-            {`Esta es tu huella cognitiva.
+            {`Esta es tu esencia cognitiva.
 
-Más pinceladas de un color = 
-más tiempo en ese patrón.
+Cada color representa un modo de pensar que exploraste.
+La intensidad refleja tu nivel de identificación.
 
-No hay pinturas buenas o malas.
+No hay animales buenos o malos.
 Solo patrones.
 
-Y los patrones pueden cambiar.`}
+Y los patrones evolucionan con la consciencia.`}
           </p>
         </motion.div>
-
-        {/* Download button */}
-        {!isGenerating && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="text-center"
-          >
-            <button
-              onClick={handleDownload}
-              className="px-10 py-5 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-2xl"
-              style={{
-                backgroundColor: '#7B6795',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '18px'
-              }}
-            >
-              ⬇ Descargar mi pintura
-            </button>
-            <p className="mt-4" style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontStyle: 'italic',
-              fontSize: '14px',
-              color: '#8B6BA5'
-            }}>
-              Guárdala. Revísala en 6 meses.<br />
-              ¿Cambió tu patrón?
-            </p>
-          </motion.div>
-        )}
 
         {/* Back button */}
         <button
