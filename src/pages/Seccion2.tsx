@@ -8,7 +8,7 @@ import { LeafPreview } from "@/components/LeafPreview";
 import { FallingLeaf } from "@/components/FallingLeaf";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import fondoAzul from "@/assets/hojas:neuronas.png";
+import fondoAzul from "@/assets/fondoazul.png";
 import treeImage from "@/assets/tree.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -43,8 +43,11 @@ const Seccion2 = () => {
     duration: number;
     color: string;
     createdAt: number;
+    finalX?: number;
+    finalY?: number;
   }>>([]);
   const lastScrollBatchRef = useRef<Set<number>>(new Set());
+  const accumulatedLeavesRef = useRef<Array<{ x: number; y: number; id: number }>>([]);
 
   const leaves: LeafData[] = [
     {
@@ -412,20 +415,52 @@ Sino cómo la habitas.`,
             // Vary the number of leaves per batch
             const leafCount = percent % 20 === 0 ? 4 : percent % 15 === 0 ? 3 : 2;
             
-            const newFallingLeaves = Array.from({ length: leafCount }, (_, i) => ({
-              id: Date.now() + i + percent * 100,
-              startX: Math.random() * window.innerWidth,
-              startY: -50 - Math.random() * 100,
-              rotation: Math.random() * 360,
-              delay: i * (300 + Math.random() * 400),
-              duration: 4000 + Math.random() * 3000,
-              color: [
-                "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
-                "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
-                "#B8860B", "#EEC900"
-              ][Math.floor(Math.random() * 10)],
-              createdAt: Date.now(),
-            }));
+            const newFallingLeaves = Array.from({ length: leafCount }, (_, i) => {
+              // Calculate natural accumulation position with more variation
+              const baseX = Math.random() * window.innerWidth;
+              const baseY = window.innerHeight - 50;
+              
+              // Find nearby leaves within a wider radius for more natural clustering
+              const nearbyLeaves = accumulatedLeavesRef.current.filter(
+                leaf => Math.abs(leaf.x - baseX) < 150
+              );
+              
+              // Calculate Y position based on nearby leaves (stack on top)
+              // Create more natural layering with varied heights
+              let finalY;
+              if (nearbyLeaves.length > 0) {
+                const lowestY = Math.min(...nearbyLeaves.map(l => l.y));
+                // Stack on top with natural variation - some leaves higher, some lower
+                const stackOffset = -15 - Math.random() * 35;
+                finalY = lowestY + stackOffset;
+              } else {
+                // No nearby leaves - place at varied heights in the bottom third
+                finalY = baseY - Math.random() * 80 - Math.random() * 40;
+              }
+              
+              // Ensure leaves don't stack too high (max 250px from bottom)
+              finalY = Math.max(finalY, baseY - 250);
+              
+              // More horizontal variation for natural spread
+              const finalX = baseX + (Math.random() - 0.5) * 80;
+              
+              return {
+                id: Date.now() + i + percent * 100,
+                startX: baseX,
+                startY: -50 - Math.random() * 100,
+                rotation: Math.random() * 360,
+                delay: i * (300 + Math.random() * 400),
+                duration: 4000 + Math.random() * 3000,
+                color: [
+                  "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
+                  "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
+                  "#B8860B", "#EEC900"
+                ][Math.floor(Math.random() * 10)],
+                createdAt: Date.now(),
+                finalX,
+                finalY,
+              };
+            });
             
             setFallingLeaves((prev) => [...prev, ...newFallingLeaves]);
           }
@@ -459,20 +494,52 @@ Sino cómo la habitas.`,
     const autoLeafInterval = setInterval(() => {
       // Generate 1-2 leaves automatically every 3-5 seconds
       const leafCount = Math.random() > 0.5 ? 1 : 2;
-      const newLeaves = Array.from({ length: leafCount }, (_, i) => ({
-        id: Date.now() + i,
-        startX: Math.random() * window.innerWidth,
-        startY: -50 - Math.random() * 100,
-        rotation: Math.random() * 360,
-        delay: i * 200,
-        duration: 4000 + Math.random() * 3000,
-        color: [
-          "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
-          "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
-          "#B8860B", "#EEC900"
-        ][Math.floor(Math.random() * 10)],
-        createdAt: Date.now(),
-      }));
+      const newLeaves = Array.from({ length: leafCount }, (_, i) => {
+        // Calculate natural accumulation position with more variation
+        const baseX = Math.random() * window.innerWidth;
+        const baseY = window.innerHeight - 50;
+        
+        // Find nearby leaves within a wider radius for more natural clustering
+        const nearbyLeaves = accumulatedLeavesRef.current.filter(
+          leaf => Math.abs(leaf.x - baseX) < 150
+        );
+        
+        // Calculate Y position based on nearby leaves (stack on top)
+        // Create more natural layering with varied heights
+        let finalY;
+        if (nearbyLeaves.length > 0) {
+          const lowestY = Math.min(...nearbyLeaves.map(l => l.y));
+          // Stack on top with natural variation - some leaves higher, some lower
+          const stackOffset = -15 - Math.random() * 35;
+          finalY = lowestY + stackOffset;
+        } else {
+          // No nearby leaves - place at varied heights in the bottom third
+          finalY = baseY - Math.random() * 80 - Math.random() * 40;
+        }
+        
+        // Ensure leaves don't stack too high (max 250px from bottom)
+        finalY = Math.max(finalY, baseY - 250);
+        
+        // More horizontal variation for natural spread
+        const finalX = baseX + (Math.random() - 0.5) * 80;
+        
+        return {
+          id: Date.now() + i,
+          startX: baseX,
+          startY: -50 - Math.random() * 100,
+          rotation: Math.random() * 360,
+          delay: i * 200,
+          duration: 4000 + Math.random() * 3000,
+          color: [
+            "#FFD700", "#F4C430", "#FFE55C", "#FFC125", 
+            "#DAA520", "#FFDB58", "#FFD966", "#D4AF37", 
+            "#B8860B", "#EEC900"
+          ][Math.floor(Math.random() * 10)],
+          createdAt: Date.now(),
+          finalX,
+          finalY,
+        };
+      });
       
       setFallingLeaves((prev) => [...prev, ...newLeaves]);
     }, 3000 + Math.random() * 2000); // Every 3-5 seconds
@@ -482,22 +549,8 @@ Sino cómo la habitas.`,
     };
   }, []);
 
-  // Clean up old falling leaves (remove after animation completes)
-  useEffect(() => {
-    const cleanupInterval = setInterval(() => {
-      const now = Date.now();
-      setFallingLeaves((prev) => 
-        prev.filter((leaf) => {
-          const maxAge = leaf.duration + leaf.delay + 1000; // Add 1 second buffer
-          return now - leaf.createdAt < maxAge;
-        })
-      );
-    }, 2000); // Check every 2 seconds
-
-    return () => {
-      clearInterval(cleanupInterval);
-    };
-  }, []);
+  // Keep all falling leaves - they accumulate at the bottom instead of being removed
+  // Removed cleanup interval so leaves stay visible and accumulate like autumn leaves
 
   return (
     <>
@@ -609,6 +662,12 @@ Sino cómo la habitas.`,
             delay={leaf.delay}
             duration={leaf.duration}
             color={leaf.color}
+            finalX={leaf.finalX}
+            finalY={leaf.finalY}
+            onAnimationComplete={(x, y) => {
+              // Register this leaf's final position for future accumulation
+              accumulatedLeavesRef.current.push({ x, y, id: leaf.id });
+            }}
           />
         ))}
 
