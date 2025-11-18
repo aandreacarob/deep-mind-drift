@@ -667,8 +667,9 @@ Sino cómo la habitas.`,
                 exit={{ opacity: 0 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
                 className="absolute left-12 top-[35%] -translate-y-1/2 pointer-events-none"
+                style={{ background: 'transparent' }}
               >
-                <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
+                <svg width="60" height="70" viewBox="0 0 60 70" fill="none" style={{ background: 'transparent' }}>
                   {/* Primera V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 8 L 30 28 L 48 8"
@@ -703,8 +704,9 @@ Sino cómo la habitas.`,
                 exit={{ opacity: 0 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
                 className="absolute right-12 top-[35%] -translate-y-1/2 pointer-events-none"
+                style={{ background: 'transparent' }}
               >
-                <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
+                <svg width="60" height="70" viewBox="0 0 60 70" fill="none" style={{ background: 'transparent' }}>
                   {/* Primera V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 8 L 30 28 L 48 8"
