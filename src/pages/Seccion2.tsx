@@ -48,6 +48,8 @@ const Seccion2 = () => {
   }>>([]);
   const lastScrollBatchRef = useRef<Set<number>>(new Set());
   const accumulatedLeavesRef = useRef<Array<{ x: number; y: number; id: number }>>([]);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   const leaves: LeafData[] = [
     {
@@ -387,6 +389,29 @@ Sino cómo la habitas.`,
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // ScrollTrigger para el indicador de scroll (chevrones)
+    const handleScrollIndicator = () => {
+      if (window.scrollY > 100 && showScrollIndicator) {
+        if (scrollIndicatorRef.current) {
+          // Animar ambos contenedores (izquierdo y derecho)
+          const leftIndicator = scrollIndicatorRef.current.querySelector('.scroll-indicator-section2-left');
+          const rightIndicator = scrollIndicatorRef.current.querySelector('.scroll-indicator-section2-right');
+          
+          gsap.to([leftIndicator, rightIndicator], {
+            opacity: 0,
+            y: -30,
+            duration: 0.8,
+            ease: "power2.in",
+            onComplete: () => {
+              setShowScrollIndicator(false);
+            }
+          });
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollIndicator);
+
     const scrollTrigger = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top top",
@@ -483,11 +508,12 @@ Sino cómo la habitas.`,
 
     return () => {
       scrollTrigger.kill();
+      window.removeEventListener('scroll', handleScrollIndicator);
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
     };
-  }, [isTransitioning]);
+  }, [isTransitioning, showScrollIndicator]);
 
   // Automatic falling leaves interval
   useEffect(() => {
@@ -555,6 +581,92 @@ Sino cómo la habitas.`,
   return (
     <>
       <CustomCursor />
+      {/* Scroll indicator - Chevrones a los lados con glow pronunciado */}
+      {showScrollIndicator && (
+        <div ref={scrollIndicatorRef}>
+          {/* Chevrones izquierda */}
+          <div className="scroll-indicator-section2-left">
+            {/* Primer chevron */}
+            <svg 
+              className="scroll-chevron-section2 scroll-chevron-1"
+              width="80" 
+              height="50" 
+              viewBox="0 0 80 50" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M15 15 L40 40 L65 15" 
+                stroke="#F5F5F0" 
+                strokeWidth="6.6" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+            
+            {/* Segundo chevron */}
+            <svg 
+              className="scroll-chevron-section2 scroll-chevron-2"
+              width="80" 
+              height="50" 
+              viewBox="0 0 80 50" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M15 15 L40 40 L65 15" 
+                stroke="#F5F5F0" 
+                strokeWidth="6.6" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </div>
+          
+          {/* Chevrones derecha */}
+          <div className="scroll-indicator-section2-right">
+            {/* Primer chevron */}
+            <svg 
+              className="scroll-chevron-section2 scroll-chevron-1"
+              width="80" 
+              height="50" 
+              viewBox="0 0 80 50" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M15 15 L40 40 L65 15" 
+                stroke="#F5F5F0" 
+                strokeWidth="6.6" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+            
+            {/* Segundo chevron */}
+            <svg 
+              className="scroll-chevron-section2 scroll-chevron-2"
+              width="80" 
+              height="50" 
+              viewBox="0 0 80 50" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M15 15 L40 40 L65 15" 
+                stroke="#F5F5F0" 
+                strokeWidth="6.6" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
       <div
         ref={containerRef}
         className="min-h-[300vh] relative"
@@ -672,29 +784,32 @@ Sino cómo la habitas.`,
         ))}
 
         {/* Back button */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+        <button 
+          className="fixed-lobby-btn"
           onClick={() => navigate("/")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-narrative-purple font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          aria-label="Volver al Lobby"
         >
-          ← Volver
-        </motion.button>
-
-        {/* Next Section button - appears when scroll reaches 99% */}
-        {isTransitioning && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            onClick={() => navigate("/seccion-3")}
-            className="fixed bottom-8 right-8 z-50 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 backdrop-blur-sm border border-white/30 rounded-full text-white font-bold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-110 shadow-lg"
-          >
-            Esferas de Pensamiento →
-          </motion.button>
-        )}
-      
+          <svg className="sunflower-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Trébol de 4 hojas */}
+            {/* Hoja superior */}
+            <circle cx="12" cy="7" r="3.5" fill="#22C55E" />
+            <circle cx="12" cy="6.5" r="2" fill="#16A34A" opacity="0.7" />
+            {/* Hoja derecha */}
+            <circle cx="17" cy="12" r="3.5" fill="#22C55E" />
+            <circle cx="17.5" cy="12" r="2" fill="#16A34A" opacity="0.7" />
+            {/* Hoja inferior */}
+            <circle cx="12" cy="17" r="3.5" fill="#22C55E" />
+            <circle cx="12" cy="17.5" r="2" fill="#16A34A" opacity="0.7" />
+            {/* Hoja izquierda */}
+            <circle cx="7" cy="12" r="3.5" fill="#22C55E" />
+            <circle cx="6.5" cy="12" r="2" fill="#16A34A" opacity="0.7" />
+            {/* Centro del trébol */}
+            <circle cx="12" cy="12" r="2" fill="#15803D" />
+            {/* Tallo */}
+            <path d="M12 14 L12 20" stroke="#15803D" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          ← Lobby
+        </button>
 
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
