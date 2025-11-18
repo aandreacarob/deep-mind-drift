@@ -611,16 +611,20 @@ All colors MUST be HSL.
     }
   }
 
-  /* Scroll Indicator - Chevron doble con efecto esmeralda */
+  /* Scroll Indicator - Chevrones individuales sin fondo */
   .scroll-indicator {
     position: fixed !important;
-    top: 30px !important;
+    top: 25px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 100 !important;
     opacity: 1;
     pointer-events: none;
     transition: opacity 0.8s ease, transform 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: -20px; /* Superposición de chevrons */
   }
 
   .scroll-indicator.hidden {
@@ -628,35 +632,19 @@ All colors MUST be HSL.
     transform: translateX(-50%) translateY(-30px);
   }
 
-  .scroll-chevron-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: -15px; /* Superposición de chevrons */
-    padding: 1rem 1.5rem;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border-radius: 30px;
-    border: 2px solid rgba(16, 185, 129, 0.3); /* Borde esmeralda sutil */
-    box-shadow: 
-      0 8px 32px rgba(16, 185, 129, 0.2),
-      0 0 60px rgba(52, 211, 153, 0.15),
-      inset 0 1px 2px rgba(255, 255, 255, 0.3),
-      inset 0 -1px 2px rgba(16, 185, 129, 0.1);
-  }
-
   .scroll-chevron {
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6))
-            drop-shadow(0 0 16px rgba(52, 211, 153, 0.4));
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4))
+            drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))
+            drop-shadow(0 0 25px rgba(245, 245, 240, 0.2))
+            drop-shadow(0 0 35px rgba(255, 255, 240, 0.15));
   }
 
   .scroll-chevron-1 {
-    animation: chevron-bounce 2s ease-in-out infinite;
+    animation: chevron-bounce 1.8s ease-in-out infinite;
   }
 
   .scroll-chevron-2 {
-    animation: chevron-bounce 2s ease-in-out 0.2s infinite;
+    animation: chevron-bounce 1.8s ease-in-out 0.3s infinite;
     opacity: 0.7;
   }
 
@@ -666,23 +654,19 @@ All colors MUST be HSL.
       opacity: 1;
     }
     50% {
-      transform: translateY(8px);
-      opacity: 0.6;
+      transform: translateY(12px);
+      opacity: 0.5;
     }
   }
 
   @media (max-width: 768px) {
     .scroll-indicator {
-      top: 20px !important;
-    }
-    
-    .scroll-chevron-container {
-      padding: 0.8rem 1.2rem;
+      top: 15px !important;
     }
 
     .scroll-chevron {
-      width: 50px;
-      height: 35px;
+      width: 60px;
+      height: 40px;
     }
   }
 
@@ -690,6 +674,7 @@ All colors MUST be HSL.
     .scroll-chevron-1,
     .scroll-chevron-2 {
       animation: none !important;
+      opacity: 0.9 !important;
     }
   }
 }

@@ -411,65 +411,49 @@ const Seccion1 = () => {
         </svg>
         ← Lobby
       </button>
-      {/* Scroll indicator - Chevron doble con efecto esmeralda */}
+      {/* Scroll indicator - Chevrones individuales sin fondo */}
       {showScrollIndicator && (
         <div 
           ref={scrollIndicatorRef}
           className="scroll-indicator"
         >
-          <div className="scroll-chevron-container">
-            {/* Primer chevron */}
-            <svg 
-              className="scroll-chevron scroll-chevron-1"
-              width="60" 
-              height="40" 
-              viewBox="0 0 60 40" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M10 10 L30 30 L50 10" 
-                stroke="url(#emeraldGradient1)" 
-                strokeWidth="5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-              <defs>
-                <linearGradient id="emeraldGradient1" x1="10" y1="10" x2="50" y2="30">
-                  <stop offset="0%" stopColor="#6EE7B7" />
-                  <stop offset="50%" stopColor="#34D399" />
-                  <stop offset="100%" stopColor="#10B981" />
-                </linearGradient>
-              </defs>
-            </svg>
-            
-            {/* Segundo chevron */}
-            <svg 
-              className="scroll-chevron scroll-chevron-2"
-              width="60" 
-              height="40" 
-              viewBox="0 0 60 40" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M10 10 L30 30 L50 10" 
-                stroke="url(#emeraldGradient2)" 
-                strokeWidth="5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-              <defs>
-                <linearGradient id="emeraldGradient2" x1="10" y1="10" x2="50" y2="30">
-                  <stop offset="0%" stopColor="#6EE7B7" />
-                  <stop offset="50%" stopColor="#34D399" />
-                  <stop offset="100%" stopColor="#10B981" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+          {/* Primer chevron */}
+          <svg 
+            className="scroll-chevron scroll-chevron-1"
+            width="80" 
+            height="50" 
+            viewBox="0 0 80 50" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path 
+              d="M15 15 L40 40 L65 15" 
+              stroke="#F5F5F0" 
+              strokeWidth="6.6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              fill="none"
+            />
+          </svg>
+          
+          {/* Segundo chevron */}
+          <svg 
+            className="scroll-chevron scroll-chevron-2"
+            width="80" 
+            height="50" 
+            viewBox="0 0 80 50" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path 
+              d="M15 15 L40 40 L65 15" 
+              stroke="#F5F5F0" 
+              strokeWidth="6.6" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              fill="none"
+            />
+          </svg>
         </div>
       )}
 
