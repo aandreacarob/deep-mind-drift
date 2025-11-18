@@ -56,7 +56,7 @@ const Seccion2 = () => {
       x: 400,
       y: 650,
       rotation: 0,
-      color: "#FFD700",
+      color: "#4A90E2",
       title: "EL MAPA CEREBRAL",
       summary: "Tu cerebro tiene 86 mil millones de neuronas. No necesitas conocerlas todas. Solo necesitas entender cuatro regiones que se activan cada vez que interactúas con una pantalla.",
       content: `Tu cerebro tiene 86 mil millones de neuronas.
@@ -87,7 +87,7 @@ Hasta ahora.`,
       x: 250,
       y: 550,
       rotation: -25,
-      color: "#F4C430",
+      color: "#5B9BD5",
       title: "47 SEGUNDOS",
       summary: "47 segundos es el tiempo promedio que pasas en una pantalla antes de cambiar. No es falta de atención, es fragmentación aprendida.",
       content: `Ese es el tiempo promedio que pasas mirando 
@@ -106,7 +106,7 @@ redirigida.`,
       x: 200,
       y: 450,
       rotation: -35,
-      color: "#FFE55C",
+      color: "#6BB6FF",
       title: "23 MINUTOS",
       summary: "23 minutos y 15 segundos. Ese es el tiempo que tu cerebro necesita para recuperar la concentración plena después de una interrupción. No es el segundo que tardas en revisar la notificación, es el cuarto de hora que pierdes después.",
       content: `Ese es el tiempo que tu cerebro necesita para 
@@ -127,7 +127,7 @@ Y esto sucede docenas de veces al día.`,
       x: 180,
       y: 350,
       rotation: -20,
-      color: "#FFC125",
+      color: "#4ECDC4",
       title: "40% DE PÉRDIDA",
       summary: "40% de pérdida de productividad. Esa es la penalización que paga tu cerebro por los 'costos de cambio' acumulados. Milisegundos que se acumulan hasta convertirse en horas perdidas.",
       content: `Esa es la penalización que paga tu cerebro 
@@ -149,7 +149,7 @@ Hasta convertirse en horas perdidas.`,
       x: 550,
       y: 530,
       rotation: 25,
-      color: "#DAA520",
+      color: "#5FD3CA",
       title: "CORTEZA PREFRONTAL",
       summary: "Tu 'CEO Interno'. La parte que razona, planifica y dice 'no' a los impulsos. Cuando estás constantemente cambiando entre tareas, ella trabaja más duro. No se apaga, se sobrecarga.",
       content: `Tu "CEO Interno"
@@ -180,7 +180,7 @@ Necesita más esfuerzo para hacer lo mismo.`,
       x: 600,
       y: 430,
       rotation: 35,
-      color: "#FFDB58",
+      color: "#6EDDD6",
       title: "NÚCLEO ACCUMBENS",
       summary: "Tu Centro de Recompensa. Se enciende cuando recibes un 'like', un mensaje o descubres un video. Las apps te recompensan a veces, impredeciblemente. Esto se llama 'refuerzo variable'.",
       content: `Tu Centro de Recompensa
@@ -218,7 +218,7 @@ sabe cómo está diseñado.`,
       x: 620,
       y: 330,
       rotation: 20,
-      color: "#FFD966",
+      color: "#7B68EE",
       title: "AMÍGDALA",
       summary: "Tu Detector de Amenazas. Heredado de cuando vivías en la sabana. Ella no distingue entre un tigre que te persigue y una notificación que vibra. Para ella, todo es una alarma.",
       content: `Tu Detector de Amenazas
@@ -260,7 +260,7 @@ una notificación de un juego.`,
       x: 600,
       y: 230,
       rotation: 15,
-      color: "#D4AF37",
+      color: "#8B7AE8",
       title: "HIPOCAMPO",
       summary: "Tu Archivador de Memorias. Solo guarda lo que considera importante. Pero cuando puedes Googlearlo, tu hipocampo aprende: 'No necesito guardar esto'. Se llama 'Efecto Google'.",
       content: `Tu Archivador de Memorias
@@ -302,7 +302,7 @@ y un poco peor en recordar.`,
       x: 380,
       y: 280,
       rotation: -10,
-      color: "#B8860B",
+      color: "#4169E1",
       title: "SIN VILLANOS",
       summary: "La mecánica sin villanos. Cuatro sistemas. Ninguno roto. Todos funcionando perfectamente. El problema es que fueron diseñados para un mundo diferente. Y alguien más lo sabe.",
       content: `Cuatro sistemas.
@@ -339,7 +339,7 @@ Para hacerte quedarte.`,
       x: 400,
       y: 150,
       rotation: 0,
-      color: "#EEC900",
+      color: "#4682B4",
       title: "LA PREGUNTA ESPEJO",
       summary: "La pregunta ya no es: '¿Por qué me pasa esto?'. La pregunta ahora es: '¿Lo noto cuando sucede?'. Porque si lo notas, si ves la mecánica mientras sucede, entonces puedes elegir.",
       content: `Has visto el mapa.
@@ -547,11 +547,23 @@ Sino cómo la habitas.`,
   // Keep all falling leaves - they accumulate at the bottom instead of being removed
   // Removed cleanup interval so leaves stay visible and accumulate like autumn leaves
 
-  // Hide scroll indicators on scroll
+  // Hide scroll indicators on scroll - desaparecer después del segundo scroll
   useEffect(() => {
+    let scrollCount = 0;
+    let lastScrollY = 0;
+    
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowScrollIndicators(false);
+      const currentScrollY = window.scrollY;
+      
+      // Detectar cuando el usuario hace scroll (cambio de posición)
+      if (Math.abs(currentScrollY - lastScrollY) > 10) {
+        scrollCount++;
+        lastScrollY = currentScrollY;
+        
+        // Desaparecer después del segundo scroll
+        if (scrollCount >= 2) {
+          setShowScrollIndicators(false);
+        }
       }
     };
 
@@ -663,35 +675,62 @@ Sino cómo la habitas.`,
               {/* Left Scroll Indicator */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                animate={{ 
+                  opacity: [0.7, 1, 0.7],
+                  x: 0
+                }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute left-12 top-[35%] -translate-y-1/2 pointer-events-none"
-                style={{ background: 'transparent' }}
+                transition={{ 
+                  delay: 1.5, 
+                  x: { duration: 0.8 },
+                  opacity: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    times: [0, 0.5, 1]
+                  }
+                }}
+                className="absolute left-24 top-[35%] -translate-y-1/2 pointer-events-none"
+                style={{ 
+                  background: 'transparent', 
+                  backgroundColor: 'transparent',
+                  mixBlendMode: 'normal'
+                }}
               >
-                <svg width="60" height="70" viewBox="0 0 60 70" fill="none" style={{ background: 'transparent' }}>
+                <svg 
+                  width="60" 
+                  height="70" 
+                  viewBox="0 0 60 70" 
+                  fill="none" 
+                  style={{ 
+                    background: 'transparent', 
+                    backgroundColor: 'transparent',
+                    overflow: 'visible'
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   {/* Primera V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 8 L 30 28 L 48 8"
-                    stroke="rgba(255, 255, 255, 0.95)"
+                    stroke="rgba(255, 248, 240, 0.95)"
                     strokeWidth="8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
+                      filter: 'drop-shadow(0 0 4px rgba(255, 248, 240, 0.8)) drop-shadow(0 0 8px rgba(255, 248, 240, 0.6)) drop-shadow(0 0 12px rgba(255, 248, 240, 0.4))'
                     }}
                   />
                   {/* Segunda V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 38 L 30 58 L 48 38"
-                    stroke="rgba(255, 255, 255, 0.95)"
+                    stroke="rgba(255, 248, 240, 0.95)"
                     strokeWidth="8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
+                      filter: 'drop-shadow(0 0 4px rgba(255, 248, 240, 0.8)) drop-shadow(0 0 8px rgba(255, 248, 240, 0.6)) drop-shadow(0 0 12px rgba(255, 248, 240, 0.4))'
                     }}
                   />
                 </svg>
@@ -700,35 +739,62 @@ Sino cómo la habitas.`,
               {/* Right Scroll Indicator */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                animate={{ 
+                  opacity: [0.7, 1, 0.7],
+                  x: 0
+                }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute right-12 top-[35%] -translate-y-1/2 pointer-events-none"
-                style={{ background: 'transparent' }}
+                transition={{ 
+                  delay: 1.5, 
+                  x: { duration: 0.8 },
+                  opacity: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    times: [0, 0.5, 1]
+                  }
+                }}
+                className="absolute right-24 top-[35%] -translate-y-1/2 pointer-events-none"
+                style={{ 
+                  background: 'transparent', 
+                  backgroundColor: 'transparent',
+                  mixBlendMode: 'normal'
+                }}
               >
-                <svg width="60" height="70" viewBox="0 0 60 70" fill="none" style={{ background: 'transparent' }}>
+                <svg 
+                  width="60" 
+                  height="70" 
+                  viewBox="0 0 60 70" 
+                  fill="none" 
+                  style={{ 
+                    background: 'transparent', 
+                    backgroundColor: 'transparent',
+                    overflow: 'visible'
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   {/* Primera V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 8 L 30 28 L 48 8"
-                    stroke="rgba(255, 255, 255, 0.95)"
+                    stroke="rgba(255, 248, 240, 0.95)"
                     strokeWidth="8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
+                      filter: 'drop-shadow(0 0 4px rgba(255, 248, 240, 0.8)) drop-shadow(0 0 8px rgba(255, 248, 240, 0.6)) drop-shadow(0 0 12px rgba(255, 248, 240, 0.4))'
                     }}
                   />
                   {/* Segunda V gruesa con puntas redondeadas */}
                   <path
                     d="M 12 38 L 30 58 L 48 38"
-                    stroke="rgba(255, 255, 255, 0.95)"
+                    stroke="rgba(255, 248, 240, 0.95)"
                     strokeWidth="8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
+                      filter: 'drop-shadow(0 0 4px rgba(255, 248, 240, 0.8)) drop-shadow(0 0 8px rgba(255, 248, 240, 0.6)) drop-shadow(0 0 12px rgba(255, 248, 240, 0.4))'
                     }}
                   />
                 </svg>
@@ -805,7 +871,15 @@ Sino cómo la habitas.`,
 
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent 
+            className="max-w-2xl max-h-[80vh] overflow-y-auto !rounded-2xl !border-4"
+            style={{
+              borderColor: '#DAA520',
+              borderWidth: '4px',
+              borderStyle: 'solid',
+              boxShadow: '0 0 20px rgba(218, 165, 32, 0.4), 0 0 40px rgba(218, 165, 32, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             {selectedLeaf && (
               <>
                 <DialogHeader>
