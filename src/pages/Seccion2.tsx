@@ -677,9 +677,43 @@ Sino cómo la habitas.`,
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           onClick={() => navigate("/")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-narrative-purple font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          className="fixed-lobby-btn"
         >
-          ← Volver
+          <svg className="clover-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Trébol de 4 hojas */}
+            <circle cx="12" cy="8" r="4" fill="url(#pearlGradient1)" />
+            <circle cx="16" cy="12" r="4" fill="url(#pearlGradient2)" />
+            <circle cx="12" cy="16" r="4" fill="url(#pearlGradient3)" />
+            <circle cx="8" cy="12" r="4" fill="url(#pearlGradient4)" />
+            {/* Centro */}
+            <circle cx="12" cy="12" r="2.5" fill="#F5F5F5" opacity="0.9" />
+            {/* Tallo */}
+            <path d="M12 14 L12 20" stroke="#E8E8E8" strokeWidth="1.5" strokeLinecap="round" />
+            {/* Gradientes perla */}
+            <defs>
+              <radialGradient id="pearlGradient1">
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#F8F8FF" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#F0F0F5" stopOpacity="0.85" />
+              </radialGradient>
+              <radialGradient id="pearlGradient2">
+                <stop offset="0%" stopColor="#FFFAF0" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#FFF8F8" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#F5F5F0" stopOpacity="0.85" />
+              </radialGradient>
+              <radialGradient id="pearlGradient3">
+                <stop offset="0%" stopColor="#F8F8FF" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#F0F0FF" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#E8E8F5" stopOpacity="0.85" />
+              </radialGradient>
+              <radialGradient id="pearlGradient4">
+                <stop offset="0%" stopColor="#FFFFF0" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#FFFAف8" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#F5F5E8" stopOpacity="0.85" />
+              </radialGradient>
+            </defs>
+          </svg>
+          ← Lobby
         </motion.button>
 
         {/* Next Section button - appears when scroll reaches 99% */}

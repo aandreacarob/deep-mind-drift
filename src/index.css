@@ -357,7 +357,8 @@ All colors MUST be HSL.
     flex-shrink: 0;
   }
 
-  .fixed-lobby-btn .sunflower-icon {
+  .fixed-lobby-btn .sunflower-icon,
+  .fixed-lobby-btn .clover-icon {
     width: 20px;
     height: 20px;
     flex-shrink: 0;
