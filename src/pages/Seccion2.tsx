@@ -48,8 +48,6 @@ const Seccion2 = () => {
   }>>([]);
   const lastScrollBatchRef = useRef<Set<number>>(new Set());
   const accumulatedLeavesRef = useRef<Array<{ x: number; y: number; id: number }>>([]);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   const leaves: LeafData[] = [
     {
@@ -389,29 +387,6 @@ Sino cómo la habitas.`,
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // ScrollTrigger para el indicador de scroll (chevrones)
-    const handleScrollIndicator = () => {
-      if (window.scrollY > 100 && showScrollIndicator) {
-        if (scrollIndicatorRef.current) {
-          // Animar ambos contenedores (izquierdo y derecho)
-          const leftIndicator = scrollIndicatorRef.current.querySelector('.scroll-indicator-section2-left');
-          const rightIndicator = scrollIndicatorRef.current.querySelector('.scroll-indicator-section2-right');
-          
-          gsap.to([leftIndicator, rightIndicator], {
-            opacity: 0,
-            y: -30,
-            duration: 0.8,
-            ease: "power2.in",
-            onComplete: () => {
-              setShowScrollIndicator(false);
-            }
-          });
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScrollIndicator);
-
     const scrollTrigger = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top top",
@@ -508,12 +483,11 @@ Sino cómo la habitas.`,
 
     return () => {
       scrollTrigger.kill();
-      window.removeEventListener('scroll', handleScrollIndicator);
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
     };
-  }, [isTransitioning, showScrollIndicator]);
+  }, [isTransitioning]);
 
   // Automatic falling leaves interval
   useEffect(() => {
@@ -581,92 +555,6 @@ Sino cómo la habitas.`,
   return (
     <>
       <CustomCursor />
-      {/* Scroll indicator - Chevrones a los lados con glow pronunciado */}
-      {showScrollIndicator && (
-        <div ref={scrollIndicatorRef}>
-          {/* Chevrones izquierda */}
-          <div className="scroll-indicator-section2-left">
-            {/* Primer chevron */}
-            <svg 
-              className="scroll-chevron-section2 scroll-chevron-1"
-              width="80" 
-              height="50" 
-              viewBox="0 0 80 50" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M15 15 L40 40 L65 15" 
-                stroke="#F5F5F0" 
-                strokeWidth="6.6" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-            
-            {/* Segundo chevron */}
-            <svg 
-              className="scroll-chevron-section2 scroll-chevron-2"
-              width="80" 
-              height="50" 
-              viewBox="0 0 80 50" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M15 15 L40 40 L65 15" 
-                stroke="#F5F5F0" 
-                strokeWidth="6.6" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-          </div>
-          
-          {/* Chevrones derecha */}
-          <div className="scroll-indicator-section2-right">
-            {/* Primer chevron */}
-            <svg 
-              className="scroll-chevron-section2 scroll-chevron-1"
-              width="80" 
-              height="50" 
-              viewBox="0 0 80 50" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M15 15 L40 40 L65 15" 
-                stroke="#F5F5F0" 
-                strokeWidth="6.6" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-            
-            {/* Segundo chevron */}
-            <svg 
-              className="scroll-chevron-section2 scroll-chevron-2"
-              width="80" 
-              height="50" 
-              viewBox="0 0 80 50" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M15 15 L40 40 L65 15" 
-                stroke="#F5F5F0" 
-                strokeWidth="6.6" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-          </div>
-        </div>
-      )}
       <div
         ref={containerRef}
         className="min-h-[300vh] relative"
@@ -784,71 +672,41 @@ Sino cómo la habitas.`,
         ))}
 
         {/* Back button */}
-        <button 
-          className="fixed-lobby-btn"
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
           onClick={() => navigate("/")}
-          aria-label="Volver al Lobby"
+          className="fixed bottom-8 left-8 z-50 px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-narrative-purple font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105"
         >
-          <svg className="sunflower-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Trébol de 4 hojas */}
-            {/* Hoja superior */}
-            <circle cx="12" cy="7" r="3.5" fill="#22C55E" />
-            <circle cx="12" cy="6.5" r="2" fill="#16A34A" opacity="0.7" />
-            {/* Hoja derecha */}
-            <circle cx="17" cy="12" r="3.5" fill="#22C55E" />
-            <circle cx="17.5" cy="12" r="2" fill="#16A34A" opacity="0.7" />
-            {/* Hoja inferior */}
-            <circle cx="12" cy="17" r="3.5" fill="#22C55E" />
-            <circle cx="12" cy="17.5" r="2" fill="#16A34A" opacity="0.7" />
-            {/* Hoja izquierda */}
-            <circle cx="7" cy="12" r="3.5" fill="#22C55E" />
-            <circle cx="6.5" cy="12" r="2" fill="#16A34A" opacity="0.7" />
-            {/* Centro del trébol */}
-            <circle cx="12" cy="12" r="2" fill="#15803D" />
-            {/* Tallo */}
-            <path d="M12 14 L12 20" stroke="#15803D" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          ← Lobby
-        </button>
+          ← Volver
+        </motion.button>
+
+        {/* Next Section button - appears when scroll reaches 99% */}
+        {isTransitioning && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            onClick={() => navigate("/seccion-3")}
+            className="fixed bottom-8 right-8 z-50 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 backdrop-blur-sm border border-white/30 rounded-full text-white font-bold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-110 shadow-lg"
+          >
+            Esferas de Pensamiento →
+          </motion.button>
+        )}
+      
 
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
-          <DialogContent 
-            className="max-w-3xl max-h-[85vh] overflow-y-auto p-10 border-0"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255, 252, 235, 0.99) 0%, rgba(255, 248, 225, 0.99) 50%, rgba(255, 245, 220, 0.99) 100%)',
-              borderRadius: '48% 52% 55% 45% / 45% 55% 45% 55%',
-              boxShadow: '0 25px 70px rgba(0, 0, 0, 0.5), inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 0 50px rgba(210, 180, 140, 0.5), inset 0 -3px 30px rgba(210, 180, 140, 0.3)',
-              border: '4px solid rgba(139, 69, 19, 0.4)',
-              backgroundImage: `
-                radial-gradient(circle at 15% 20%, rgba(255, 245, 200, 0.7) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(245, 222, 179, 0.6) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(250, 235, 215, 0.5) 0%, transparent 50%),
-                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(139, 69, 19, 0.03) 10px, rgba(139, 69, 19, 0.03) 11px)
-              `,
-            }}
-          >
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             {selectedLeaf && (
               <>
                 <DialogHeader>
-                  <DialogTitle 
-                    className="text-4xl font-bold mb-6 font-['Cormorant_Garamond'] italic tracking-wide"
-                    style={{ 
-                      color: 'hsl(225, 80%, 45%)',
-                      textShadow: '0 2px 3px rgba(255, 255, 255, 0.7), 0 0 10px rgba(67, 97, 238, 0.3)'
-                    }}
-                  >
+                  <DialogTitle className="text-2xl font-semibold mb-4 font-['Cormorant_Garamond'] italic" style={{ color: 'hsl(225, 73%, 57%)' }}>
                     {selectedLeaf.title}
                   </DialogTitle>
                 </DialogHeader>
-                <div 
-                  className="text-xl whitespace-pre-line leading-loose font-['Cormorant_Garamond'] mt-2"
-                  style={{ 
-                    color: 'hsl(25, 35%, 18%)',
-                    fontWeight: 500,
-                    textShadow: '0 1px 1px rgba(255, 255, 255, 0.6)'
-                  }}
-                >
+                <div className="text-lg whitespace-pre-line leading-relaxed text-foreground font-['Cormorant_Garamond']">
                   {selectedLeaf.content}
                 </div>
               </>
