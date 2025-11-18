@@ -688,10 +688,11 @@ Sino cómo la habitas.`,
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            onClick={() => navigate("/seccion-3")}
-            className="fixed bottom-8 right-8 z-50 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 backdrop-blur-sm border border-white/30 rounded-full text-white font-bold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-110 shadow-lg"
+            onClick={() => navigate("/")}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-8 py-4 bg-white/90 backdrop-blur-md rounded-full text-gray-800 font-bold hover:bg-white transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.5)] flex items-center gap-3"
           >
-            Esferas de Pensamiento →
+            <span className="text-2xl text-green-500">🧩</span>
+            <span className="text-xl">← Lobby</span>
           </motion.button>
         )}
       
