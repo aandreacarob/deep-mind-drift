@@ -813,15 +813,41 @@ Sino cómo la habitas.`,
 
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent 
+            className="max-w-3xl max-h-[85vh] overflow-y-auto p-10 border-0"
+            style={{
+              background: 'linear-gradient(135deg, rgba(245, 245, 220, 0.98) 0%, rgba(255, 250, 240, 0.96) 50%, rgba(255, 248, 220, 0.98) 100%)',
+              borderRadius: '48% 52% 55% 45% / 45% 55% 45% 55%',
+              boxShadow: '0 20px 60px rgba(139, 69, 19, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 0 40px rgba(210, 180, 140, 0.3), inset 0 -2px 20px rgba(210, 180, 140, 0.2)',
+              border: '3px solid rgba(210, 180, 140, 0.5)',
+              backgroundImage: `
+                radial-gradient(circle at 15% 20%, rgba(255, 248, 220, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(245, 222, 179, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(250, 235, 215, 0.4) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(139, 69, 19, 0.02) 10px, rgba(139, 69, 19, 0.02) 11px)
+              `,
+            }}
+          >
             {selectedLeaf && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-semibold mb-4 font-['Cormorant_Garamond'] italic" style={{ color: 'hsl(225, 73%, 57%)' }}>
+                  <DialogTitle 
+                    className="text-3xl font-bold mb-6 font-['Cormorant_Garamond'] italic tracking-wide"
+                    style={{ 
+                      color: 'hsl(225, 73%, 57%)',
+                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5)'
+                    }}
+                  >
                     {selectedLeaf.title}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="text-lg whitespace-pre-line leading-relaxed text-foreground font-['Cormorant_Garamond']">
+                <div 
+                  className="text-xl whitespace-pre-line leading-loose font-['Cormorant_Garamond'] mt-2"
+                  style={{ 
+                    color: 'hsl(25, 20%, 25%)',
+                    textShadow: '0 1px 1px rgba(255, 255, 255, 0.5)'
+                  }}
+                >
                   {selectedLeaf.content}
                 </div>
               </>
