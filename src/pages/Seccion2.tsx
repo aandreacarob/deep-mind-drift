@@ -816,15 +816,15 @@ Sino cómo la habitas.`,
           <DialogContent 
             className="max-w-3xl max-h-[85vh] overflow-y-auto p-10 border-0"
             style={{
-              background: 'linear-gradient(135deg, rgba(245, 245, 220, 0.98) 0%, rgba(255, 250, 240, 0.96) 50%, rgba(255, 248, 220, 0.98) 100%)',
+              background: 'linear-gradient(135deg, rgba(255, 252, 235, 0.99) 0%, rgba(255, 248, 225, 0.99) 50%, rgba(255, 245, 220, 0.99) 100%)',
               borderRadius: '48% 52% 55% 45% / 45% 55% 45% 55%',
-              boxShadow: '0 20px 60px rgba(139, 69, 19, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 0 40px rgba(210, 180, 140, 0.3), inset 0 -2px 20px rgba(210, 180, 140, 0.2)',
-              border: '3px solid rgba(210, 180, 140, 0.5)',
+              boxShadow: '0 25px 70px rgba(0, 0, 0, 0.5), inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 0 50px rgba(210, 180, 140, 0.5), inset 0 -3px 30px rgba(210, 180, 140, 0.3)',
+              border: '4px solid rgba(139, 69, 19, 0.4)',
               backgroundImage: `
-                radial-gradient(circle at 15% 20%, rgba(255, 248, 220, 0.6) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(245, 222, 179, 0.5) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(250, 235, 215, 0.4) 0%, transparent 50%),
-                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(139, 69, 19, 0.02) 10px, rgba(139, 69, 19, 0.02) 11px)
+                radial-gradient(circle at 15% 20%, rgba(255, 245, 200, 0.7) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(245, 222, 179, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(250, 235, 215, 0.5) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(139, 69, 19, 0.03) 10px, rgba(139, 69, 19, 0.03) 11px)
               `,
             }}
           >
@@ -832,10 +832,10 @@ Sino cómo la habitas.`,
               <>
                 <DialogHeader>
                   <DialogTitle 
-                    className="text-3xl font-bold mb-6 font-['Cormorant_Garamond'] italic tracking-wide"
+                    className="text-4xl font-bold mb-6 font-['Cormorant_Garamond'] italic tracking-wide"
                     style={{ 
-                      color: 'hsl(225, 73%, 57%)',
-                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5)'
+                      color: 'hsl(225, 80%, 45%)',
+                      textShadow: '0 2px 3px rgba(255, 255, 255, 0.7), 0 0 10px rgba(67, 97, 238, 0.3)'
                     }}
                   >
                     {selectedLeaf.title}
@@ -844,8 +844,9 @@ Sino cómo la habitas.`,
                 <div 
                   className="text-xl whitespace-pre-line leading-loose font-['Cormorant_Garamond'] mt-2"
                   style={{ 
-                    color: 'hsl(25, 20%, 25%)',
-                    textShadow: '0 1px 1px rgba(255, 255, 255, 0.5)'
+                    color: 'hsl(25, 35%, 18%)',
+                    fontWeight: 500,
+                    textShadow: '0 1px 1px rgba(255, 255, 255, 0.6)'
                   }}
                 >
                   {selectedLeaf.content}
