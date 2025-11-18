@@ -214,21 +214,56 @@ Y los patrones evolucionan con la consciencia.`}
           </p>
         </motion.div>
 
-        {/* Back button */}
-        <button
-          onClick={() => navigate("/")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-md border rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            borderColor: 'rgba(255, 255, 255, 0.3)',
-            color: '#1a1a1a',
-            fontFamily: 'Inter, sans-serif',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-          }}
-        >
-          🌳 ← Lobby
-        </button>
+        {/* Botones organizados: Constelación arriba, Lobby abajo */}
+        <div className="fixed bottom-8 left-8 z-50 flex flex-col gap-3">
+          {/* Constelación button */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            onClick={onBack}
+            className="px-6 py-3 backdrop-blur-md border rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              color: '#1a1a1a',
+              fontFamily: 'Inter, sans-serif',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            <svg className="clover-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '20px', height: '20px', display: 'inline-block', marginRight: '8px', verticalAlign: 'middle' }}>
+              {/* Estrella/Constelación */}
+              <path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z" fill="url(#starGradient1)" />
+              <circle cx="12" cy="12" r="1.5" fill="#F5F5F5" opacity="0.9" />
+              {/* Gradientes perla para estrella */}
+              <defs>
+                <radialGradient id="starGradient1">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+                  <stop offset="50%" stopColor="#F8F8FF" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#F0F0F5" stopOpacity="0.85" />
+                </radialGradient>
+              </defs>
+            </svg>
+            ← Constelación
+          </motion.button>
+
+          {/* Back button */}
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-3 backdrop-blur-md border rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              color: '#1a1a1a',
+              fontFamily: 'Inter, sans-serif',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            🌳 ← Lobby
+          </button>
+        </div>
       </div>
     </div>
   );

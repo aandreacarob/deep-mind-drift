@@ -869,7 +869,6 @@ Sino cómo la habitas.`,
           ← Lobby
         </motion.button>
 
-
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
           <DialogContent 

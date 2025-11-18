@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Sphere } from "@/components/Sphere";
 import { SphereModal } from "@/components/SphereModal";
@@ -106,7 +106,10 @@ simultáneas. Nunca terminas nada profundamente.`,
 
 const Seccion3 = () => {
   const navigate = useNavigate();
-  const [stage, setStage] = useState<"intro" | "constellation" | "painting">("intro");
+  const location = useLocation();
+  const [stage, setStage] = useState<"intro" | "constellation" | "painting">(
+    (location.state as { showConstellation?: boolean })?.showConstellation ? "constellation" : "intro"
+  );
   const [selectedSphere, setSelectedSphere] = useState<SphereData | null>(null);
   const [modalOpenTime, setModalOpenTime] = useState<number>(0);
   const [userJourney, setUserJourney] = useState<UserJourney>({

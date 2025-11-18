@@ -964,32 +964,85 @@ Es difícil de sostener, pero poderoso.`,
           </motion.div>
         )}
 
-        {/* CTA */}
+        {/* CTA - Layout vertical: video centrado arriba y botón debajo */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3.2 }}
-          className="text-center"
+          className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto px-4"
         >
-          <motion.button
-            onClick={onGeneratePainting}
-            className="px-12 py-5 text-white font-semibold rounded-full transition-all duration-300"
-            style={{
-              background: 'linear-gradient(135deg, #9B87B5 0%, #7B68A0 100%)',
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '20px',
-              fontStyle: 'italic',
-              boxShadow: '0 8px 32px rgba(155, 135, 181, 0.4)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 12px 48px rgba(155, 135, 181, 0.6)',
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            ✨ Descubrir mi animal espiritual
-          </motion.button>
+          {/* Video TikTok centrado */}
+          <div className="flex flex-col items-center justify-center">
+            <h3 
+              className="mb-4 text-white font-semibold text-center max-w-2xl mx-auto px-4"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: '22px',
+                fontWeight: 600,
+                fontStyle: 'italic',
+                letterSpacing: '0.5px',
+                textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1)',
+                lineHeight: '1.5'
+              }}
+            >
+              Mira este video para seguir scrolleando conscientemente y vuelve para descubrir tu animal espiritual, haz clik abajo
+            </h3>
+            {/* Contenedor tipo TikTok */}
+            <div 
+              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                width: '360px',
+                height: '640px',
+                maxWidth: '100%',
+                aspectRatio: '9/16'
+              }}
+            >
+              {/* Placeholder para el video - se puede reemplazar con un video real */}
+              <div 
+                className="w-full h-full flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(40, 30, 60, 0.9) 100%)'
+                }}
+              >
+                <div className="text-center p-6">
+                  <div className="text-4xl mb-4">📱</div>
+                  <p className="text-white text-sm opacity-70" style={{
+                    fontFamily: 'Inter, sans-serif'
+                  }}>
+                    Video TikTok
+                  </p>
+                  <p className="text-white text-xs opacity-50 mt-2" style={{
+                    fontFamily: 'Inter, sans-serif'
+                  }}>
+                    (Espacio para video)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botón debajo del video */}
+          <div className="flex flex-col items-center justify-center">
+            <motion.button
+              onClick={onGeneratePainting}
+              className="px-12 py-5 text-white font-semibold rounded-full transition-all duration-300"
+              style={{
+                background: 'linear-gradient(135deg, #9B87B5 0%, #7B68A0 100%)',
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: '20px',
+                fontStyle: 'italic',
+                boxShadow: '0 8px 32px rgba(155, 135, 181, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: '0 12px 48px rgba(155, 135, 181, 0.6)',
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              ✨ Descubrir mi animal espiritual
+            </motion.button>
+          </div>
         </motion.div>
 
         {/* Back button */}
