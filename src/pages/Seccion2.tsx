@@ -716,20 +716,6 @@ Sino cómo la habitas.`,
           ← Lobby
         </motion.button>
 
-        {/* Next Section button - appears when scroll reaches 99% */}
-        {isTransitioning && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            onClick={() => navigate("/")}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-8 py-4 bg-white/90 backdrop-blur-md rounded-full text-gray-800 font-bold hover:bg-white transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.5)] flex items-center gap-3"
-          >
-            <span className="text-2xl text-green-500">🧩</span>
-            <span className="text-xl">← Lobby</span>
-          </motion.button>
-        )}
-      
 
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
