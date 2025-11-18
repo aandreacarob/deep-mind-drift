@@ -108,9 +108,7 @@ redirigida.`,
       color: "#FFE55C",
       title: "23 MINUTOS",
       summary: "23 minutos y 15 segundos. Ese es el tiempo que tu cerebro necesita para recuperar la concentración plena después de una interrupción. No es el segundo que tardas en revisar la notificación, es el cuarto de hora que pierdes después.",
-      content: `23 MINUTOS Y 15 SEGUNDOS
-
-Ese es el tiempo que tu cerebro necesita para 
+      content: `Ese es el tiempo que tu cerebro necesita para 
 recuperar la concentración plena después de 
 una interrupción.
 
@@ -131,9 +129,7 @@ Y esto sucede docenas de veces al día.`,
       color: "#FFC125",
       title: "40% DE PÉRDIDA",
       summary: "40% de pérdida de productividad. Esa es la penalización que paga tu cerebro por los 'costos de cambio' acumulados. Milisegundos que se acumulan hasta convertirse en horas perdidas.",
-      content: `40% DE PÉRDIDA DE PRODUCTIVIDAD
-
-Esa es la penalización que paga tu cerebro 
+      content: `Esa es la penalización que paga tu cerebro 
 por los "costos de cambio" acumulados.
 
 Cada vez que saltas de una tarea a otra,
@@ -308,9 +304,7 @@ y un poco peor en recordar.`,
       color: "#B8860B",
       title: "SIN VILLANOS",
       summary: "La mecánica sin villanos. Cuatro sistemas. Ninguno roto. Todos funcionando perfectamente. El problema es que fueron diseñados para un mundo diferente. Y alguien más lo sabe.",
-      content: `LA MECÁNICA SIN VILLANOS
-
-Cuatro sistemas.
+      content: `Cuatro sistemas.
 Ninguno roto.
 
 Tu corteza prefrontal no es débil.
