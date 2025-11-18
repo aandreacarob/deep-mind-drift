@@ -666,34 +666,31 @@ Sino cómo la habitas.`,
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute left-12 top-1/2 -translate-y-1/2 pointer-events-none"
+                className="absolute left-12 top-[35%] -translate-y-1/2 pointer-events-none"
               >
                 <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
-                  <defs>
-                    <filter id="pearlGlow">
-                      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                  {/* Primera V gruesa */}
+                  {/* Primera V gruesa con puntas redondeadas */}
                   <path
-                    d="M 10 5 L 30 25 L 50 5 L 50 15 L 30 35 L 10 15 Z"
-                    fill="rgba(255, 255, 255, 0.95)"
-                    filter="url(#pearlGlow)"
+                    d="M 12 8 L 30 28 L 48 8"
+                    stroke="rgba(255, 255, 255, 0.95)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
+                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
                     }}
                   />
-                  {/* Segunda V gruesa */}
+                  {/* Segunda V gruesa con puntas redondeadas */}
                   <path
-                    d="M 10 35 L 30 55 L 50 35 L 50 45 L 30 65 L 10 45 Z"
-                    fill="rgba(255, 255, 255, 0.95)"
-                    filter="url(#pearlGlow)"
+                    d="M 12 38 L 30 58 L 48 38"
+                    stroke="rgba(255, 255, 255, 0.95)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
+                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
                     }}
                   />
                 </svg>
@@ -705,34 +702,31 @@ Sino cómo la habitas.`,
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none"
+                className="absolute right-12 top-[35%] -translate-y-1/2 pointer-events-none"
               >
                 <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
-                  <defs>
-                    <filter id="pearlGlowRight">
-                      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                  {/* Primera V gruesa */}
+                  {/* Primera V gruesa con puntas redondeadas */}
                   <path
-                    d="M 10 5 L 30 25 L 50 5 L 50 15 L 30 35 L 10 15 Z"
-                    fill="rgba(255, 255, 255, 0.95)"
-                    filter="url(#pearlGlowRight)"
+                    d="M 12 8 L 30 28 L 48 8"
+                    stroke="rgba(255, 255, 255, 0.95)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
+                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
                     }}
                   />
-                  {/* Segunda V gruesa */}
+                  {/* Segunda V gruesa con puntas redondeadas */}
                   <path
-                    d="M 10 35 L 30 55 L 50 35 L 50 45 L 30 65 L 10 45 Z"
-                    fill="rgba(255, 255, 255, 0.95)"
-                    filter="url(#pearlGlowRight)"
+                    d="M 12 38 L 30 58 L 48 38"
+                    stroke="rgba(255, 255, 255, 0.95)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
                     style={{
-                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
+                      filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 1)) drop-shadow(0 0 25px rgba(240, 240, 255, 0.8)) drop-shadow(0 0 35px rgba(230, 230, 250, 0.6))'
                     }}
                   />
                 </svg>
