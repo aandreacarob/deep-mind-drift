@@ -10,6 +10,7 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import fondoAzul from "@/assets/fondoazul.png";
 import treeImage from "@/assets/tree.png";
+import neuronaImage from "@/assets/neurona.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -872,25 +873,59 @@ Sino cómo la habitas.`,
         {/* Modal Dialog */}
         <Dialog open={selectedLeaf !== null} onOpenChange={(open) => !open && setSelectedLeaf(null)}>
           <DialogContent 
-            className="max-w-2xl max-h-[80vh] overflow-y-auto !rounded-2xl !border-4"
+            className="max-w-xl max-h-[70vh] overflow-y-auto !rounded-2xl !border-4 !bg-white !grid-rows-none relative"
             style={{
               borderColor: '#DAA520',
               borderWidth: '4px',
               borderStyle: 'solid',
-              boxShadow: '0 0 20px rgba(218, 165, 32, 0.4), 0 0 40px rgba(218, 165, 32, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 0 20px rgba(218, 165, 32, 0.4), 0 0 40px rgba(218, 165, 32, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)',
+              position: 'fixed',
+              top: '15%',
+              left: '50%',
+              transform: 'translate(-50%, 0)',
+              width: '90%',
+              maxWidth: '600px'
             }}
           >
+            {/* Fondo con imagen de neurona */}
+            <div 
+              className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden"
+              style={{
+                backgroundImage: `url(${neuronaImage})`,
+                backgroundSize: '150px 150px',
+                backgroundRepeat: 'repeat',
+                backgroundPosition: '0 0',
+                opacity: 0.5,
+                zIndex: 0,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+            />
+            {/* Overlay sutil para mantener legibilidad del texto */}
+            <div 
+              className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden"
+              style={{
+                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.5) 100%)',
+                zIndex: 1,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+            />
             {selectedLeaf && (
-              <>
+              <div className="relative" style={{ zIndex: 10, position: 'relative', paddingTop: '0' }}>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-semibold mb-4 font-['Cormorant_Garamond'] italic" style={{ color: 'hsl(225, 73%, 57%)' }}>
+                  <DialogTitle className="text-3xl font-semibold mb-4 font-['Cormorant_Garamond'] italic" style={{ color: 'hsl(225, 73%, 50%)' }}>
                     {selectedLeaf.title}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="text-lg whitespace-pre-line leading-relaxed text-foreground font-['Cormorant_Garamond']">
+                <div className="text-xl whitespace-pre-line leading-relaxed font-['Cormorant_Garamond']" style={{ color: '#1a1a1a', fontWeight: 500 }}>
                   {selectedLeaf.content}
                 </div>
-              </>
+              </div>
             )}
           </DialogContent>
         </Dialog>
