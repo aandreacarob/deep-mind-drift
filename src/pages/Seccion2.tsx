@@ -33,6 +33,7 @@ const Seccion2 = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedLeaf, setSelectedLeaf] = useState<LeafData | null>(null);
   const [hoveredLeaf, setHoveredLeaf] = useState<LeafData | null>(null);
+  const [showScrollIndicators, setShowScrollIndicators] = useState(true);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [fallingLeaves, setFallingLeaves] = useState<Array<{
     id: number;
@@ -546,6 +547,18 @@ Sino cómo la habitas.`,
   // Keep all falling leaves - they accumulate at the bottom instead of being removed
   // Removed cleanup interval so leaves stay visible and accumulate like autumn leaves
 
+  // Hide scroll indicators on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowScrollIndicators(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <CustomCursor />
@@ -643,6 +656,53 @@ Sino cómo la habitas.`,
               />
             )}
           </motion.div>
+
+          {/* Scroll Indicators */}
+          {showScrollIndicators && (
+            <>
+              {/* Left Scroll Indicator */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 1.5, duration: 0.8 }}
+                className="absolute left-8 top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{
+                  filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.5))',
+                }}
+              >
+                <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                  <path
+                    d="M30 10 L10 35 L30 35 L30 10 Z M30 35 L10 60 L30 60 L30 35 Z"
+                    fill="rgba(255, 255, 255, 0.9)"
+                    stroke="rgba(255, 215, 0, 0.8)"
+                    strokeWidth="3"
+                  />
+                </svg>
+              </motion.div>
+
+              {/* Right Scroll Indicator */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 1.5, duration: 0.8 }}
+                className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{
+                  filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.5))',
+                }}
+              >
+                <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                  <path
+                    d="M30 10 L50 35 L30 35 L30 10 Z M30 35 L50 60 L30 60 L30 35 Z"
+                    fill="rgba(255, 255, 255, 0.9)"
+                    stroke="rgba(255, 215, 0, 0.8)"
+                    strokeWidth="3"
+                  />
+                </svg>
+              </motion.div>
+            </>
+          )}
         </div>
 
         {/* Falling Decorative Leaves */}
