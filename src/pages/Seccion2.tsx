@@ -668,40 +668,32 @@ Sino cómo la habitas.`,
                 transition={{ delay: 1.5, duration: 0.8 }}
                 className="absolute left-12 top-1/2 -translate-y-1/2 pointer-events-none"
               >
-                <svg width="50" height="60" viewBox="0 0 50 60" fill="none">
+                <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
                   <defs>
                     <filter id="pearlGlow">
-                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                       <feMerge>
                         <feMergeNode in="coloredBlur"/>
                         <feMergeNode in="SourceGraphic"/>
                       </feMerge>
                     </filter>
                   </defs>
-                  {/* Primera V */}
+                  {/* Primera V gruesa */}
                   <path
-                    d="M 15 8 L 25 22 L 35 8"
-                    stroke="rgba(255, 255, 255, 0.95)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
+                    d="M 10 5 L 30 25 L 50 5 L 50 15 L 30 35 L 10 15 Z"
+                    fill="rgba(255, 255, 255, 0.95)"
                     filter="url(#pearlGlow)"
                     style={{
-                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 15px rgba(240, 240, 255, 0.6))'
+                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
                     }}
                   />
-                  {/* Segunda V */}
+                  {/* Segunda V gruesa */}
                   <path
-                    d="M 15 28 L 25 42 L 35 28"
-                    stroke="rgba(255, 255, 255, 0.95)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
+                    d="M 10 35 L 30 55 L 50 35 L 50 45 L 30 65 L 10 45 Z"
+                    fill="rgba(255, 255, 255, 0.95)"
                     filter="url(#pearlGlow)"
                     style={{
-                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 15px rgba(240, 240, 255, 0.6))'
+                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
                     }}
                   />
                 </svg>
@@ -715,40 +707,32 @@ Sino cómo la habitas.`,
                 transition={{ delay: 1.5, duration: 0.8 }}
                 className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none"
               >
-                <svg width="50" height="60" viewBox="0 0 50 60" fill="none">
+                <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
                   <defs>
                     <filter id="pearlGlowRight">
-                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                       <feMerge>
                         <feMergeNode in="coloredBlur"/>
                         <feMergeNode in="SourceGraphic"/>
                       </feMerge>
                     </filter>
                   </defs>
-                  {/* Primera V */}
+                  {/* Primera V gruesa */}
                   <path
-                    d="M 15 8 L 25 22 L 35 8"
-                    stroke="rgba(255, 255, 255, 0.95)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
+                    d="M 10 5 L 30 25 L 50 5 L 50 15 L 30 35 L 10 15 Z"
+                    fill="rgba(255, 255, 255, 0.95)"
                     filter="url(#pearlGlowRight)"
                     style={{
-                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 15px rgba(240, 240, 255, 0.6))'
+                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
                     }}
                   />
-                  {/* Segunda V */}
+                  {/* Segunda V gruesa */}
                   <path
-                    d="M 15 28 L 25 42 L 35 28"
-                    stroke="rgba(255, 255, 255, 0.95)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
+                    d="M 10 35 L 30 55 L 50 35 L 50 45 L 30 65 L 10 45 Z"
+                    fill="rgba(255, 255, 255, 0.95)"
                     filter="url(#pearlGlowRight)"
                     style={{
-                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 15px rgba(240, 240, 255, 0.6))'
+                      filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(240, 240, 255, 0.7))'
                     }}
                   />
                 </svg>
