@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomCursor } from "@/components/CustomCursor";
-import vanGoghVideo from "@/assets/Van Gogh Style Video.mp4";
+// Videos are in public folder for better deployment compatibility
+const vanGoghVideoWebm = "/van-gogh-style-video-web.webm";
+const vanGoghVideoMp4 = "/van-gogh-style-video-web.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -461,7 +463,6 @@ const Seccion1 = () => {
         <video
           ref={backgroundRef}
           className="fixed-background"
-          src={vanGoghVideo}
           autoPlay
           loop
           muted
@@ -470,7 +471,10 @@ const Seccion1 = () => {
             objectFit: "cover",
             objectPosition: "center top",
           }}
-        />
+        >
+          <source src={vanGoghVideoWebm} type="video/webm" />
+          <source src={vanGoghVideoMp4} type="video/mp4" />
+        </video>
       
       {/* Estrellas que adornan el cielo como perlas */}
       <div className="sky-stars">
