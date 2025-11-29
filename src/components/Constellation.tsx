@@ -1,6 +1,7 @@
 import { motion, useAnimation } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState, useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { SphereData, UserJourney } from "@/pages/Seccion3";
 
 interface ConstellationProps {
@@ -194,6 +195,7 @@ const Constellation = ({
   const navigate = useNavigate();
   const [hoveredStar, setHoveredStar] = useState<string | null>(null);
   const tiktokEmbedRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Cargar el script de TikTok embed
   useEffect(() => {
@@ -272,17 +274,21 @@ Es difícil de sostener, pero poderoso.`,
   const hasRatings = Object.keys(userJourney.ratings || {}).length > 0;
   
   const getSphereSize = (id: string) => {
+    // Responsive base size - much smaller on mobile
+    const baseSize = isMobile ? 4 : 8;
+    const maxSize = isMobile ? 8 : 16;
+    
     if (hasRatings && userJourney.ratings[id]) {
-      // Use ratings: scale from 8 to 16
+      // Use ratings: scale from baseSize to maxSize
       const rating = userJourney.ratings[id];
-      return 8 + (rating - 1) * 2; // 8, 10, 12, 14, 16
+      return baseSize + (rating - 1) * ((maxSize - baseSize) / 4);
     } else if (userJourney.timeSpent[id]) {
       // Fallback to time spent
       const maxTime = Math.max(...Object.values(userJourney.timeSpent));
       const time = userJourney.timeSpent[id] || 0;
-      return 8 + (time / maxTime) * 8; // 8px to 16px
+      return baseSize + (time / maxTime) * (maxSize - baseSize);
     }
-    return 10; // Default size
+    return baseSize + 1; // Default size
   };
 
   // Generate background stars with more variety
@@ -373,7 +379,7 @@ Es difícil de sostener, pero poderoso.`,
   }, [constellationShape, exploredSpheres]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className="min-h-screen relative overflow-x-hidden overflow-y-auto" style={{
       background: 'radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1e 50%, #050510 100%)'
     }}>
       {/* Background Stars - Twinkling with sparkle effect */}
@@ -460,21 +466,21 @@ Es difícil de sostener, pero poderoso.`,
         })}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-16">
+      <div className={`relative z-10 container mx-auto ${isMobile ? 'px-2 py-4' : 'px-4 sm:px-6 py-6 sm:py-8 md:py-12 lg:py-16'}`}>
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className={`text-center ${isMobile ? 'mb-4' : 'mb-6 sm:mb-8'}`}
         >
-          <h1 className="text-7xl font-semibold text-white mb-4" style={{
+          <h1 className={`${isMobile ? 'text-xl mb-2 px-1' : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2 sm:mb-3 md:mb-4 px-2'} font-semibold text-white leading-tight`} style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
             textShadow: '0 0 30px rgba(255, 255, 255, 0.3)'
           }}>
             Tu Constelación Cognitiva
           </h1>
-          <p className="text-3xl mb-3" style={{
+          <p className={`${isMobile ? 'text-sm mb-1 px-1' : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2 sm:mb-3 px-2'}`} style={{
             fontFamily: 'Crimson Pro, serif',
             color: '#B8A9D4',
             opacity: 0.9
@@ -501,7 +507,7 @@ Es difícil de sostener, pero poderoso.`,
               }
             })()}
           </p>
-          <p className="text-xl" style={{
+          <p className={`${isMobile ? 'text-xs px-1' : 'text-sm sm:text-base md:text-lg lg:text-xl px-2'}`} style={{
             fontFamily: 'Crimson Pro, serif',
             color: '#8B7BA8',
             opacity: 0.8
@@ -515,9 +521,10 @@ Es difícil de sostener, pero poderoso.`,
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="relative w-full max-w-6xl mx-auto mb-16"
+          className={`relative w-full max-w-6xl mx-auto ${isMobile ? 'mb-4' : 'mb-6 sm:mb-8 md:mb-12 lg:mb-16'}`}
           style={{
-            height: '800px',
+            height: isMobile ? '250px' : 'clamp(300px, 40vh, 600px)',
+            minHeight: isMobile ? '250px' : '300px',
           }}
         >
           <svg className="absolute inset-0 w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.1))' }}>
@@ -841,18 +848,18 @@ Es difícil de sostener, pero poderoso.`,
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-full mt-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap px-4 py-2 rounded-xl z-50"
+                    className="absolute top-full mt-4 sm:mt-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl z-50"
                     style={{
                       backgroundColor: 'rgba(0, 0, 0, 0.95)',
                       border: `2px solid ${sphere.color}`,
                       boxShadow: `0 0 30px ${sphere.color}60`,
                     }}
                   >
-                    <p className="text-white text-sm font-semibold mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <p className="text-white text-xs sm:text-sm font-semibold mb-0.5 sm:mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {sphere.title}
                     </p>
                     {hasRatings && userJourney.ratings[sphere.id] && (
-                      <p className="text-xs" style={{ color: sphere.color, fontFamily: 'Crimson Pro, serif' }}>
+                      <p className="text-[10px] sm:text-xs" style={{ color: sphere.color, fontFamily: 'Crimson Pro, serif' }}>
                         ★ Identificación: {userJourney.ratings[sphere.id]}/5
                       </p>
                     )}
@@ -868,27 +875,27 @@ Es difícil de sostener, pero poderoso.`,
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5 }}
-          className="max-w-3xl mx-auto text-center mb-12"
+          className={`max-w-3xl mx-auto text-center ${isMobile ? 'mb-4 px-2' : 'mb-6 sm:mb-8 md:mb-10 lg:mb-12 px-3 sm:px-4'}`}
         >
           <motion.div
-            className="backdrop-blur-sm rounded-3xl p-8 border"
+            className={`backdrop-blur-sm ${isMobile ? 'rounded-lg p-3' : 'rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 lg:p-8'} border`}
             style={{
               backgroundColor: 'rgba(26, 26, 46, 0.6)',
               borderColor: 'rgba(255, 255, 255, 0.1)',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
             }}
           >
-            <h2 className="text-3xl font-semibold text-white mb-6" style={{
+            <h2 className={`${isMobile ? 'text-base mb-2' : 'text-lg sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 md:mb-5 lg:mb-6'} font-semibold text-white`} style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontStyle: 'italic',
               textShadow: '0 0 20px rgba(255, 255, 255, 0.2)'
             }}>
               {insight.title}
             </h2>
-            <p className="text-lg whitespace-pre-line" style={{
+            <p className={`${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base lg:text-lg'} whitespace-pre-line leading-relaxed`} style={{
               fontFamily: 'Crimson Pro, serif',
               color: '#D1C4E0',
-              lineHeight: '1.9',
+              lineHeight: isMobile ? '1.6' : '1.8',
               opacity: 0.95
             }}>
               {insight.message}
@@ -902,24 +909,24 @@ Es difícil de sostener, pero poderoso.`,
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.8 }}
-            className="max-w-3xl mx-auto mb-12"
+            className={`max-w-3xl mx-auto ${isMobile ? 'mb-4 px-2' : 'mb-8 sm:mb-10 md:mb-12 px-4'}`}
           >
             <div 
-              className="backdrop-blur-sm rounded-3xl p-8 border"
+              className={`backdrop-blur-sm ${isMobile ? 'rounded-lg p-3' : 'rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8'} border`}
               style={{
                 backgroundColor: 'rgba(26, 26, 46, 0.4)',
                 borderColor: 'rgba(255, 255, 255, 0.08)',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <h3 className="text-2xl font-semibold text-white mb-8 text-center" style={{
+              <h3 className={`${isMobile ? 'text-sm mb-3' : 'text-lg sm:text-xl md:text-2xl mb-6 sm:mb-7 md:mb-8'} font-semibold text-white text-center`} style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontStyle: 'italic',
                 color: '#E8DFF5'
               }}>
                 Intensidad de tu identificación
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={`grid grid-cols-1 ${isMobile ? 'gap-3' : 'md:grid-cols-2 gap-4 sm:gap-5 md:gap-6'}`}>
                 {exploredSpheres.map((sphere) => {
                   const rating = userJourney.ratings[sphere.id];
                   if (!rating) return null;
@@ -927,7 +934,7 @@ Es difícil de sostener, pero poderoso.`,
                   return (
                     <motion.div 
                       key={sphere.id} 
-                      className="flex items-center gap-4 p-4 rounded-xl"
+                      className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl"
                       style={{
                         backgroundColor: 'rgba(0, 0, 0, 0.2)',
                         border: `1px solid ${sphere.color}30`,
@@ -940,23 +947,23 @@ Es difícil de sostener, pero poderoso.`,
                       transition={{ duration: 0.2 }}
                     >
                       <div 
-                        className="w-10 h-10 rounded-full flex-shrink-0"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
                         style={{ 
                           backgroundColor: sphere.color,
                           boxShadow: `0 0 20px ${sphere.color}60`,
                         }}
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-white text-sm font-medium mb-2 truncate" style={{
+                        <p className="text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2 truncate" style={{
                           fontFamily: 'Inter, sans-serif'
                         }}>
                           {sphere.title}
                         </p>
-                        <div className="flex gap-1">
+                        <div className="flex gap-0.5 sm:gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <div
                               key={star}
-                              className="w-5 h-5 rounded-full transition-all"
+                              className="w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-all"
                               style={{
                                 backgroundColor: star <= rating ? sphere.color : 'rgba(255, 255, 255, 0.1)',
                                 opacity: star <= rating ? 1 : 0.3,
@@ -967,7 +974,7 @@ Es difícil de sostener, pero poderoso.`,
                         </div>
                       </div>
                       <div 
-                        className="text-3xl font-bold flex-shrink-0 w-12 text-center"
+                        className="text-2xl sm:text-3xl font-bold flex-shrink-0 w-10 sm:w-12 text-center"
                         style={{ 
                           color: sphere.color,
                           textShadow: `0 0 10px ${sphere.color}80`,
@@ -989,20 +996,19 @@ Es difícil de sostener, pero poderoso.`,
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3.2 }}
-          className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto px-4"
+          className={`flex flex-col items-center justify-center ${isMobile ? 'gap-2 px-2 pb-4' : 'gap-3 sm:gap-4 md:gap-5 lg:gap-6 px-3 sm:px-4 md:px-6 pb-4 sm:pb-6'} max-w-2xl mx-auto`}
         >
           {/* Video TikTok centrado */}
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center w-full">
             <h3 
-              className="mb-4 text-white font-semibold text-center max-w-2xl mx-auto px-4"
+              className={`${isMobile ? 'mb-2 px-1 text-xs' : 'mb-2 sm:mb-3 md:mb-4 px-2 sm:px-3 md:px-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl'} text-white font-semibold text-center max-w-2xl mx-auto leading-tight`}
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '22px',
                 fontWeight: 600,
                 fontStyle: 'italic',
-                letterSpacing: '0.5px',
+                letterSpacing: isMobile ? '0.2px' : '0.3px',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1)',
-                lineHeight: '1.5'
+                lineHeight: '1.4'
               }}
             >
               Mira este video para seguir scrolleando conscientemente y vuelve para descubrir tu animal espiritual, haz clik abajo
@@ -1010,11 +1016,11 @@ Es difícil de sostener, pero poderoso.`,
             {/* Contenedor tipo TikTok */}
             <div 
               ref={tiktokEmbedRef}
-              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center"
+              className={`relative bg-black ${isMobile ? 'rounded-lg' : 'rounded-lg sm:rounded-xl md:rounded-2xl'} overflow-hidden shadow-2xl flex items-center justify-center w-full`}
               style={{
-                width: '360px',
-                height: '640px',
-                maxWidth: '100%',
+                width: '100%',
+                maxWidth: isMobile ? '100%' : 'min(100%, 360px)',
+                maxHeight: isMobile ? '60vh' : 'min(70vh, 640px)',
                 aspectRatio: '9/16'
               }}
             >
@@ -1025,7 +1031,7 @@ Es difícil de sostener, pero poderoso.`,
                 data-video-id="7577978105667636492"
                 style={{ 
                   maxWidth: '100%', 
-                  minWidth: '325px',
+                  minWidth: isMobile ? '200px' : '250px',
                   width: '100%',
                   height: '100%'
                 }}
@@ -1045,14 +1051,13 @@ Es difícil de sostener, pero poderoso.`,
           </div>
 
           {/* Botón debajo del video */}
-          <div className="flex flex-col items-center justify-center">
+          <div className={`flex flex-col items-center justify-center w-full ${isMobile ? 'px-2' : 'px-2 sm:px-3'}`}>
             <motion.button
               onClick={onGeneratePainting}
-              className="px-12 py-5 text-white font-semibold rounded-full transition-all duration-300"
+              className={`w-full ${isMobile ? 'px-4 py-2 text-xs' : 'sm:w-auto px-6 sm:px-8 md:px-10 lg:px-12 py-2.5 sm:py-3 md:py-4 lg:py-5 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl'} text-white font-semibold rounded-full transition-all duration-300`}
               style={{
                 background: 'linear-gradient(135deg, #9B87B5 0%, #7B68A0 100%)',
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '20px',
                 fontStyle: 'italic',
                 boxShadow: '0 8px 32px rgba(155, 135, 181, 0.4)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -1071,7 +1076,7 @@ Es difícil de sostener, pero poderoso.`,
         {/* Back button */}
         <motion.button
           onClick={() => navigate("/")}
-          className="fixed bottom-8 left-8 z-50 px-6 py-3 backdrop-blur-md border rounded-full font-semibold transition-all duration-300"
+          className={`fixed ${isMobile ? 'bottom-3 left-3 px-2 py-1.5 text-xs' : 'bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm md:text-base'} z-50 backdrop-blur-md border rounded-full font-semibold transition-all duration-300`}
           style={{
             backgroundColor: 'rgba(26, 26, 46, 0.7)',
             borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -1088,7 +1093,7 @@ Es difícil de sostener, pero poderoso.`,
           }}
           whileTap={{ scale: 0.98 }}
         >
-          🌳 ← Lobby
+          <span className={isMobile ? 'hidden' : 'hidden sm:inline'}>🌳 </span>← <span className={isMobile ? 'hidden' : 'hidden sm:inline'}>Lobby</span>
         </motion.button>
       </div>
     </div>
