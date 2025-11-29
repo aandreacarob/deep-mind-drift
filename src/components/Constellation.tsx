@@ -1,6 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import type { SphereData, UserJourney } from "@/pages/Seccion3";
 
 interface ConstellationProps {
@@ -193,6 +193,26 @@ const Constellation = ({
 }: ConstellationProps) => {
   const navigate = useNavigate();
   const [hoveredStar, setHoveredStar] = useState<string | null>(null);
+  const tiktokEmbedRef = useRef<HTMLDivElement>(null);
+
+  // Cargar el script de TikTok embed
+  useEffect(() => {
+    // Verificar si el script ya existe
+    const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (existingScript) {
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://www.tiktok.com/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // No removemos el script ya que puede ser usado por otros componentes
+      // El script se procesará automáticamente cuando encuentre blockquotes con clase tiktok-embed
+    };
+  }, []);
 
   const insights: Record<string, { title: string; message: string }> = {
   profundo: {
@@ -989,7 +1009,8 @@ Es difícil de sostener, pero poderoso.`,
             </h3>
             {/* Contenedor tipo TikTok */}
             <div 
-              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl"
+              ref={tiktokEmbedRef}
+              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center"
               style={{
                 width: '360px',
                 height: '640px',
@@ -997,27 +1018,29 @@ Es difícil de sostener, pero poderoso.`,
                 aspectRatio: '9/16'
               }}
             >
-              {/* Placeholder para el video - se puede reemplazar con un video real */}
-              <div 
-                className="w-full h-full flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(40, 30, 60, 0.9) 100%)'
+              {/* Embed de TikTok */}
+              <blockquote 
+                className="tiktok-embed" 
+                cite="https://www.tiktok.com/@andreacarob/video/7577978105667636492" 
+                data-video-id="7577978105667636492"
+                style={{ 
+                  maxWidth: '100%', 
+                  minWidth: '325px',
+                  width: '100%',
+                  height: '100%'
                 }}
               >
-                <div className="text-center p-6">
-                  <div className="text-4xl mb-4">📱</div>
-                  <p className="text-white text-sm opacity-70" style={{
-                    fontFamily: 'Inter, sans-serif'
-                  }}>
-                    Video TikTok
-                  </p>
-                  <p className="text-white text-xs opacity-50 mt-2" style={{
-                    fontFamily: 'Inter, sans-serif'
-                  }}>
-                    (Espacio para video)
-                  </p>
-                </div>
-              </div>
+                <section>
+                  <a 
+                    target="_blank" 
+                    title="@andreacarob" 
+                    href="https://www.tiktok.com/@andreacarob/video/7577978105667636492?refer=embed"
+                    style={{ display: 'none' }}
+                  >
+                    @andreacarob
+                  </a>
+                </section>
+              </blockquote>
             </div>
           </div>
 

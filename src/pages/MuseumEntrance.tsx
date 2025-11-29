@@ -167,20 +167,12 @@ const MuseumEntrance = () => {
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
                 }}
                 onMouseEnter={(e) => {
-                  // Blue glow for LA DERIVA (door 1), pink glow for RAÍCES (door 2), yellow for others
+                  // Blue glow for LA DERIVA (door 1), yellow for others
                   if (door.id === 1) {
                     e.currentTarget.style.boxShadow = `
                       0 0 30px rgba(135, 206, 250, 0.6),
                       0 0 50px rgba(100, 149, 237, 0.4),
                       0 0 70px rgba(135, 206, 250, 0.3),
-                      0 15px 40px rgba(0, 0, 0, 0.8)
-                    `;
-                  } else if (door.id === 2) {
-                    e.currentTarget.style.boxShadow = `
-                      0 0 30px rgba(255, 182, 193, 0.5),
-                      0 0 50px rgba(255, 105, 180, 0.4),
-                      0 0 70px rgba(255, 20, 147, 0.3),
-                      0 0 90px rgba(255, 182, 193, 0.2),
                       0 15px 40px rgba(0, 0, 0, 0.8)
                     `;
                   } else {
@@ -218,24 +210,6 @@ const MuseumEntrance = () => {
                           `,
                           filter: 'blur(2px)',
                         }
-                      : door.id === 2
-                      ? {
-                          // Pink glow for RAÍCES
-                          background: `
-                            radial-gradient(circle at 30% 30%, rgba(255, 182, 193, 0.4) 0%, transparent 50%),
-                            radial-gradient(circle at 70% 70%, rgba(255, 105, 180, 0.35) 0%, transparent 50%),
-                            radial-gradient(circle at 50% 50%, rgba(255, 20, 147, 0.3) 0%, transparent 60%),
-                            radial-gradient(circle at 20% 80%, rgba(255, 192, 203, 0.3) 0%, transparent 50%)
-                          `,
-                          boxShadow: `
-                            0 0 30px rgba(255, 182, 193, 0.6),
-                            0 0 50px rgba(255, 105, 180, 0.5),
-                            0 0 70px rgba(255, 20, 147, 0.4),
-                            0 0 90px rgba(255, 182, 193, 0.3),
-                            inset 0 0 40px rgba(255, 182, 193, 0.15)
-                          `,
-                          filter: 'blur(2px)',
-                        }
                       : {
                           // Original yellow glow for other doors
                           background: `
@@ -267,15 +241,6 @@ const MuseumEntrance = () => {
                             'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
                             'radial-gradient(circle at 100% 100%, rgba(100, 149, 237, 0.4), transparent 50%)',
                             'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
-                          ],
-                        }
-                      : door.id === 2
-                      ? {
-                          // Pink animated glow for RAÍCES
-                          background: [
-                            'radial-gradient(circle at 0% 0%, rgba(255, 182, 193, 0.35), transparent 50%)',
-                            'radial-gradient(circle at 100% 100%, rgba(255, 105, 180, 0.35), transparent 50%)',
-                            'radial-gradient(circle at 0% 0%, rgba(255, 182, 193, 0.35), transparent 50%)',
                           ],
                         }
                       : {
