@@ -28,8 +28,11 @@ export const ThreadVineBackground = () => {
       let targetMouseRadius = 0; // Radio objetivo para suavizar
 
       p.setup = () => {
-        p.createCanvas(p.windowWidth, p.windowHeight);
-        p.pixelDensity(window.devicePixelRatio || 1);
+        const canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+        canvas.parent(containerRef.current!);
+        // Reduce pixel density on mobile for better performance
+        const isMobile = window.innerWidth < 768;
+        p.pixelDensity(isMobile ? 1 : (window.devicePixelRatio || 1));
         p.colorMode(p.HSB, 360, 100, 100, 100);
         p.background(0);
         p.noFill();
@@ -219,7 +222,12 @@ export const ThreadVineBackground = () => {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 z-0 opacity-95"
+      className="pointer-events-none fixed inset-0 z-0 opacity-95"
+      style={{ 
+        width: '100vw', 
+        height: '100vh',
+        overflow: 'hidden'
+      }}
       aria-hidden="true"
     />
   );
