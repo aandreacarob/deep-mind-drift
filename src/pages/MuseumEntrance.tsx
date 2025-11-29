@@ -121,18 +121,18 @@ const MuseumEntrance = () => {
       <ThreadVineBackground />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:py-12 md:py-16">
         {/* Title Section */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl text-white tracking-wider mb-4">
+          <h1 className="font-['Playfair_Display'] text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-white tracking-wider mb-2 sm:mb-4">
               MUSEO DIGITAL
             </h1>
-          <h2 className="font-['Playfair_Display'] text-2xl md:text-4xl text-white/90">
+          <h2 className="font-['Playfair_Display'] text-lg sm:text-2xl md:text-4xl text-white/90">
             Mil Caminos, Tres Puertas.
           </h2>
         </motion.div>
@@ -142,7 +142,7 @@ const MuseumEntrance = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12 w-full max-w-6xl"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-12 w-full max-w-6xl px-4"
         >
           {doors.map((door, index) => (
             <motion.div
@@ -153,7 +153,7 @@ const MuseumEntrance = () => {
               className="flex flex-col items-center"
             >
               {/* Door Label */}
-              <p className="font-['Playfair_Display'] text-sm md:text-base text-white/80 mb-3 tracking-wide">
+              <p className="font-['Playfair_Display'] text-xs sm:text-sm md:text-base text-white/80 mb-2 sm:mb-3 tracking-wide">
                 {door.label}
               </p>
               
@@ -162,7 +162,7 @@ const MuseumEntrance = () => {
                 onClick={() => handleDoorClick(door)}
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[2/3] max-w-[200px] overflow-hidden"
+                className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[2/3] max-w-[140px] sm:max-w-[180px] md:max-w-[200px] overflow-hidden mx-auto"
                 style={{
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
                 }}
@@ -263,13 +263,13 @@ const MuseumEntrance = () => {
                 />
                 
                 {/* Outer Door Frame */}
-                <div className="absolute inset-0 border-[6px] border-[#2a2a2a] rounded-sm z-10" />
+                <div className="absolute inset-0 border-[4px] sm:border-[5px] md:border-[6px] border-[#2a2a2a] rounded-sm z-10" />
               
                 {/* Inner Door Panel */}
-                <div className="absolute inset-6 border-[3px] border-[#3a3a3a] rounded-sm z-10" />
+                <div className="absolute inset-4 sm:inset-5 md:inset-6 border-[2px] sm:border-[2.5px] md:border-[3px] border-[#3a3a3a] rounded-sm z-10" />
               
                 {/* Door Knob */}
-                <div className="absolute right-8 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3a3a3a] shadow-inner z-20" />
+                <div className="absolute right-5 sm:right-7 md:right-8 top-1/2 -translate-y-1/2 w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-[#3a3a3a] shadow-inner z-20" />
               
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-300 rounded-sm z-10" />
