@@ -26,11 +26,22 @@ const MuseumEntrance = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedDoor, setSelectedDoor] = useState<{ id: number; label: string; route: string } | null>(null);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     correo: "",
     porque: "",
   });
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Cargar información del usuario al montar el componente
   useEffect(() => {
@@ -124,9 +135,9 @@ const MuseumEntrance = () => {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:py-12 md:py-16">
         {/* Title Section */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          initial={isMobile ? { opacity: 0 } : { opacity: 0, y: -30 }}
+          animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          transition={isMobile ? { duration: 0.5, delay: 0.2 } : { duration: 1, delay: 0.5 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <h1 className="font-['Playfair_Display'] text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-white tracking-wider mb-2 sm:mb-4">
@@ -139,17 +150,17 @@ const MuseumEntrance = () => {
 
         {/* Three Doors */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          initial={isMobile ? { opacity: 0 } : { opacity: 0, scale: 0.9 }}
+          animate={isMobile ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+          transition={isMobile ? { duration: 0.4, delay: 0.3 } : { duration: 0.8, delay: 1 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-12 w-full max-w-6xl px-4"
         >
           {doors.map((door, index) => (
             <motion.div
               key={door.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.2 + index * 0.2 }}
+              initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 50 }}
+              animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              transition={isMobile ? { duration: 0.3, delay: 0.4 + index * 0.1 } : { duration: 0.6, delay: 1.2 + index * 0.2 }}
               className="flex flex-col items-center"
             >
               {/* Door Label */}
@@ -160,13 +171,13 @@ const MuseumEntrance = () => {
               {/* Door */}
               <motion.button
                 onClick={() => handleDoorClick(door)}
-                whileHover={{ scale: 1.03, y: -5 }}
+                whileHover={isMobile ? undefined : { scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative bg-[#F5F5DC] rounded-sm shadow-2xl transition-all duration-300 w-full aspect-[2/3] max-w-[140px] sm:max-w-[180px] md:max-w-[200px] overflow-hidden mx-auto"
                 style={{
                   boxShadow: "0 15px 40px rgba(0, 0, 0, 0.8)"
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={isMobile ? undefined : (e) => {
                   // Blue glow for LA DERIVA (door 1), yellow for others
                   if (door.id === 1) {
                     e.currentTarget.style.boxShadow = `
@@ -184,83 +195,77 @@ const MuseumEntrance = () => {
                     `;
                   }
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={isMobile ? undefined : (e) => {
                   e.currentTarget.style.boxShadow = "0 15px 40px rgba(0, 0, 0, 0.8)";
                 }}
               >
-                {/* Glow perlado en hover - capa base */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"
-                  style={
-                    door.id === 1 
-                      ? {
-                          // Blue sky glow for LA DERIVA
-                          background: `
-                            radial-gradient(circle at 30% 30%, rgba(135, 206, 250, 0.5) 0%, transparent 50%),
-                            radial-gradient(circle at 70% 70%, rgba(100, 149, 237, 0.4) 0%, transparent 50%),
-                            radial-gradient(circle at 50% 50%, rgba(173, 216, 230, 0.3) 0%, transparent 60%),
-                            radial-gradient(circle at 20% 80%, rgba(135, 206, 250, 0.3) 0%, transparent 50%)
-                          `,
-                          boxShadow: `
-                            0 0 30px rgba(135, 206, 250, 0.8),
-                            0 0 50px rgba(100, 149, 237, 0.6),
-                            0 0 70px rgba(173, 216, 230, 0.4),
-                            0 0 90px rgba(135, 206, 250, 0.3),
-                            inset 0 0 40px rgba(135, 206, 250, 0.15)
-                          `,
-                          filter: 'blur(2px)',
-                        }
-                      : {
-                          // Original yellow glow for other doors
-                          background: `
-                            radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
-                            radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
-                            radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.2) 0%, transparent 60%),
-                            radial-gradient(circle at 20% 80%, rgba(200, 230, 255, 0.2) 0%, transparent 50%)
-                          `,
-                          boxShadow: `
-                            0 0 30px rgba(255, 255, 255, 0.8),
-                            0 0 50px rgba(255, 215, 0, 0.6),
-                            0 0 70px rgba(255, 192, 203, 0.4),
-                            0 0 90px rgba(200, 230, 255, 0.3),
-                            inset 0 0 40px rgba(255, 255, 255, 0.15)
-                          `,
-                          filter: 'blur(2px)',
-                        }
-                  }
-                />
-                
-                {/* Efecto de brillo animado */}
-                <motion.div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                  animate={
-                    door.id === 1
-                      ? {
-                          // Blue animated glow for LA DERIVA
-                          background: [
-                            'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
-                            'radial-gradient(circle at 100% 100%, rgba(100, 149, 237, 0.4), transparent 50%)',
-                            'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
-                          ],
-                        }
-                      : {
-                          // Original yellow animated glow for other doors
-                          background: [
-                            'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
-                            'radial-gradient(circle at 100% 100%, rgba(255, 215, 0, 0.4), transparent 50%)',
-                            'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
-                          ],
-                        }
-                  }
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    mixBlendMode: 'overlay',
-                  }}
-                />
+                {/* Glow perlado en hover - capa base (solo desktop) */}
+                {!isMobile && (
+                  <>
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"
+                      style={
+                        door.id === 1 
+                          ? {
+                              // Blue sky glow for LA DERIVA
+                              background: `
+                                radial-gradient(circle at 30% 30%, rgba(135, 206, 250, 0.5) 0%, transparent 50%),
+                                radial-gradient(circle at 70% 70%, rgba(100, 149, 237, 0.4) 0%, transparent 50%)
+                              `,
+                              boxShadow: `
+                                0 0 30px rgba(135, 206, 250, 0.8),
+                                0 0 50px rgba(100, 149, 237, 0.6)
+                              `,
+                              filter: 'blur(2px)',
+                            }
+                          : {
+                              // Original yellow glow for other doors
+                              background: `
+                                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+                                radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 50%)
+                              `,
+                              boxShadow: `
+                                0 0 30px rgba(255, 255, 255, 0.8),
+                                0 0 50px rgba(255, 215, 0, 0.6)
+                              `,
+                              filter: 'blur(2px)',
+                            }
+                      }
+                    />
+                    
+                    {/* Efecto de brillo animado */}
+                    <motion.div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                      animate={
+                        door.id === 1
+                          ? {
+                              // Blue animated glow for LA DERIVA
+                              background: [
+                                'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
+                                'radial-gradient(circle at 100% 100%, rgba(100, 149, 237, 0.4), transparent 50%)',
+                                'radial-gradient(circle at 0% 0%, rgba(135, 206, 250, 0.4), transparent 50%)',
+                              ],
+                            }
+                          : {
+                              // Original yellow animated glow for other doors
+                              background: [
+                                'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                                'radial-gradient(circle at 100% 100%, rgba(255, 215, 0, 0.4), transparent 50%)',
+                                'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 50%)',
+                              ],
+                            }
+                      }
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      style={{
+                        mixBlendMode: 'overlay',
+                      }}
+                    />
+                  </>
+                )}
                 
                 {/* Outer Door Frame */}
                 <div className="absolute inset-0 border-[4px] sm:border-[5px] md:border-[6px] border-[#2a2a2a] rounded-sm z-10" />
