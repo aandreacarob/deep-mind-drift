@@ -128,8 +128,10 @@ const MuseumEntrance = () => {
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
       <CustomCursor />
-      {/* Thread Vine p5 Background */}
-      <ThreadVineBackground />
+      {/* Thread Vine p5 Background - Fixed positioning */}
+      <div className="fixed inset-0 z-0">
+        <ThreadVineBackground />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:py-12 md:py-16">
